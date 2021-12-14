@@ -1,0 +1,40 @@
+<template>
+  <svg
+    width="17"
+    height="21"
+    viewBox="0 0 17 21"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M11.4166 -0.00012207H5.58331L4.41665 1.16654H0.333313V3.49988H16.6666V1.16654H12.5833L11.4166 -0.00012207ZM13.1666 7.00017V18.6668H3.83329V7.00017H13.1666ZM1.49997 4.66674H15.5V18.6667C15.5 19.9501 14.45 21.0001 13.1666 21.0001H3.83331C2.54997 21.0001 1.49997 19.9501 1.49997 18.6667V4.66674Z"
+      :fill="changeColor"
+    />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: "SvgIconDelete",
+  props: {
+    status: { type: Boolean, default: false },
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    changeColor() {
+      console.log("Status", this.status);
+      if (!this.status) {
+        return "#444444";
+      } else {
+        return "#A0A0A0";
+      }
+    },
+  },
+};
+</script>
+
+<style></style>

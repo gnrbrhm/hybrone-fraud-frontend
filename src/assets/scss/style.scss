@@ -1,0 +1,114 @@
+// Breakpoints
+$bp-small: 48em; // 768px
+$bp-medium: 64em; // 1024px
+$bp-large: 85.375em; // 1366px
+$bp-xlarge: 120em; // 1920px
+$bp-xxlarge: 160em; // 2560px
+
+// Media Queries
+$mq-small: "(min-width: #{$bp-small})";
+$mq-medium: "(min-width: #{$bp-medium})";
+$mq-large: "(min-width: #{$bp-large})";
+$mq-xlarge: "(min-width: #{$bp-xlarge})";
+$mq-xxlarge: "(min-width: #{$bp-xxlarge})";
+$mq-retina: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
+
+$hybrone_blue: #2c3357;
+$hybrone_light_blue: #007db7;
+$hybrone_background_color: #ffffff;
+$hybrone_avatar_background: #2c3357;
+$hybrone_success_color: linear-gradient(90deg, #6cca93 0%, #56df8f 100%);
+$hybrone_error_red: #e04141;
+$hybrone_normal_color: #6fcf97;
+$hybrone_anormal_color: #eb5757;
+$hybrone_fault_color: #f2994a;
+$hybrone_nodata_color: #b7b7b7;
+$hybrone_border_color: #a0a0a0;
+$hybrone_selection_table_color: #d7ecff;
+$hybrone_disabled_color: #a0a0a0;
+$hybrone_header_background_color: #f5f5f5;
+.sentinel-input {
+  background: $hybrone_background_color;
+  height: 50px !important;
+}
+.sentinel-label {
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  font-feature-settings: "zero" on;
+  display: flex;
+  align-self: flex-start;
+  margin-bottom: 4px;
+  /* Gray Dark */
+
+  color: #444444;
+}
+.sentinel-button {
+  background: $hybrone_background_color;
+  /* Gray Medium */
+  height: 50px !important;
+
+  border: 1px solid $hybrone_border_color;
+  box-sizing: border-box;
+  border-radius: 4px;
+  &__settings {
+    /* Auto Layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px 32px;
+
+    /* Hybrone Light Blue */
+    background: $hybrone_light_blue;
+    box-shadow: 0px 2px 4px rgba(91, 134, 245, 0.05);
+    border-radius: 4px;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+  }
+  /*
+  Details Padding
+  */
+  .hap-details-padding {
+    padding: 0px 24px 0px 24px;
+  }
+  .hap-details-last-signals-padding {
+    padding: 0px 39px 0px 34px !important;
+  }
+  .sentinel-location-bottom {
+    display: flex;
+    margin-top: 10%;
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+    // margin-bottom: 7px; justify-content:space-between; den sonra gerek kalmadı
+
+    button {
+      @extend .sentinel-button__settings;
+      &:nth-child(2n + 1) {
+        background-color: $hybrone_error_red;
+        color: $hybrone_background_color;
+        &:hover {
+          border-color: $hybrone_error_red;
+          color: $hybrone_error_red;
+          background-color: $hybrone_background_color;
+        }
+      }
+      &:nth-child(2n) {
+        color: #fff;
+        background-color: $hybrone_light_blue;
+        &:hover {
+          border-color: $hybrone_light_blue;
+          color: $hybrone_light_blue;
+          background-color: $hybrone_background_color;
+        }
+      }
+    }
+  }
+}

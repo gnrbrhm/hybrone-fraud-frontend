@@ -1,0 +1,461 @@
+<template>
+  <!-- Liste Dashboard Tracked Device  -->
+  <el-table
+    v-loading="loading"
+    v-if="['List', 'Dashboard'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    @row-dblclick="handleDBClick"
+    :header-cell-style="
+      this.$route.name == 'List'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : { color: '#444444' }
+    "
+    @selection-change="handleSelectionChange"
+    :row-class-name="rowClassName"
+    height="100%"
+  >
+    <el-table-column type="selection" width="55"> </el-table-column>
+
+    <el-table-column
+      header-align="left"
+      prop="premise.custom_premise_id"
+      label="MAĞAZA KODU"
+      width="180"
+    >
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="premise.custom_premise_name"
+      label="MAĞAZA ADI"
+    >
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="premise.location.city.name"
+      label="LOKASYON"
+      width="180"
+    >
+    </el-table-column>
+
+    <!--   <el-table-column
+      header-align="left"
+      prop="description"
+      label="Açıklama"
+      width="300"
+    >
+    </el-table-column> -->
+    <el-table-column
+      header-align="left"
+      prop="device_brand.name"
+      label="CİHAZ"
+      width="180"
+    >
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="device_state"
+      label="CİHAZ DURUMLARI"
+    >
+      <template slot-scope="scope">
+        <ul>
+          <li class="device-channel-icon">
+            <SvgIconArmed
+              :status="scope.row.communication == 0 ? 0 : scope.row.arm_dis_arm"
+            ></SvgIconArmed>
+          </li>
+          <li class="device-channel-icon">
+            <SvgIconAlarm
+              :status="scope.row.communication == 0 ? 0 : scope.row.alarm"
+            ></SvgIconAlarm>
+          </li>
+          <li class="device-channel-icon">
+            <SvgIconFault
+              :status="scope.row.communication == 0 ? 0 : scope.row.trouble"
+            ></SvgIconFault>
+          </li>
+          <li class="device-channel-icon">
+            <SvgIconSabotage
+              :status="scope.row.communication == 0 ? 0 : scope.row.sabotage"
+            ></SvgIconSabotage>
+          </li>
+        </ul>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="state" label="">
+      <template slot-scope="scope">
+        <ul>
+          <li class="device-state-icon">
+            <SvgIconCommunication
+              :status="scope.row.communication"
+            ></SvgIconCommunication>
+          </li>
+          <li class="device-state-icon">
+            <SvgIconEnergy
+              :status="scope.row.communication == 0 ? 0 : scope.row.energy"
+            ></SvgIconEnergy>
+          </li>
+          <li class="device-state-icon">
+            <SvgIconBattery
+              :status="scope.row.communication == 0 ? 0 : scope.row.battery"
+            ></SvgIconBattery>
+          </li>
+          <!-- <li class="device-state-icon">
+            <SvgIconDateTime :status="scope.row.time"></SvgIconDateTime>
+          </li> -->
+        </ul>
+      </template>
+    </el-table-column>
+    <!-- <el-table-column
+      align="center"
+      prop="has_service"
+      label="Servis"
+      width="180"
+    >
+      <template slot-scope="scope">
+        <SvgIconServiceRequest
+          :is_ticket="scope.is_active"
+        ></SvgIconServiceRequest>
+      </template>
+    </el-table-column> -->
+    <el-table-column
+      align="left"
+      prop="updated_at"
+      label="SON SİNYAL"
+      width="180"
+    >
+      <template slot-scope="scope">
+        {{
+          scope.row.last_signal == null ||
+          scope.row.last_signal == '0001-01-01T00:00:00Z' ||
+          scope.row.last_signal == '0001-01-01T01:55:52+01:55'
+            ? 'Bilgi Alınamadı'
+            : formattedDatetime(scope.row.last_signal)
+        }}
+      </template>
+    </el-table-column>
+    <!-- <el-table-column header-align="center" prop="last_state" label="Sorgu">
+      <template slot-scope="scope">
+        <SvgIconQuery :status="scope.is_active"></SvgIconQuery>
+      </template>
+    </el-table-column> -->
+  </el-table>
+  <!-- Mekanlar -->
+  <el-table
+    v-loading="loading"
+    v-else-if="['Premises'].includes(this.$route.name)"
+    ref="singleTable"
+    :data="data"
+    :header-cell-style="{ color: '#444444' }"
+    style="width: 97%; max-height: calc(100vh - 180px);  margin-left 20px; overflow: scroll;"
+    stripe
+    highlight-current-row
+    @current-change="handleCurrentChange"
+    :row-class-name="rowClassName"
+  >
+    <el-table-column
+      property="custom_premise_id"
+      label="MAĞAZA KODU"
+      min-width="50"
+    ></el-table-column>
+    <el-table-column
+      property="location.city.name"
+      label="LOKASYON"
+      min-width="100"
+      align="center"
+    ></el-table-column>
+
+    <el-table-column
+      property="created_at"
+      label="OLUŞTURULMA ZAMANI"
+      min-width="100"
+      align="right"
+      show-overflow-tooltip
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.created_at) }}
+      </template>
+    </el-table-column>
+  </el-table>
+  <!--Servisler-->
+  <el-table
+    v-loading="loading"
+    v-else-if="['Services'].includes(this.$route.name)"
+    ref="singleTable"
+    :data="data"
+    :header-cell-style="
+      this.$route.name === 'Services'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : ''
+    "
+    style="width: 100%; max-height: calc(100vh - 180px); overflow: none"
+    stripe
+    highlight-current-row
+    height="100%"
+  >
+    <el-table-column property="premise_id" label="MAĞAZA KODU" min-width="55">
+    </el-table-column>
+    <el-table-column property="location" label="LOKASYON" min-width="80">
+    </el-table-column>
+
+    <el-table-column property="premise_name" label="MEKAN ADI" min-width="80">
+      <!-- <template slot-scope="scope">
+        {{ scope.custom_premise_id }}
+      </template> -->
+    </el-table-column>
+    <!-- <el-table-column property="fault_type" label="Arıza Tipi" min-width="150">
+    </el-table-column>
+    <el-table-column property="service_state" label="Durum" min-width="80">
+    </el-table-column> -->
+    <el-table-column
+      property="started_at"
+      label="BAŞLANGIÇ TARİHİ"
+      min-width="100"
+      show-overflow-tooltip
+    >
+    </el-table-column>
+    <el-table-column
+      property="ended_at"
+      label="BİTİŞ TARİHİ"
+      min-width="100"
+      show-overflow-tooltip
+    >
+    </el-table-column>
+    <el-table-column
+      align="right"
+      property="created_at"
+      label="OLUŞTURULMA TARİHİ"
+      min-width="100"
+      show-overflow-tooltip
+    >
+    </el-table-column>
+  </el-table>
+  <!--Logs Kullanıcı İşlemleri-->
+  <el-table
+    v-loading="loading"
+    v-else-if="['Logs'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    stripe
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    height="100%"
+  >
+    <el-table-column header-align="left" prop="user" label="Kullanıcı">
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="description"
+      label="Olay Açıklaması"
+    >
+    </el-table-column>
+
+    <el-table-column
+      header-align="left"
+      prop="created_at"
+      label="Oluşturulma Zamanı"
+    >
+    </el-table-column>
+  </el-table>
+  <!--Geçmiş Sinyaller Kullanıcı İşlemleri-->
+  <el-table
+    v-loading="loading"
+    v-else-if="['DeviceLastSignals'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    stripe
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    height="100%"
+    :header-cell-style="
+      this.$route.name === 'DeviceLastSignals'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : ''
+    "
+  >
+    <el-table-column header-align="left" prop="zone" label="BÖLGE">
+      <template slot-scope="scope">
+        {{ scope.row.zone == 0 ? 'Genel' : scope.row.zone }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="signal_type.sub_category"
+      label="DURUM"
+    >
+    </el-table-column>
+    <!-- <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
+    </el-table-column> -->
+    <el-table-column
+      header-align="left"
+      prop="signal_type.category"
+      label="KATEGORİ"
+    >
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="signal_type.description"
+      label="OLAY AÇIKLAMASI"
+    >
+    </el-table-column>
+    <el-table-column
+      prop="subscriber_id"
+      header-align="right"
+      align="right"
+      label="OLAY ZAMANI"
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.updated_at) }}
+      </template>
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+import SvgIconArmed from '@/components/atomic/device/hap/svg-icon-armed.vue'
+// import SvgIconDateTime from "@/components/atomic/device/hap/svg-icon-datetime.vue";
+import SvgIconAlarm from '@/components/atomic/device/hap/svg-icon-alarm.vue'
+import SvgIconFault from '@/components/atomic/device/hap/svg-icon-fault.vue'
+import SvgIconSabotage from '@/components/atomic/device/hap/svg-icon-sabotage.vue'
+import SvgIconCommunication from '@/components/atomic/device/hap/svg-icon-communication.vue'
+import SvgIconEnergy from '@/components/atomic/device/hap/svg-icon-energy.vue'
+// import SvgIconServiceRequest from "@/components/atomic/device/hap/svg-icon-is-service-request.vue";
+import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
+// import SvgIconQuery from "@/components/atomic/device/hap/svg-icon-query.vue";
+
+import { bus } from '@/main.js'
+import { dateTimeChange } from '@/utils.js'
+import { mapActions } from 'vuex'
+export default {
+  name: 'DataTable',
+  data() {
+    return {
+      multiple_selection: [],
+      bus: {},
+      loading: true
+    }
+  },
+  components: {
+    SvgIconArmed,
+    // SvgIconDateTime,
+    SvgIconAlarm,
+    SvgIconFault,
+    SvgIconSabotage,
+    SvgIconCommunication,
+    SvgIconEnergy,
+    SvgIconBattery
+    // SvgIconServiceRequest,
+    // SvgIconQuery,
+  },
+  props: {
+    data: {
+      default: []
+    }
+  },
+  watch: {
+    data: function (val) {
+      if (val) {
+        this.loading = false
+      } else {
+        if (
+          ['Dashboard', 'List', 'Premises', 'DeviceLastSignals'].includes(
+            this.$route.name
+          )
+        )
+          this.loading = false
+        else this.loading = true
+      }
+      if (val && this.$route.name == 'Premises') this.setCurrent(val[0])
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSelectedRows: 'dataTable/setSelectedRows',
+      setSelectedRow: 'dataTable/setSelectedRow'
+      // setLocation: "map/setLocation",
+    }),
+    formattedDatetime(val) {
+      console.log(val)
+      return dateTimeChange(val)
+    },
+    handleDBClick(val) {
+      if (['List', 'Dashboard'].includes(this.$route.name)) {
+        this.$router.push({
+          name: 'DeviceDetail',
+          params: { device_id: val.id }
+        })
+      }
+    },
+    rowClassName({ row }) {
+      return this.$refs.singleTable.selection.find(
+        (element) => element.id == row.id
+      )
+        ? 'selected-row'
+        : ''
+    },
+    handleSelectionChange(val) {
+      this.setSelectedRows(val)
+    },
+    async setCurrent(row) {
+      this.$refs.singleTable.setCurrentRow(row)
+      this.setSelectedRow(row)
+    },
+    handleCurrentChange(row) {
+      if (this.$route.name === 'Premises') {
+        this.setSelectedRow(row)
+        let location = {
+          lat: row.location.lat,
+          long: row.location.long
+        }
+        this.$store.dispatch('setLocation', {
+          location: { ...location }
+        })
+        bus.$emit('onCurrentChangeRowPremise', row)
+      }
+    }
+  },
+  created() {},
+  mounted() {}
+}
+</script>
+
+<style lang="scss">
+@import '@/assets/scss/style.scss';
+
+.data-table {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  align-items: center;
+  color: #000000;
+  // margin-top: 10px;
+}
+.data-table ul {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  grid-gap: 5px;
+  padding: 0px !important;
+  margin: 0px;
+}
+.el-table .selected-row {
+  background-color: $hybrone_selection_table_color !important;
+  td {
+    &:nth-child(1) {
+      border-left: 10px solid $hybrone_light_blue !important;
+    }
+  }
+}
+.el-table .current-row {
+  background-color: $hybrone_selection_table_color !important;
+  td {
+    &:nth-child(1) {
+      border-left: 10px solid $hybrone_light_blue !important;
+    }
+  }
+}
+</style>

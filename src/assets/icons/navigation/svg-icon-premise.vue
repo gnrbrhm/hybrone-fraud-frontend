@@ -1,0 +1,24 @@
+<template>
+  <svg
+    width="33"
+    height="31"
+    viewBox="0 0 33 31"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M16.5 7.375H32.75V30.125H0.25V0.875H16.5V7.375ZM3.5 26.875H6.75V23.625H3.5V26.875ZM6.75 20.375H3.5V17.125H6.75V20.375ZM3.5 13.875H6.75V10.625H3.5V13.875ZM6.75 7.375H3.5V4.125H6.75V7.375ZM10 26.875H13.25V23.625H10V26.875ZM13.25 20.375H10V17.125H13.25V20.375ZM10 13.875H13.25V10.625H10V13.875ZM13.25 7.375H10V4.125H13.25V7.375ZM29.5 26.875V10.625H16.5V13.875H19.75V17.125H16.5V20.375H19.75V23.625H16.5V26.875H29.5ZM26.25 13.875H23V17.125H26.25V13.875ZM23 20.375H26.25V23.625H23V20.375Z"
+      fill="#2C3357"
+    />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: "SvgIconPremise",
+};
+</script>
+
+<style></style>
