@@ -26,30 +26,30 @@
 </template>
 
 <script>
-import { ACTIONS_FIELDS } from "@/constant";
+import { ACTIONS_FIELDS } from '@/constant'
 
 export default {
-  name: "DeviceActions",
+  name: 'DeviceActions',
   data() {
     return {
       chronic_fault: null,
       fault_options: [],
       location_off: null,
-      location_off_options: [],
-    };
+      location_off_options: []
+    }
   },
   created() {
     this.fault_options = [
       //   ...ACTIONS_FIELDS["ACTIONS"],
-      ...ACTIONS_FIELDS["ACTIONS"][0]["cronic_fault"]["options"],
-    ];
+      ...ACTIONS_FIELDS['ACTIONS'][0]['cronic_fault']['options']
+    ]
     this.location_off_options = [
       //   ...ACTIONS_FIELDS["ACTIONS"],
-      ...ACTIONS_FIELDS["ACTIONS"][0]["location_off"]["options"],
-    ];
-    console.log(this.fault_options);
-  },
-};
+      ...ACTIONS_FIELDS['ACTIONS'][0]['location_off']['options']
+    ]
+    console.log(this.fault_options)
+  }
+}
 </script>
 
 <style></style>

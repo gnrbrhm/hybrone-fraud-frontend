@@ -3,34 +3,34 @@ export default {
   state: {
     selectedRows: [],
     selectedRow: {},
-    data: [],
+    data: []
   },
   getters: {
     getisSelected: (state) => {
-      return !!state.selectedRows;
+      return !!state.selectedRows
     },
     getSelectedRow: (state) => {
-      return state.selectedRow;
+      return state.selectedRow
     },
     getSelectedRows: (state) => {
-      return state.selectedRows;
-    },
+      return state.selectedRows
+    }
   },
   mutations: {
     SET_SELECTED_ROWS(state, rows) {
-      console.log(rows);
-      state.selectedRows = rows;
+      console.log(rows)
+      state.selectedRows = rows
     },
     SET_SELECTED_ROW(state, row) {
-      state.selectedRow = row;
-    },
+      state.selectedRow = row
+    }
   },
   actions: {
     setSelectedRows({ commit }, rows) {
-      commit("SET_SELECTED_ROWS", rows);
+      commit('SET_SELECTED_ROWS', rows)
     },
     setSelectedRow({ commit }, row) {
-      commit("SET_SELECTED_ROW", row);
-    },
-  },
-};
+      commit('SET_SELECTED_ROW', row)
+    }
+  }
+}

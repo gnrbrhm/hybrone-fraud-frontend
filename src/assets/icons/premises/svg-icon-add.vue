@@ -20,8 +20,8 @@
 
 <script>
 export default {
-  name: "SvgIconAdd",
-};
+  name: 'SvgIconAdd'
+}
 </script>
 
 <style></style>

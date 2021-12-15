@@ -78,47 +78,47 @@
 </template>
 
 <script>
-import { ACTIONS_FIELDS } from "@/constant";
-import endpoints from "@/endpoints";
-import { bus } from "@/main.js";
+import { ACTIONS_FIELDS } from '@/constant'
+import endpoints from '@/endpoints'
+import { bus } from '@/main.js'
 
 export default {
-  name: "DeviceReport",
+  name: 'DeviceReport',
   data() {
     return {
-      list_val: "",
-      type: "",
-      response_type: "",
-      start_time: "",
-      finish_time: "",
+      list_val: '',
+      type: '',
+      response_type: '',
+      start_time: '',
+      finish_time: '',
       type_options: [],
       format_options: [],
-      list_options: [],
-    };
+      list_options: []
+    }
   },
   computed: {
     getSelectedRowsPremiseId() {
-      let selected_premise_ids = [];
+      let selected_premise_ids = []
       this.$store.state.dataTable.selectedRows.forEach((item) => {
-        selected_premise_ids.push(item.premise_id);
-      });
-      return selected_premise_ids;
-    },
+        selected_premise_ids.push(item.premise_id)
+      })
+      return selected_premise_ids
+    }
   },
   methods: {
     handleReportSubmit() {
-      let devicesPremiseID = [];
-      let currentDate = new Date();
-      if (this.start_time == "" || this.end_time == "") {
-        let end_time = new Date();
-        let start_time = new Date();
-        start_time.setDate(end_time.getDate() - 30);
-        this.end_time = end_time.toISOString();
-        this.start_time = start_time.toISOString();
+      let devicesPremiseID = []
+      let currentDate = new Date()
+      if (this.start_time == '' || this.end_time == '') {
+        let end_time = new Date()
+        let start_time = new Date()
+        start_time.setDate(end_time.getDate() - 30)
+        this.end_time = end_time.toISOString()
+        this.start_time = start_time.toISOString()
       }
-      if (this.list_val != "all")
-        devicesPremiseID = this.getSelectedRowsPremiseId;
-      else devicesPremiseID = [];
+      if (this.list_val != 'all')
+        devicesPremiseID = this.getSelectedRowsPremiseId
+      else devicesPremiseID = []
       this.$api({
         ...endpoints.getDeviceReport,
         params: {
@@ -126,50 +126,50 @@ export default {
           report_type: this.type,
           start_time: this.start_time,
           finish_time: this.finish_time,
-          premise_id: devicesPremiseID.join(),
-        },
+          premise_id: devicesPremiseID.join()
+        }
       }).then((r) => {
         if (r.status == 200) {
-          console.log(r);
-          const url = window.URL.createObjectURL(new Blob([r.data]));
-          const link = document.createElement("a");
-          link.href = url;
+          console.log(r)
+          const url = window.URL.createObjectURL(new Blob([r.data]))
+          const link = document.createElement('a')
+          link.href = url
           link.setAttribute(
-            "download",
-            "Cihaz-raporlari-" +
+            'download',
+            'Cihaz-raporlari-' +
               currentDate.getFullYear() +
-              ("0" + (currentDate.getMonth() + 1)).slice(-2) +
-              ("0" + currentDate.getDate()).slice(-2) +
-              ("0" + currentDate.getHours()).slice(-2) +
-              ("0" + currentDate.getMinutes()).slice(-2) +
-              ("0" + currentDate.getSeconds()).slice(-2) +
-              "." +
-              (this.response_type == "excel" ? "xlsx" : this.response_type)
-          );
+              ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+              ('0' + currentDate.getDate()).slice(-2) +
+              ('0' + currentDate.getHours()).slice(-2) +
+              ('0' + currentDate.getMinutes()).slice(-2) +
+              ('0' + currentDate.getSeconds()).slice(-2) +
+              '.' +
+              (this.response_type == 'excel' ? 'xlsx' : this.response_type)
+          )
           // link.setAttribute('download', 'file.xlsx')
-          document.body.appendChild(link);
-          link.click();
+          document.body.appendChild(link)
+          link.click()
           if (r.status) {
-            this.$emit("onClose");
-            this.list_val = "";
-            this.start_time = "";
-            this.finish_time = "";
-            this.type = "";
-            this.response_type = "";
+            this.$emit('onClose')
+            this.list_val = ''
+            this.start_time = ''
+            this.finish_time = ''
+            this.type = ''
+            this.response_type = ''
           }
         }
-      });
-    },
+      })
+    }
   },
   created() {
-    this.list_options = [...ACTIONS_FIELDS["REPORT"][0]["list"]["options"]];
-    this.type_options = [...ACTIONS_FIELDS["REPORT"][0]["type"]["options"]];
-    this.format_options = [...ACTIONS_FIELDS["REPORT"][0]["format"]["options"]];
+    this.list_options = [...ACTIONS_FIELDS['REPORT'][0]['list']['options']]
+    this.type_options = [...ACTIONS_FIELDS['REPORT'][0]['type']['options']]
+    this.format_options = [...ACTIONS_FIELDS['REPORT'][0]['format']['options']]
   },
   mounted() {
-    bus.$on("onReportSubmit", (val) => this.handleReportSubmit(val));
-  },
-};
+    bus.$on('onReportSubmit', (val) => this.handleReportSubmit(val))
+  }
+}
 </script>
 
 <style></style>

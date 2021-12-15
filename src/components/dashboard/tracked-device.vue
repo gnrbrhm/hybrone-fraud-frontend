@@ -9,44 +9,44 @@
 </template>
 
 <script>
-import TrackedDeviceFilter from "@/components/dashboard/tracked-device-filter";
-import DataTable from "@/components/atomic/data-table.vue";
-import { mapActions } from "vuex";
+import TrackedDeviceFilter from '@/components/dashboard/tracked-device-filter'
+import DataTable from '@/components/atomic/data-table.vue'
+import { mapActions } from 'vuex'
 export default {
-  name: "TrackedDevice",
+  name: 'TrackedDevice',
   components: { TrackedDeviceFilter, DataTable },
   data() {
     return {
       selectedRow: false,
-      table_data: [],
-    };
+      table_data: []
+    }
   },
   methods: {
     ...mapActions({
-      getTrackedPremises: "premise/getTrackedPremises",
+      getTrackedPremises: 'premise/getTrackedPremises'
     }),
     handleSelectRow(val) {
-      this.selectedRow = val;
+      this.selectedRow = val
     },
     handleCreateTrackedPremise() {
-      this.fillDataTable();
+      this.fillDataTable()
     },
     fillDataTable() {
       let tracked_premises = this.getTrackedPremises({
         page: 1,
         limit: 5,
-        is_tracked: true,
-      });
+        is_tracked: true
+      })
       tracked_premises.then((r) => {
-        console.log("Response Data", r);
-        this.table_data = r;
-      });
-    },
+        console.log('Response Data', r)
+        this.table_data = r
+      })
+    }
   },
   created() {
-    this.fillDataTable();
-  },
-};
+    this.fillDataTable()
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -27,32 +27,32 @@
 </template>
 
 <script>
-import SvgIconAdd from "@/assets/icons/premises/svg-icon-add";
-import SvgIconSearch from "@/assets/icons/list/svg-icon-search.vue";
+import SvgIconAdd from '@/assets/icons/premises/svg-icon-add'
+import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
 
 export default {
-  name: "PremiseFilter",
+  name: 'PremiseFilter',
   components: {
     SvgIconSearch,
-    SvgIconAdd,
+    SvgIconAdd
   },
   data() {
     return {
-      custom_premise_id: "",
-    };
+      custom_premise_id: ''
+    }
   },
   methods: {
     handleSearch() {
-      this.$emit("onPremiseFilteredData", {
-        custom_premise_id: this.custom_premise_id,
-      });
-    },
-  },
-};
+      this.$emit('onPremiseFilteredData', {
+        custom_premise_id: this.custom_premise_id
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .premise-filter {
   display: flex;

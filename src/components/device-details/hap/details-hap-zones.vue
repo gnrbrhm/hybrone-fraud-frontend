@@ -6,66 +6,66 @@
 </template>
 
 <script>
-import DetailsTable from "@/components/device-details/hap/details-table.vue";
-import { mapGetters, mapActions } from "vuex";
+import DetailsTable from '@/components/device-details/hap/details-table.vue'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: "DetailsHapZones",
+  name: 'DetailsHapZones',
   components: { DetailsTable },
   data() {
     return {
       data: [],
       device_zones: [],
       modal_type: null,
-      selectedAction: "",
-      modal_visible: false,
-    };
+      selectedAction: '',
+      modal_visible: false
+    }
   },
-  
+
   props: {
     table_data: {
-      default: [],
+      default: []
     },
     watch: {
       table_data: function (val) {
-        console.log("TableData", val);
-      },
-    },
+        console.log('TableData', val)
+      }
+    }
   },
   computed: {
     ...mapGetters({
-      getProsecDevice: "device/getDevice",
-    }),
+      getProsecDevice: 'device/getDevice'
+    })
   },
   methods: {
     ...mapActions({
-      getProsecDeviceById: "device/getProsecDeviceById",
+      getProsecDeviceById: 'device/getProsecDeviceById'
     }),
     async getDeviceDetails(device_id) {
-      return await this.getProsecDeviceById(device_id);
+      return await this.getProsecDeviceById(device_id)
     },
     getPartionsZones(prosec_device) {
-      console.log("ProsecDevice", prosec_device);
+      console.log('ProsecDevice', prosec_device)
       prosec_device.partitions.forEach((partition) => {
-        console.log("Partion", partition);
-        let partion_name = partition.name;
+        console.log('Partion', partition)
+        let partion_name = partition.name
         partition.zones.forEach((zone) => {
-          zone = { ...zone, partition_name: partion_name };
-          this.device_zones.push(zone);
-        });
-      });
+          zone = { ...zone, partition_name: partion_name }
+          this.device_zones.push(zone)
+        })
+      })
       this.device_zones = this.device_zones.sort((a, b) => {
-        return a.id.localeCompare(b.id);
-      });
-      console.log("Zone Array", this.device_zones);
-    },
+        return a.id.localeCompare(b.id)
+      })
+      console.log('Zone Array', this.device_zones)
+    }
   },
   mounted() {
-    let prosec_device = this.getDeviceDetails(this.$route.params.device_id);
+    let prosec_device = this.getDeviceDetails(this.$route.params.device_id)
     prosec_device.then((r) => {
-      this.getPartionsZones(r);
-    });
-  },
-};
+      this.getPartionsZones(r)
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -15,8 +15,8 @@
 
 <script>
 export default {
-  name: "BackArrow",
-};
+  name: 'BackArrow'
+}
 </script>
 
 <style></style>

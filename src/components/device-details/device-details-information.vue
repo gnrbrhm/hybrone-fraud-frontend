@@ -10,18 +10,18 @@
 
 <script>
 export default {
-  name: "DeviceDetailsInformation",
+  name: 'DeviceDetailsInformation',
   props: {
     data: {
       type: Object,
-      default: () => {},
-    },
-  },
-};
+      default: () => {}
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .information {
   min-width: 140px;
   min-height: 150px;

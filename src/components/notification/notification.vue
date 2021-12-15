@@ -6,19 +6,19 @@
 </template>
 
 <script>
-import SvgIconNotification from "@/components/notification/notification.vue";
+import SvgIconNotification from '@/components/notification/notification.vue'
 export default {
-  name: "Notification",
+  name: 'Notification',
   components: {
-    SvgIconNotification,
+    SvgIconNotification
   },
   props: {
     msg: {
-      default: "Deneme",
-      type: String,
-    },
-  },
-};
+      default: 'Deneme',
+      type: String
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

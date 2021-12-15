@@ -16,49 +16,49 @@
 </template>
 
 <script>
-import { DEVICE_TYPES } from "@/constant";
+import { DEVICE_TYPES } from '@/constant'
 export default {
-  name: "DashboardNav",
+  name: 'DashboardNav',
   data() {
-    return { device_types: {} };
+    return { device_types: {} }
   },
   computed: {
     prefixRoute() {
-      if (this.$route.name != "DeviceLastSignals") return "";
+      if (this.$route.name != 'DeviceLastSignals') return ''
       else {
-        return "/last-signals";
+        return '/last-signals'
       }
     },
     parentRoute() {
-      if (this.$route.name == "Dashboard") {
-        return "/" + this.$route.path.split("/")[1];
+      if (this.$route.name == 'Dashboard') {
+        return '/' + this.$route.path.split('/')[1]
       } else if (
-        this.$route.name == "DeviceDetail" ||
-        this.$route.name == "DeviceLastSignals"
+        this.$route.name == 'DeviceDetail' ||
+        this.$route.name == 'DeviceLastSignals'
       ) {
-        let new_path = this.$route.path.split("/");
-        new_path.pop();
-        return new_path.join("/");
+        let new_path = this.$route.path.split('/')
+        new_path.pop()
+        return new_path.join('/')
       } else {
-        let new_path = this.$route.path.split("/");
-        new_path.pop();
-        new_path.pop();
-        return new_path.join("/");
+        let new_path = this.$route.path.split('/')
+        new_path.pop()
+        new_path.pop()
+        return new_path.join('/')
       }
-    },
+    }
   },
   methods: {},
   created() {
-    this.device_types = { ...DEVICE_TYPES };
+    this.device_types = { ...DEVICE_TYPES }
   },
   mounted() {
-    console.log("Dashboard Nav", this.$route);
-  },
-};
+    console.log('Dashboard Nav', this.$route)
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .header-content {
   display: flex;

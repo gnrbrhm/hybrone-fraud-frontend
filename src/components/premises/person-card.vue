@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import SvgIconPerson from "@/assets/icons/premises/svg-icon-person";
+import SvgIconPerson from '@/assets/icons/premises/svg-icon-person'
 export default {
-  name: "PersonsCard",
-  components: { SvgIconPerson },
-};
+  name: 'PersonsCard',
+  components: { SvgIconPerson }
+}
 </script>
 
 <style lang="scss" scoped>

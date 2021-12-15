@@ -61,11 +61,11 @@
 
 <script>
 export default {
-  name: "SvgIconArmed",
+  name: 'SvgIconArmed',
   props: {
-    status: { default: 3 },
-  },
-};
+    status: { default: 3 }
+  }
+}
 </script>
 
 <style></style>

@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import DeviceHeader from "@/components/device/device-header";
-import CreateHapDeviceForm from "@/components/device/hap/create-hap-device-form.vue";
+import DeviceHeader from '@/components/device/device-header'
+import CreateHapDeviceForm from '@/components/device/hap/create-hap-device-form.vue'
 export default {
-  name: "CreateHapDevice",
+  name: 'CreateHapDevice',
   components: { DeviceHeader, CreateHapDeviceForm },
   props: {
     is_update: {
-      default: false,
-    },
-  },
-};
+      default: false
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

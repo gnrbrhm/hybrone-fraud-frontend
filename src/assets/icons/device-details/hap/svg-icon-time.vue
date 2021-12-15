@@ -17,21 +17,21 @@
 
 <script>
 export default {
-  name: "SvgIconTime",
+  name: 'SvgIconTime',
   props: {
-    status: { type: Boolean, default: null },
+    status: { type: Boolean, default: null }
   },
   computed: {
     changeColor() {
       if (this.status == 1) {
-        return "#6FCF97";
+        return '#6FCF97'
       } else {
-        if (this.status == 0) return "#B7B7B7";
-        else return "#EB5757";
+        if (this.status == 0) return '#B7B7B7'
+        else return '#EB5757'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>

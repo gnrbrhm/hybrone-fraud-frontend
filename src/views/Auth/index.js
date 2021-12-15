@@ -4,7 +4,7 @@ import Auth from './auth'
 
 const components = [Auth]
 
-components.forEach(component => {
+components.forEach((component) => {
   Vue.component(component.name, component)
 })
 

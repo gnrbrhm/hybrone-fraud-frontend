@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: "Partions",
-};
+  name: 'Partions'
+}
 </script>
 
 <style></style>

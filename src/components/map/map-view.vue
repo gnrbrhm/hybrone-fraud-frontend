@@ -16,78 +16,78 @@
 </template>
 
 <script>
-import leaflet from "leaflet";
-import { mapGetters } from "vuex";
-import { mapActions } from "vuex";
-import { bus } from "@/main.js";
+import leaflet from 'leaflet'
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
+import { bus } from '@/main.js'
 export default {
-  name: "MapView",
+  name: 'MapView',
   data() {
     return {
       maps: null,
       marker: null,
       isRender: true,
-      bus: {},
-    };
+      bus: {}
+    }
   },
   props: {
     premise: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
+        return {}
+      }
+    }
   },
   watch: {},
   computed: {
     ...mapGetters({
-      getCurrentLocation: "getCurrentLocation",
-    }),
+      getCurrentLocation: 'getCurrentLocation'
+    })
   },
   methods: {
     ...mapActions({
-      setSelectedLocation: "setSelectedLocation",
+      setSelectedLocation: 'setSelectedLocation'
     }),
     async addMarkerAndFlyTo(val) {
-      console.log("Val", val);
-      leaflet.marker([val.lat, val.long]).addTo(this.maps);
-      this.maps.flyTo([val.lat, val.long], 14);
-      this.$forceUpdate();
+      console.log('Val', val)
+      leaflet.marker([val.lat, val.long]).addTo(this.maps)
+      this.maps.flyTo([val.lat, val.long], 14)
+      this.$forceUpdate()
     },
     handleCurrentChangeRowPremise() {
-      this.addMarkerAndFlyTo(this.getCurrentLocation.location);
-    },
+      this.addMarkerAndFlyTo(this.getCurrentLocation.location)
+    }
   },
   mounted() {
-    let L = leaflet;
-    this.maps = leaflet.map("map").setView([38.963745, 35.243322], 6);
+    let L = leaflet
+    this.maps = leaflet.map('map').setView([38.963745, 35.243322], 6)
     L.tileLayer(this.$map, {
       maxZoom: 18,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-      id: "base",
-    }).addTo(this.maps);
-    if (this.$route.name == "Premises") {
-      console.log("GetCurrentLocation Premise", this.getCurrentLocation);
-      this.addMarkerAndFlyTo(this.getCurrentLocation.location);
+      id: 'base'
+    }).addTo(this.maps)
+    if (this.$route.name == 'Premises') {
+      console.log('GetCurrentLocation Premise', this.getCurrentLocation)
+      this.addMarkerAndFlyTo(this.getCurrentLocation.location)
     }
     // if (this.$route.name == "CreatePremise") {
-    if (["CreatePremise", "UpdatePremise"].includes(this.$route.name)) {
-      this.maps.on("click", (e) => {
-        if (this.marker) this.maps.removeLayer(this.marker);
-        this.marker = L.marker(e.latlng).addTo(this.maps);
-        this.$store.dispatch("setSelectedLocation", {
-          ...this.marker.getLatLng(),
-        });
-        this.selected_location = true;
-      });
+    if (['CreatePremise', 'UpdatePremise'].includes(this.$route.name)) {
+      this.maps.on('click', (e) => {
+        if (this.marker) this.maps.removeLayer(this.marker)
+        this.marker = L.marker(e.latlng).addTo(this.maps)
+        this.$store.dispatch('setSelectedLocation', {
+          ...this.marker.getLatLng()
+        })
+        this.selected_location = true
+      })
     }
 
-    bus.$on("onCurrentChangeRowPremise", () =>
+    bus.$on('onCurrentChangeRowPremise', () =>
       this.handleCurrentChangeRowPremise()
-    );
-  },
-};
+    )
+  }
+}
 </script>
 <style lang="scss">
 #map {

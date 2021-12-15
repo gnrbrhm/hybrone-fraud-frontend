@@ -10,15 +10,15 @@
 </template>
 
 <script>
-import FormLogin from "./FormLogin.vue";
-import SentinelAvatar from "./SentinelAvatar.vue";
+import FormLogin from './FormLogin.vue'
+import SentinelAvatar from './SentinelAvatar.vue'
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     FormLogin,
-    SentinelAvatar,
-  },
-};
+    SentinelAvatar
+  }
+}
 </script>
 
 <style lang="scss" scoped>

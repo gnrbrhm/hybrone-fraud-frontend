@@ -6,34 +6,34 @@
 </template>
 
 <script>
-import leaflet from "leaflet";
-import ListFilter from "@/components/list/list-filter";
-import MapView from "@/components/map/map-view";
+import leaflet from 'leaflet'
+import ListFilter from '@/components/list/list-filter'
+import MapView from '@/components/map/map-view'
 
 export default {
-  name: "Map",
+  name: 'Map',
   components: {
     ListFilter,
-    MapView,
+    MapView
   },
   data() {
     return {
-      map: null,
-    };
+      map: null
+    }
   },
   mounted() {
-    let L = leaflet;
-    this.map = leaflet.map("map").setView([38.963745, 35.243322], 6);
+    let L = leaflet
+    this.map = leaflet.map('map').setView([38.963745, 35.243322], 6)
     // this.$map.addTo(this.map);
     // console.log(this.map);
     L.tileLayer(this.$map, {
       maxZoom: 18,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-      id: "base",
-    }).addTo(this.map);
-  },
-};
+      id: 'base'
+    }).addTo(this.map)
+  }
+}
 </script>
 
 <style lang="scss">

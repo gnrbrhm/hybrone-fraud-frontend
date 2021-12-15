@@ -17,8 +17,8 @@
 
 <script>
 export default {
-  name: "SvgIconRefresh",
-};
+  name: 'SvgIconRefresh'
+}
 </script>
 
 <style></style>

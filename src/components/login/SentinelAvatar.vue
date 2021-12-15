@@ -1611,8 +1611,8 @@
 
 <script>
 export default {
-  name: "SentinelAvatar",
-};
+  name: 'SentinelAvatar'
+}
 </script>
 
 <style></style>

@@ -13,11 +13,11 @@
 
 <script>
 export default {
-  name: "SvgIconQuery",
+  name: 'SvgIconQuery',
   props: {
-    status: { type: Boolean, default: null },
-  },
-};
+    status: { type: Boolean, default: null }
+  }
+}
 </script>
 
 <style></style>

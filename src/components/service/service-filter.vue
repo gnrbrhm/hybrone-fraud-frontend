@@ -99,9 +99,9 @@
       <div class="dialog-content-information">
         <span class="information">{{
           import_result.success_count +
-          "/" +
+          '/' +
           import_result.total_count +
-          " Kayıt Eklendi"
+          ' Kayıt Eklendi'
         }}</span>
         <span class="statuses">Eklenmeyen kayıtlar</span>
         <el-table
@@ -131,101 +131,101 @@
 </template>
 
 <script>
-import axios from "axios";
-import moment from "moment";
+import axios from 'axios'
+import moment from 'moment'
 // import endpoints from "@/endpoints";
-import SvgIconSearch from "@/assets/icons/list/svg-icon-search.vue";
-import SvgIconSettingDownload from "@/assets/icons/settings/svg-icon-settings-download.vue";
-import SvgIconListRaport from "@/assets/icons/services/svg-icon-list-rapor";
-import SvgIconServiceImport from "@/assets/icons/services/svg-icon-service-import.vue";
-import store from "../../store";
-import { mapActions } from "vuex";
+import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
+import SvgIconSettingDownload from '@/assets/icons/settings/svg-icon-settings-download.vue'
+import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
+import SvgIconServiceImport from '@/assets/icons/services/svg-icon-service-import.vue'
+import store from '../../store'
+import { mapActions } from 'vuex'
 export default {
-  name: "ServiceFilter",
+  name: 'ServiceFilter',
   components: {
     SvgIconListRaport,
     SvgIconServiceImport,
     SvgIconSettingDownload,
-    SvgIconSearch,
+    SvgIconSearch
   },
   data() {
     return {
       import_result: {
         total_count: null,
         fail_count: null,
-        success_count: null,
+        success_count: null
       },
       filtered_device: false,
       fileList: [],
-      filename: "",
+      filename: '',
       dialogImportVisible: false,
       dialogTableVisible: false,
-      date_val: "",
+      date_val: '',
       filter_data: {
         // start_time: '',
         // finish_time: '',
         // ticket_type: ''
       },
-      device_id: "",
+      device_id: '',
       resultTable: [],
       status_option: [
         {
-          label: "Tamamlandı",
-          value: 1,
+          label: 'Tamamlandı',
+          value: 1
         },
         {
-          label: "Açık / Beklemede",
-          value: 2,
-        },
+          label: 'Açık / Beklemede',
+          value: 2
+        }
       ],
       state_option: [
         {
-          label: "Tüm Durumlar",
-          value: "Tüm Durumlar",
+          label: 'Tüm Durumlar',
+          value: 'Tüm Durumlar'
         },
         {
-          label: "Açık",
-          value: "Açık",
+          label: 'Açık',
+          value: 'Açık'
         },
         {
-          label: "Genel Kontrol (Bakım)",
-          value: "Genel Kontrol (Bakım)",
+          label: 'Genel Kontrol (Bakım)',
+          value: 'Genel Kontrol (Bakım)'
         },
         {
-          label: "Genel Arıza",
-          value: "Genel Arıza",
+          label: 'Genel Arıza',
+          value: 'Genel Arıza'
         },
         {
-          label: "Batarya Hatası",
-          value: "Batarya Hatası",
+          label: 'Batarya Hatası',
+          value: 'Batarya Hatası'
         },
         {
-          label: "İletişim Hatası",
-          value: "İletişim Hatası",
-        },
-      ],
-    };
+          label: 'İletişim Hatası',
+          value: 'İletişim Hatası'
+        }
+      ]
+    }
   },
   methods: {
     ...mapActions({
-      getTicketDownloadList: "service/getTicketDownloadList",
+      getTicketDownloadList: 'service/getTicketDownloadList'
     }),
     closeDialogHandle() {
-      this.fileList = [];
-      this.dialogTableVisible = false;
+      this.fileList = []
+      this.dialogTableVisible = false
     },
     handleChangeDate(val) {
       if (val != null) {
         this.filter_data.start_time = moment(val[0])
-          .add(3, "hours")
-          ._d.toISOString();
+          .add(3, 'hours')
+          ._d.toISOString()
         // .toISOString()
         this.filter_data.finish_time = moment(val[1])
-          .add(3, "hours")
-          ._d.toISOString();
+          .add(3, 'hours')
+          ._d.toISOString()
 
-        console.log(this.filter_data.start_time);
-        console.log(this.filter_data.finish_time);
+        console.log(this.filter_data.start_time)
+        console.log(this.filter_data.finish_time)
         // .toISOString()
         // let start_time = new Date(val['0'])
         // let finish_time = new Date(val['1'])
@@ -239,82 +239,82 @@ export default {
         // this.filter_data.start_time = start_time
         // this.filter_data.finish_time = finish_time
       } else {
-        this.filter_data.start_time = "";
-        this.filter_data.finish_time = "";
+        this.filter_data.start_time = ''
+        this.filter_data.finish_time = ''
       }
     },
     onFilteredDataClick() {
-      console.log(this.filter_data);
+      console.log(this.filter_data)
       Object.keys(this.filter_data).forEach((element) => {
-        if (this.filter_data[element] == "") {
-          console.log("Element", element);
-          delete this.filter_data[element];
+        if (this.filter_data[element] == '') {
+          console.log('Element', element)
+          delete this.filter_data[element]
         }
-      });
-      this.$emit("onhandleFiltredParam", this.filter_data);
+      })
+      this.$emit('onhandleFiltredParam', this.filter_data)
     },
 
     handleChange(file, fileList) {
-      this.filename = file.name;
-      this.fileList.push(file);
+      this.filename = file.name
+      this.fileList.push(file)
       if (fileList.length > 0) {
-        this.importDisabled = false;
-        this.isEmpyt = false;
+        this.importDisabled = false
+        this.isEmpyt = false
       }
-      this.uploadFiles();
+      this.uploadFiles()
     },
     uploadFiles() {
-      this.dialogImportVisible = true;
-      let token = store.state.auth.user.token;
+      this.dialogImportVisible = true
+      let token = store.state.auth.user.token
       const config = {
         headers: {
-          "Content-Type":
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const form = new FormData();
-      form.append("excel", this.fileList[0].raw, this.fileList[0].name);
+          'Content-Type':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const form = new FormData()
+      form.append('excel', this.fileList[0].raw, this.fileList[0].name)
       axios
         .post(
           // 'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/tickets/import/',
           // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/tickets/import/',
-          "http://192.168.3.199:3000/api/v1/tickets/import",
+          'http://192.168.3.199:3000/api/v1/tickets/import',
           // 'http://10.81.102.51:3000/api/v1/tickets/import',
           form,
           config
         )
         .then((r) => {
-          this.import_result = { ...r.data.data };
+          this.import_result = { ...r.data.data }
           this.import_result.total_count =
             parseInt(this.import_result.fail_count) +
-            parseInt(this.import_result.success_count);
-          this.resultTable = r.data.data.failed_rows;
-        });
+            parseInt(this.import_result.success_count)
+          this.resultTable = r.data.data.failed_rows
+        })
       setTimeout(() => {
-        this.dialogImportVisible = false;
-        this.dialogTableVisible = true;
-        this.$emit("onUpdateTable", true);
-      }, 750);
+        this.dialogImportVisible = false
+        this.dialogTableVisible = true
+        this.$emit('onUpdateTable', true)
+      }, 750)
     },
     getDownloadExcel(data) {
-      let currentDate = new Date();
-      const url = window.URL.createObjectURL(new Blob([data]));
-      const link = document.createElement("a");
-      link.href = url;
+      let currentDate = new Date()
+      const url = window.URL.createObjectURL(new Blob([data]))
+      const link = document.createElement('a')
+      link.href = url
       link.setAttribute(
-        "download",
-        "Teknik-servis " +
+        'download',
+        'Teknik-servis ' +
           currentDate.getFullYear() +
-          ("0" + (currentDate.getMonth() + 1)).slice(-2) +
-          ("0" + currentDate.getDate()).slice(-2) +
-          ("0" + currentDate.getHours()).slice(-2) +
-          ("0" + currentDate.getMinutes()).slice(-2) +
-          ("0" + currentDate.getSeconds()).slice(-2) +
-          ".xlsx"
-      );
-      document.body.appendChild(link);
-      link.click();
+          ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+          ('0' + currentDate.getDate()).slice(-2) +
+          ('0' + currentDate.getHours()).slice(-2) +
+          ('0' + currentDate.getMinutes()).slice(-2) +
+          ('0' + currentDate.getSeconds()).slice(-2) +
+          '.xlsx'
+      )
+      document.body.appendChild(link)
+      link.click()
     },
 
     onDownloadTicketList() {
@@ -322,24 +322,24 @@ export default {
       //   ...endpoints.getTicketsListDownload,
       //   params: { response_type: "excel", ...this.filter_data },
       // }).then((r) => {
-      let download_list = this.getTicketDownloadList(this.filter_data);
+      let download_list = this.getTicketDownloadList(this.filter_data)
       download_list.then((r) => {
-        this.getDownloadExcel(r);
-      });
-    },
+        this.getDownloadExcel(r)
+      })
+    }
   },
   created() {
     if (this.$route.params.premise_id) {
-      console.log(this.$route.params.premise_id);
-      this.filter_data.search = this.$route.params.premise_id;
-      this.onFilteredDataClick(this.$route.params.premise_id);
+      console.log(this.$route.params.premise_id)
+      this.filter_data.search = this.$route.params.premise_id
+      this.onFilteredDataClick(this.$route.params.premise_id)
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

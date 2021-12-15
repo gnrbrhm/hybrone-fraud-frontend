@@ -140,9 +140,9 @@
       <div class="dialog-content-information">
         <span class="information">{{
           import_result.success_count +
-          "/" +
+          '/' +
           import_result.total_count +
-          " Kayıt Eklendi"
+          ' Kayıt Eklendi'
         }}</span>
         <span class="status">Eklenmeyen kayıtlar</span>
         <el-table
@@ -172,139 +172,139 @@
 </template>
 
 <script>
-import axios from "axios";
-import endpoints from "@/endpoints";
-import SvgIconSettingDownload from "@/assets/icons/settings/svg-icon-settings-download.vue";
-import store from "../../store";
+import axios from 'axios'
+import endpoints from '@/endpoints'
+import SvgIconSettingDownload from '@/assets/icons/settings/svg-icon-settings-download.vue'
+import store from '../../store'
 
 export default {
-  name: "Settings",
+  name: 'Settings',
   components: {
-    SvgIconSettingDownload,
+    SvgIconSettingDownload
   },
   data() {
     return {
       import_result: {
         total_count: null,
         fail_count: null,
-        success_count: null,
+        success_count: null
       },
-      setting: { name: "QueryPeriod", value: this.query_result },
+      setting: { name: 'QueryPeriod', value: this.query_result },
       dialogImportVisible: false,
       dialogTableVisible: false,
       isEmpyt: true,
       isBackupEmpyt: true,
-      query_result: "",
+      query_result: '',
       fileList: [],
       backupList: [],
-      filename: "",
-      backupname: "",
+      filename: '',
+      backupname: '',
       importDisabled: true,
       backupDisabled: true,
       query_state_option: [
         {
-          label: "Kapalı",
-          value: "closed",
+          label: 'Kapalı',
+          value: 'closed'
         },
         {
-          label: "1 Saat",
-          value: "1",
+          label: '1 Saat',
+          value: '1'
         },
         {
-          label: "3 Saat",
-          value: "3",
+          label: '3 Saat',
+          value: '3'
         },
         {
-          label: "6 Saat",
-          value: "6",
+          label: '6 Saat',
+          value: '6'
         },
         {
-          label: "12 Saat",
-          value: "12",
+          label: '12 Saat',
+          value: '12'
         },
         {
-          label: "24 Saat",
-          value: "24",
-        },
+          label: '24 Saat',
+          value: '24'
+        }
       ],
-      resultTable: [],
-    };
+      resultTable: []
+    }
   },
   methods: {
     getBackupFile() {
       this.$api({
-        ...endpoints.getBackupFiles,
+        ...endpoints.getBackupFiles
       }).then((r) => {
-        const url = window.URL.createObjectURL(new Blob([r.data]));
-        const link = document.createElement("a");
-        link.href = url;
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const link = document.createElement('a')
+        link.href = url
         // link.setAttribute('download', 'file.xlsx')
-        document.body.appendChild(link);
-        link.click();
-      });
+        document.body.appendChild(link)
+        link.click()
+      })
     },
     handleRemove() {
       setTimeout(() => {
-        this.isEmpyt = true;
-        this.importDisabled = true;
-        this.fileList = [];
-      }, 500);
+        this.isEmpyt = true
+        this.importDisabled = true
+        this.fileList = []
+      }, 500)
     },
     handleBackupRemove() {
       setTimeout(() => {
-        this.isBackupEmpyt = true;
-        this.backupDisabled = true;
-        this.backupList = [];
-      }, 500);
+        this.isBackupEmpyt = true
+        this.backupDisabled = true
+        this.backupList = []
+      }, 500)
     },
     onhandleChangePeriod(val) {
-      this.setting.value = val;
+      this.setting.value = val
     },
     onhandleSave() {
-      this.updateQueryPeriod();
+      this.updateQueryPeriod()
     },
     onClicksLogs() {
-      this.$router.push("/settings/logs");
+      this.$router.push('/settings/logs')
     },
     handleChange(file, fileList) {
-      this.filename = file.name;
-      this.fileList.push(file);
-      console.log(file);
-      console.log(fileList);
+      this.filename = file.name
+      this.fileList.push(file)
+      console.log(file)
+      console.log(fileList)
       if (fileList.length > 0) {
-        this.importDisabled = false;
-        this.isEmpyt = false;
+        this.importDisabled = false
+        this.isEmpyt = false
       }
     },
     handleBackupChange(file, fileList) {
-      this.backupname = file.name;
-      this.backupList.push(file);
-      console.log(file);
-      console.log(fileList);
+      this.backupname = file.name
+      this.backupList.push(file)
+      console.log(file)
+      console.log(fileList)
       if (this.backupList.length > 0) {
-        this.backupDisabled = false;
-        this.isBackupEmpyt = false;
+        this.backupDisabled = false
+        this.isBackupEmpyt = false
       }
     },
     uploadFiles() {
-      this.$confirm("Toplu cihaz ekleme işlemi için emin misiniz ?", {
-        confirmButtonText: "Evet",
-        cancelButtonText: "Hayır",
+      this.$confirm('Toplu cihaz ekleme işlemi için emin misiniz ?', {
+        confirmButtonText: 'Evet',
+        cancelButtonText: 'Hayır'
       }).then(() => {
-        let token = store.state.auth.user.token;
+        let token = store.state.auth.user.token
         const config = {
           headers: {
-            "Content-Type":
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        this.dialogImportVisible = true;
-        const form = new FormData();
-        form.append("excel", this.fileList[0].raw, this.fileList[0].name);
+            'Content-Type':
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            Authorization: `Bearer ${token}`
+          }
+        }
+        this.dialogImportVisible = true
+        const form = new FormData()
+        form.append('excel', this.fileList[0].raw, this.fileList[0].name)
         axios
           .post(
-            "https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/premises/excel",
+            'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/premises/excel',
             // 'http://10.81.102.51:3000/api/v1/premises/excel',
             // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/premises/excel',
             // 'http://192.168.3.202:3000/api/v1/premises/excel',
@@ -312,37 +312,37 @@ export default {
             config
           )
           .then((r) => {
-            this.import_result = { ...r.data.data };
+            this.import_result = { ...r.data.data }
             this.import_result.total_count =
               parseInt(this.import_result.fail_count) +
-              parseInt(this.import_result.success_count);
-            this.resultTable = r.data.data.failed_rows;
-          });
+              parseInt(this.import_result.success_count)
+            this.resultTable = r.data.data.failed_rows
+          })
         setTimeout(() => {
-          this.dialogImportVisible = false;
-          this.dialogTableVisible = true;
-        }, 1500);
-      });
+          this.dialogImportVisible = false
+          this.dialogTableVisible = true
+        }, 1500)
+      })
     },
     uploadBackupFiles() {
       this.$confirm(
-        this.backupname + "isimli yedeği yüklemek istediğinize emin misiniz ?",
+        this.backupname + 'isimli yedeği yüklemek istediğinize emin misiniz ?',
         {
-          confirmButtonText: "Evet",
-          cancelButtonText: "Hayır",
+          confirmButtonText: 'Evet',
+          cancelButtonText: 'Hayır'
         }
       ).then(() => {
-        let token = store.state.auth.user.token;
+        let token = store.state.auth.user.token
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const form = new FormData();
-        form.append("zip", this.backupList[0].raw, this.backupList[0].name);
+            Authorization: `Bearer ${token}`
+          }
+        }
+        const form = new FormData()
+        form.append('zip', this.backupList[0].raw, this.backupList[0].name)
         axios
           .post(
-            "https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/premises/excel",
+            'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/premises/excel',
             // 'http://10.81.102.51:3000/api/v1/premises/excel',
             // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/premises/excel',
             // 'http://192.168.3.202:3000/api/v1/premises/excel',
@@ -350,48 +350,48 @@ export default {
             config
           )
           .then((r) => {
-            console.log(r);
+            console.log(r)
             //Buraya bir şeyler gelicek
-          });
+          })
         setTimeout(() => {
-          this.backupList = [];
-          this.backupname = "";
-        }, 1500);
-      });
+          this.backupList = []
+          this.backupname = ''
+        }, 1500)
+      })
     },
     closeDialogHandle() {
-      this.dialogTableVisible = false;
+      this.dialogTableVisible = false
     },
     updateQueryPeriod() {
       this.$api({
         ...endpoints.updateSettings,
-        data: { setting: { ...this.setting } },
+        data: { setting: { ...this.setting } }
       }).then((r) => {
-        console.log(r);
+        console.log(r)
         if (r.status == 200) {
           this.$message({
-            type: "success",
-            message: "Periyot güncelleme başarılı",
-          });
+            type: 'success',
+            message: 'Periyot güncelleme başarılı'
+          })
         }
-      });
+      })
     },
     getSettings() {
       this.$api({
-        ...endpoints.getSettings,
+        ...endpoints.getSettings
       }).then((r) => {
-        console.log(r);
-        this.query_result = r.data.data.settings[0].value;
-      });
-    },
+        console.log(r)
+        this.query_result = r.data.data.settings[0].value
+      })
+    }
   },
   created() {
-    this.getSettings();
-  },
-};
+    this.getSettings()
+  }
+}
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .container {
   min-height: 100vh;

@@ -5,23 +5,23 @@
 </template>
 
 <script>
-import MapView from "@/components/map/map-view";
+import MapView from '@/components/map/map-view'
 
 export default {
-  name: "CreateMap",
+  name: 'CreateMap',
   components: {
-    MapView,
+    MapView
   },
   data() {
     return {
       premise: null,
-      isRendered: false,
-    };
+      isRendered: false
+    }
   },
   mounted() {
-    this.isRendered = true;
-  },
-};
+    this.isRendered = true
+  }
+}
 </script>
 
 <style lang="scss" scoped>

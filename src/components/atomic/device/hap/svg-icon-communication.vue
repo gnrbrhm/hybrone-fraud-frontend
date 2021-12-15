@@ -17,21 +17,21 @@
 
 <script>
 export default {
-  name: "SvgIconCommunication",
+  name: 'SvgIconCommunication',
   props: {
-    status: { type: Boolean, default: null },
+    status: { type: Boolean, default: null }
   },
   computed: {
     changeColor() {
       if (this.status) {
-        return "#6FCF97";
+        return '#6FCF97'
       } else {
-        if (this.status == null) return "#DADADA";
-        else return "#EB5757";
+        if (this.status == null) return '#DADADA'
+        else return '#EB5757'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>

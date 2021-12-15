@@ -40,34 +40,34 @@
   </div>
 </template>
 <script>
-import anon from "@/layouts/anon";
-import auth from "@/layouts/auth";
-import blank from "@/layouts/blank";
-import SvgIconNotification from "@/assets/icons/notification/svg-icon-notification.vue";
-import SvgIconNotificationFalse from "@/assets/icons/notification/svg-icon-notification-false.vue";
+import anon from '@/layouts/anon'
+import auth from '@/layouts/auth'
+import blank from '@/layouts/blank'
+import SvgIconNotification from '@/assets/icons/notification/svg-icon-notification.vue'
+import SvgIconNotificationFalse from '@/assets/icons/notification/svg-icon-notification-false.vue'
 
 export default {
   components: { SvgIconNotification, SvgIconNotificationFalse },
   computed: {
     layoutName() {
-      return this.$route.meta.layout || "blank";
+      return this.$route.meta.layout || 'blank'
     },
     screenSize() {
-      var html = document.documentElement;
-      return html.clientHeight;
-    },
+      var html = document.documentElement
+      return html.clientHeight
+    }
   },
   data() {
     return {
       layouts: {
         anon,
         auth,
-        blank,
-      },
-    };
+        blank
+      }
+    }
   },
-  created() {},
-};
+  created() {}
+}
 </script>
 
 <style lang="scss">

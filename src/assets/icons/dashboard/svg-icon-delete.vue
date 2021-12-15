@@ -17,24 +17,24 @@
 
 <script>
 export default {
-  name: "SvgIconDelete",
+  name: 'SvgIconDelete',
   props: {
-    status: { type: Boolean, default: false },
+    status: { type: Boolean, default: false }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     changeColor() {
-      console.log("Status", this.status);
+      console.log('Status', this.status)
       if (!this.status) {
-        return "#444444";
+        return '#444444'
       } else {
-        return "#A0A0A0";
+        return '#A0A0A0'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>

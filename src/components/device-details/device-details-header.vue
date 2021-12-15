@@ -16,45 +16,45 @@
 </template>
 
 <script>
-import BackArrow from "@/components/atomic/back-arrow.vue";
-import DeviceDetailsInformation from "@/components/device-details/device-details-information.vue";
-import DashboardNav from "@/components/dashboard/dashboard-nav.vue";
+import BackArrow from '@/components/atomic/back-arrow.vue'
+import DeviceDetailsInformation from '@/components/device-details/device-details-information.vue'
+import DashboardNav from '@/components/dashboard/dashboard-nav.vue'
 export default {
-  name: "DeviceDetailsHeader",
+  name: 'DeviceDetailsHeader',
   components: { DeviceDetailsInformation, BackArrow, DashboardNav },
   data() {
-    return {};
+    return {}
   },
   props: {
     premise_information: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
+        return {}
+      }
+    }
   },
   computed: {
     getRouteForClass: function () {
-      if (!this.$route.path.split("/").includes("last-signals")) {
-        return "detail-header-content";
+      if (!this.$route.path.split('/').includes('last-signals')) {
+        return 'detail-header-content'
       } else {
-        return "table-filter-header ";
+        return 'table-filter-header '
       }
-    },
+    }
   },
   watch: {
     premise_information: function (value) {
-      console.log("DeviceDetailHeader", value);
-    },
+      console.log('DeviceDetailHeader', value)
+    }
   },
   mounted() {
-    console.log("HEADER", this.$route.path.split("/").includes("last-signals"));
-  },
-};
+    console.log('HEADER', this.$route.path.split('/').includes('last-signals'))
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .detail-header-content {
   display: flex;
   flex-direction: row;

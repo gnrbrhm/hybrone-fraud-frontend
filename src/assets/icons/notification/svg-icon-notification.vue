@@ -17,8 +17,8 @@
 
 <script>
 export default {
-  name: "SvgIconNotification",
-};
+  name: 'SvgIconNotification'
+}
 </script>
 
 <style></style>

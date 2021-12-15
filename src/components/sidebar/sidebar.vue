@@ -29,7 +29,7 @@
           <SvgIconPremise v-else-if="nav.label == 'Mekanlar'"></SvgIconPremise>
           <SvgIconSettings v-else-if="nav.label == 'Ayarlar'"></SvgIconSettings>
 
-          <span v-if="nav.label != 'Çıkış' ">{{ nav.label }}</span></router-link
+          <span v-if="nav.label != 'Çıkış'">{{ nav.label }}</span></router-link
         >
       </div>
       <div @click="logoutFunc()">
@@ -41,18 +41,18 @@
 </template>
 
 <script>
-import { NAVIGATON } from "@/constant";
-import SvgIconTracked from "@/assets/icons/navigation/tracked.vue";
-import Dashboard from "@/assets/icons/navigation/dashboard.vue";
-import SvgIconList from "@/assets/icons/navigation/svg-icon-list.vue";
+import { NAVIGATON } from '@/constant'
+import SvgIconTracked from '@/assets/icons/navigation/tracked.vue'
+import Dashboard from '@/assets/icons/navigation/dashboard.vue'
+import SvgIconList from '@/assets/icons/navigation/svg-icon-list.vue'
 // import SvgIconServices from "@/assets/icons/navigation/svg-icon-services.vue";
-import SvgIconMaps from "@/assets/icons/navigation/svg-icon-maps.vue";
-import SvgIconSettings from "@/assets/icons/navigation/svg-icon-settings.vue";
-import SvgIconLogout from "@/assets/icons/navigation/svg-icon-logout.vue";
-import SvgIconPremise from "@/assets/icons/navigation/svg-icon-premise.vue";
-import { mapActions } from "vuex";
+import SvgIconMaps from '@/assets/icons/navigation/svg-icon-maps.vue'
+import SvgIconSettings from '@/assets/icons/navigation/svg-icon-settings.vue'
+import SvgIconLogout from '@/assets/icons/navigation/svg-icon-logout.vue'
+import SvgIconPremise from '@/assets/icons/navigation/svg-icon-premise.vue'
+import { mapActions } from 'vuex'
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   components: {
     SvgIconTracked,
     Dashboard,
@@ -61,25 +61,25 @@ export default {
     SvgIconMaps,
     SvgIconSettings,
     SvgIconLogout,
-    SvgIconPremise,
+    SvgIconPremise
   },
   data() {
     return {
-      navigation: {},
-    };
+      navigation: {}
+    }
   },
   methods: {
     ...mapActions({
-      logout: "auth/logout",
+      logout: 'auth/logout'
     }),
     logoutFunc() {
-      this.logout();
-    },
+      this.logout()
+    }
   },
 
   created() {
     var body = document.body,
-      html = document.documentElement;
+      html = document.documentElement
 
     var height = Math.max(
       body.scrollHeight,
@@ -87,18 +87,18 @@ export default {
       html.clientHeight,
       html.scrollHeight,
       html.offsetHeight
-    );
-    console.log("Client Width", html.clientWidth);
-    console.log("Client Height", html.clientHeight);
-    console.log("Screen Width", screen.width);
-    console.log("Screen Height", height);
-    this.navigation = { ...NAVIGATON };
-  },
-};
+    )
+    console.log('Client Width', html.clientWidth)
+    console.log('Client Height', html.clientHeight)
+    console.log('Screen Width', screen.width)
+    console.log('Screen Height', height)
+    this.navigation = { ...NAVIGATON }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 $sidebar_width: 100px;
 $high: 1920px;
 #nav {

@@ -33,11 +33,11 @@
 
 <script>
 export default {
-  name: "SvgIconOpen",
+  name: 'SvgIconOpen',
   props: {
-    state: { type: Boolean, default: false },
-  },
-};
+    state: { type: Boolean, default: false }
+  }
+}
 </script>
 
 <style></style>

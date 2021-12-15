@@ -11,29 +11,29 @@
 </template>
 
 <script>
-import DetailsHapZones from "@/components/device-details/hap/details-hap-zones";
-import DetailsIndicators from "@/components/device-details/hap/details-indicators";
-import DetailsArmOperation from "@/components/device-details/hap/details-arm-operation";
+import DetailsHapZones from '@/components/device-details/hap/details-hap-zones'
+import DetailsIndicators from '@/components/device-details/hap/details-indicators'
+import DetailsArmOperation from '@/components/device-details/hap/details-arm-operation'
 export default {
-  name: "DeviceDetailsContent",
+  name: 'DeviceDetailsContent',
   components: {
     DetailsIndicators,
     DetailsHapZones,
-    DetailsArmOperation,
+    DetailsArmOperation
   },
   data() {
     return {
-      device_zones: [],
-    };
+      device_zones: []
+    }
   },
   mounted() {
-    console.log("mounted detail Dashboard");
-  },
-};
+    console.log('mounted detail Dashboard')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .device-details-content {
   display: flex;
   flex-direction: row;

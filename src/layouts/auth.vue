@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import Auth from "../views/Auth/auth.vue";
-import Sidebar from "@/components/sidebar/sidebar.vue";
+import Auth from '../views/Auth/auth.vue'
+import Sidebar from '@/components/sidebar/sidebar.vue'
 
 export default {
-  name: "auth",
+  name: 'auth',
   components: {
     Auth,
-    Sidebar,
-  },
-};
+    Sidebar
+  }
+}
 </script>

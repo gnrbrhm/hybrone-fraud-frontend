@@ -9,38 +9,38 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import DetailsActions from "@/components/device-details/hap/details-actions";
+import { mapGetters } from 'vuex'
+import DetailsActions from '@/components/device-details/hap/details-actions'
 export default {
-  name: "DeviceDetailsTitle",
+  name: 'DeviceDetailsTitle',
   components: {
-    DetailsActions,
+    DetailsActions
   },
   computed: {
     ...mapGetters({
-      getDevice: "device/getDevice",
+      getDevice: 'device/getDevice'
     }),
     getRouteForClass: function () {
-      if (!this.$route.path.split("/").includes("last-signals")) {
-        return "details-title";
+      if (!this.$route.path.split('/').includes('last-signals')) {
+        return 'details-title'
       } else {
-        return "details-title__last-signals";
+        return 'details-title__last-signals'
       }
-    },
+    }
   },
   methods: {
     handleDownloadSignalsHistory() {
-      this.$emit("onDownloadSignalsHistory");
+      this.$emit('onDownloadSignalsHistory')
     },
     handleServiceModal() {
-      this.$emit("onServiceModal", true);
-    },
-  },
-};
+      this.$emit('onServiceModal', true)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .details-title {
   display: flex;

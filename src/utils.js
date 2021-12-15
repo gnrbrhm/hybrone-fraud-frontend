@@ -1,5 +1,5 @@
-import moment from "moment";
+import moment from 'moment'
 
 export const dateTimeChange = (val) => {
-  return moment(val).format("DD.MM.YYYY HH:mm");
-};
+  return moment(val).format('DD.MM.YYYY HH:mm')
+}

@@ -33,89 +33,89 @@
 </template>
 
 <script>
-import Vue from "vue";
-import moment from "moment";
-import BackArrow from "@/components/atomic/back-arrow.vue";
-import SvgIconListRapor from "@/assets/icons/services/svg-icon-list-rapor.vue";
-import { mapActions } from "vuex";
+import Vue from 'vue'
+import moment from 'moment'
+import BackArrow from '@/components/atomic/back-arrow.vue'
+import SvgIconListRapor from '@/assets/icons/services/svg-icon-list-rapor.vue'
+import { mapActions } from 'vuex'
 export default {
-  name: "LogsFilter",
+  name: 'LogsFilter',
   components: {
     BackArrow,
-    SvgIconListRapor,
+    SvgIconListRapor
   },
   data() {
     return {
-      state: "",
-      date_value: "",
-      start_time: "",
-      finish_time: "",
-      selected_date: false,
-    };
+      state: '',
+      date_value: '',
+      start_time: '',
+      finish_time: '',
+      selected_date: false
+    }
   },
   methods: {
     ...mapActions({
-      getLogListDownload: "logs/getLogListDownload",
+      getLogListDownload: 'logs/getLogListDownload'
     }),
     handleChangeDate(val) {
-      console.log("val");
-      console.log(val);
-      let date = [];
-      this.selected_date = true;
-      this.start_time = moment(val[0]).add(3, "hours")._d.toISOString();
-      date.push(this.start_time);
-      this.finish_time = moment(val[1]).add(3, "hours")._d.toISOString();
-      date.push(this.finish_time);
-      this.$emit("onHandleFiltre", date);
+      console.log('val')
+      console.log(val)
+      let date = []
+      this.selected_date = true
+      this.start_time = moment(val[0]).add(3, 'hours')._d.toISOString()
+      date.push(this.start_time)
+      this.finish_time = moment(val[1]).add(3, 'hours')._d.toISOString()
+      date.push(this.finish_time)
+      this.$emit('onHandleFiltre', date)
       // this.start_time = val[0]
       // this.finish_time = val[1]
     },
     onDownloadLogsList() {
-      let currentDate = new Date();
+      let currentDate = new Date()
 
       if (this.selected_date) {
         let user_activities = this.getLogListDownload({
           start_time: this.start_time,
           finish_time: this.finish_time,
-          response_type: "excel",
-        });
+          response_type: 'excel'
+        })
         user_activities.then((r) => {
           if (r.status) {
-            const url = window.URL.createObjectURL(new Blob([r.data]));
-            const link = document.createElement("a");
-            link.href = url;
+            const url = window.URL.createObjectURL(new Blob([r.data]))
+            const link = document.createElement('a')
+            link.href = url
             link.setAttribute(
-              "download",
-              "Sistem-loglari-" +
+              'download',
+              'Sistem-loglari-' +
                 currentDate.getFullYear() +
-                ("0" + (currentDate.getMonth() + 1)).slice(-2) +
-                ("0" + currentDate.getDate()).slice(-2) +
-                ("0" + currentDate.getHours()).slice(-2) +
-                ("0" + currentDate.getMinutes()).slice(-2) +
-                ("0" + currentDate.getSeconds()).slice(-2) +
-                ".xlsx"
-            );
-            document.body.appendChild(link);
-            link.click();
+                ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+                ('0' + currentDate.getDate()).slice(-2) +
+                ('0' + currentDate.getHours()).slice(-2) +
+                ('0' + currentDate.getMinutes()).slice(-2) +
+                ('0' + currentDate.getSeconds()).slice(-2) +
+                '.xlsx'
+            )
+            document.body.appendChild(link)
+            link.click()
           }
-        });
+        })
       } else {
         Vue.notify({
-          text: "Lütfen tarih bilgisi giriniz.",
-          group: "error-template",
-          type: "error",
-        });
+          text: 'Lütfen tarih bilgisi giriniz.',
+          group: 'error-template',
+          type: 'error'
+        })
       }
     },
     create() {
-      this.date_value["1"] = Date.now();
-    },
-  },
-};
+      this.date_value['1'] = Date.now()
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .header {
   padding: 38px;

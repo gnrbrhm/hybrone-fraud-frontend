@@ -8,20 +8,20 @@
 </template>
 
 <script>
-import { INDICATORS } from "@/constant";
-import Indicator from "@/components/device-details/hap/indicator";
+import { INDICATORS } from '@/constant'
+import Indicator from '@/components/device-details/hap/indicator'
 export default {
-  name: "DetailsIndicators",
+  name: 'DetailsIndicators',
   components: { Indicator },
   data() {
     return {
-      indicators_array: [],
-    };
+      indicators_array: []
+    }
   },
   created() {
-    this.indicators_array = [...INDICATORS];
-  },
-};
+    this.indicators_array = [...INDICATORS]
+  }
+}
 </script>
 
 <style lang="scss" scoped>

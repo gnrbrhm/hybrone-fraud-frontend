@@ -32,41 +32,41 @@
 </template>
 
 <script>
-import SvgIconRefresh from "@/assets/icons/list/svg-icon-refresh.vue"
-import SvgIconService from "@/assets/icons/list/svg-icon-service.vue"
-import SvgIconSummary from "@/assets/icons/list/svg-icon-summary.vue"
-import SvgIconHistory from "@/assets/icons/device-details/hap/svg-icon-history"
-import SvgIconListRaport from "@/assets/icons/services/svg-icon-list-rapor"
+import SvgIconRefresh from '@/assets/icons/list/svg-icon-refresh.vue'
+import SvgIconService from '@/assets/icons/list/svg-icon-service.vue'
+import SvgIconSummary from '@/assets/icons/list/svg-icon-summary.vue'
+import SvgIconHistory from '@/assets/icons/device-details/hap/svg-icon-history'
+import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
 export default {
-  name: "DetailsActions",
+  name: 'DetailsActions',
   components: {
     SvgIconListRaport,
     SvgIconHistory,
     SvgIconService,
     SvgIconRefresh,
-    SvgIconSummary,
+    SvgIconSummary
   },
   computed: {
     isLastSignals() {
-      return !this.$route.path.split("/").includes("last-signals")
-    },
+      return !this.$route.path.split('/').includes('last-signals')
+    }
   },
   methods: {
     openServiceModal() {
-      this.$emit("openServiceModal", true)
+      this.$emit('openServiceModal', true)
     },
     openSignalsHistory() {
       // let route = this.$route.path;
       // this.$router.push({ path: route + "/last-signals" });
-      this.$router.push({ name: "DeviceLastSignals" })
+      this.$router.push({ name: 'DeviceLastSignals' })
     },
     openDeviceDetails() {
       this.$router.go(-1)
     },
     downloadSignalsHistory() {
-      this.$emit("downloadSignalsHistory")
-    },
-  },
+      this.$emit('downloadSignalsHistory')
+    }
+  }
 }
 </script>
 

@@ -70,79 +70,79 @@
 </template>
 
 <script>
-import { ACTIONS_FIELDS } from "@/constant";
-import { bus } from "@/main.js";
-import { mapActions } from "vuex";
+import { ACTIONS_FIELDS } from '@/constant'
+import { bus } from '@/main.js'
+import { mapActions } from 'vuex'
 export default {
-  name: "DeviceReport",
+  name: 'DeviceReport',
   data() {
     return {
       rules: {
         ticket_type: [
-          { required: true, message: "Durum Seçiniz", trigger: "change" },
+          { required: true, message: 'Durum Seçiniz', trigger: 'change' }
         ],
         to_created: [
           {
-            type: "date",
+            type: 'date',
             required: true,
-            message: "Tarih giriniz.",
-            trigger: "change",
-          },
+            message: 'Tarih giriniz.',
+            trigger: 'change'
+          }
         ],
         from_created: [
           {
-            type: "date",
+            type: 'date',
             required: true,
-            message: "Tarih giriniz.",
-            trigger: "change",
-          },
-        ],
+            message: 'Tarih giriniz.',
+            trigger: 'change'
+          }
+        ]
       },
       ruleForm: {
-        ticket_type: "",
-        to_created: "",
-        from_created: "",
-        description: "",
-      },
-    };
+        ticket_type: '',
+        to_created: '',
+        from_created: '',
+        description: ''
+      }
+    }
   },
   computed: {
     getSelectedRowsPremiseId() {
-      let selected_premise_ids = [];
+      let selected_premise_ids = []
       this.$store.state.dataTable.selectedRows.forEach((item) => {
-        selected_premise_ids.push(item.premise_id);
-      });
-      return selected_premise_ids;
-    },
+        selected_premise_ids.push(item.premise_id)
+      })
+      return selected_premise_ids
+    }
   },
   methods: {
     ...mapActions({
-      createService: "service/createService",
+      createService: 'service/createService'
     }),
     handleServiceSubmit(val) {
-      console.log(val);
+      console.log(val)
       let service = this.createService({
         ...this.ruleForm,
         // premise_id: this.getSelectedRowsPremiseId.join(),
         premise_id: this.getSelectedRowsPremiseId[0],
-        status_code: 3,
-      });
+        status_code: 3
+      })
       service.then((r) => {
-        console.log(r);
-        this.$emit("onClose");
-      });
-    },
+        console.log(r)
+        this.$emit('onClose')
+      })
+    }
   },
   created() {
-    this.state_options = [...ACTIONS_FIELDS["SERVICE"][0]["state"]["options"]];
+    this.state_options = [...ACTIONS_FIELDS['SERVICE'][0]['state']['options']]
   },
   mounted() {
-    console.log("Seçilen Mekanlar", this.getSelectedRowsPremiseId);
-    bus.$on("onSubmitService", (val) => {
-      this.handleServiceSubmit(val);
-    });
-  },
-};
+    console.log('Seçilen Mekanlar', this.getSelectedRowsPremiseId)
+    bus.$on('onSubmitService', (val) => {
+      this.handleServiceSubmit(val)
+    })
+  }
+}
 </script>
 
 <style></style>

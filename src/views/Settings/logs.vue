@@ -12,72 +12,72 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import moment from "moment";
-import LogsFilter from "@/components/settings/logs-filter.vue";
-import DataTable from "@/components/atomic/data-table.vue";
-import DataTablePagination from "@/components/atomic/data-table-pagination.vue";
+import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
+import LogsFilter from '@/components/settings/logs-filter.vue'
+import DataTable from '@/components/atomic/data-table.vue'
+import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
 export default {
-  name: "Logs",
+  name: 'Logs',
   components: {
     DataTable,
     DataTablePagination,
-    LogsFilter,
+    LogsFilter
   },
   data() {
     return {
       data: [],
       filterData: {},
-      is_filtered: false,
-    };
+      is_filtered: false
+    }
   },
   computed: {
     ...mapGetters({
-      getCurrentPage: "pagination/getCurrentPage",
-      getCurrentLimit: "pagination/getCurrentLimit",
-    }),
+      getCurrentPage: 'pagination/getCurrentPage',
+      getCurrentLimit: 'pagination/getCurrentLimit'
+    })
   },
   methods: {
     ...mapActions({
-      getLogRecords: "logs/getLogRecords",
+      getLogRecords: 'logs/getLogRecords'
     }),
     handleFilter(val) {
-      this.is_filtered = true;
+      this.is_filtered = true
       this.filterData = {
         start_time: val[0],
-        finish_time: val[1],
-      };
-      this.getUserActivities({ limit: 10, page: 1, ...this.filterData });
+        finish_time: val[1]
+      }
+      this.getUserActivities({ limit: 10, page: 1, ...this.filterData })
     },
     handleChangePagination() {
-      this.data = [];
+      this.data = []
       this.getUserActivities({
         page: this.getCurrentPage,
         limit: this.getCurrentLimit,
-        ...this.filterData,
-      });
+        ...this.filterData
+      })
     },
     async getUserActivities(payload) {
-      let logs = this.getLogRecords(payload);
+      let logs = this.getLogRecords(payload)
       return logs.then((r) => {
         return r.forEach((record) => {
           let row = {
-            user: record.user ? record.user.username : "Kullanıcı Atanmamış",
+            user: record.user ? record.user.username : 'Kullanıcı Atanmamış',
             description: record.activity,
-            created_at: moment(record.created_at).format("DD.MM.YYYY HH:mm"),
-          };
-          this.data.push(row);
-        });
-      });
-    },
+            created_at: moment(record.created_at).format('DD.MM.YYYY HH:mm')
+          }
+          this.data.push(row)
+        })
+      })
+    }
   },
   created() {
     this.getUserActivities({
       page: 1,
-      limit: 20,
-    });
-  },
-};
+      limit: 20
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

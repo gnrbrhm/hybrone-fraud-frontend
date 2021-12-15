@@ -21,62 +21,62 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import SvgIconDelete from "@/assets/icons/dashboard/svg-icon-delete.vue";
+import { mapActions } from 'vuex'
+import SvgIconDelete from '@/assets/icons/dashboard/svg-icon-delete.vue'
 export default {
-  name: "TrackedDeviceFilter",
+  name: 'TrackedDeviceFilter',
   components: { SvgIconDelete },
   data() {
     return {
-      search_key: "",
+      search_key: '',
       search_ids: null,
-      selected_premise: null,
-    };
+      selected_premise: null
+    }
   },
   computed: {
     getSelectedRows() {
-      return this.$store.state.dataTable.selectedRows;
+      return this.$store.state.dataTable.selectedRows
     },
     isSelected() {
-      return !(this.$store.state.dataTable.selectedRows.length > 0);
-    },
+      return !(this.$store.state.dataTable.selectedRows.length > 0)
+    }
   },
   methods: {
     ...mapActions({
-      getFilterPremises: "premise/getFilterPremises",
-      updateDevice: "device/updateDevice",
-      getProsecDevicesByFilter: "device/getProsecDevicesByFilter",
-      getProsecDeviceById: "device/getProsecDeviceById",
+      getFilterPremises: 'premise/getFilterPremises',
+      updateDevice: 'device/updateDevice',
+      getProsecDevicesByFilter: 'device/getProsecDevicesByFilter',
+      getProsecDeviceById: 'device/getProsecDeviceById'
     }),
     onSubmit() {
-      console.log(this.selected_premise);
-      let new_tracked_device = this.updateDevice(this.selected_premise);
+      console.log(this.selected_premise)
+      let new_tracked_device = this.updateDevice(this.selected_premise)
       new_tracked_device.then((r) => {
         // if (r.status) {
-        console.log(r);
-        this.$emit("onCreateTrackedPremise");
-        this.search_key = "";
+        console.log(r)
+        this.$emit('onCreateTrackedPremise')
+        this.search_key = ''
         // }
-      });
+      })
     },
     deleteButton() {
       if (this.getSelectedRows.length > 0) {
         this.getSelectedRows.forEach((item) => {
-          console.log(item);
-          let un_tracked_payload = null;
-          let un_tracked_device = this.getProsecDeviceById(item.id);
+          console.log(item)
+          let un_tracked_payload = null
+          let un_tracked_device = this.getProsecDeviceById(item.id)
 
           un_tracked_device.then((r) => {
-            un_tracked_payload = { ...r, is_tracked: false };
+            un_tracked_payload = { ...r, is_tracked: false }
             let delete_tracked_device = this.updateDevice({
-              ...un_tracked_payload,
-            });
+              ...un_tracked_payload
+            })
             delete_tracked_device.then((r) => {
-              console.log("UntrackedDevice", r);
-              this.$emit("onCreateTrackedPremise");
-            });
-          });
-        });
+              console.log('UntrackedDevice', r)
+              this.$emit('onCreateTrackedPremise')
+            })
+          })
+        })
       }
       /*
         Burada Takip edilen cihazlardan
@@ -85,46 +85,46 @@ export default {
     },
     querySearch(queryString, cb) {
       if (queryString.length > 0) {
-        this.handleOnChange(queryString);
+        this.handleOnChange(queryString)
       } else {
-        this.search_ids = [];
+        this.search_ids = []
       }
-      return cb(this.search_ids);
+      return cb(this.search_ids)
     },
     async handleOnChange(val) {
-      this.search_ids = [];
-      console.log("val", val);
+      this.search_ids = []
+      console.log('val', val)
       let device = this.getProsecDevicesByFilter({
         page: 1,
         limit: 5,
-        custom_premise_id: val,
-      });
+        custom_premise_id: val
+      })
       device.then((r) => {
         r.forEach((item) => {
           let result = {
             label: item.premise.custom_premise_id,
             value: item.premise.custom_premise_id,
-            data: { ...item, is_tracked: true },
-          };
-          this.search_ids.push(result);
-        });
-      });
+            data: { ...item, is_tracked: true }
+          }
+          this.search_ids.push(result)
+        })
+      })
     },
     handleSelect(device) {
-      console.log("Device", device);
-      let tracked_device = this.getProsecDeviceById(device.data.id);
+      console.log('Device', device)
+      let tracked_device = this.getProsecDeviceById(device.data.id)
       tracked_device.then((r) => {
-        console.log("R", r);
-        this.selected_premise = { ...r, is_tracked: true };
-      });
-    },
+        console.log('R', r)
+        this.selected_premise = { ...r, is_tracked: true }
+      })
+    }
   },
-  mounted() {},
-};
+  mounted() {}
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .tracked-filter-content {
   display: flex;
   align-items: stretch;

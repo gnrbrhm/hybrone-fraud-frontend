@@ -29,80 +29,80 @@
 </template>
 
 <script>
-import endpoints from "@/endpoints";
-import { mapActions } from "vuex";
+import endpoints from '@/endpoints'
+import { mapActions } from 'vuex'
 export default {
-  name: "FormLogin",
+  name: 'FormLogin',
   data() {
     return {
       ruleForm: {
-        email: "",
-        password: "",
+        email: '',
+        password: ''
       },
       rules: {
         email: [
           {
             required: true,
-            message: "Lütfen mail adresi giriniz !",
-            trigger: "blur",
+            message: 'Lütfen mail adresi giriniz !',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 50,
-            message: "Length should be 3 to 5",
-            trigger: "blur",
-          },
+            message: 'Length should be 3 to 5',
+            trigger: 'blur'
+          }
         ],
         password: [
           {
             required: true,
-            message: "Lütfen şifrenizi giriniz.",
-            trigger: "blur",
-          },
-        ],
-      },
-    };
+            message: 'Lütfen şifrenizi giriniz.',
+            trigger: 'blur'
+          }
+        ]
+      }
+    }
   },
   methods: {
     ...mapActions({
-      setAuthUser: "auth/setAuthUser",
+      setAuthUser: 'auth/setAuthUser'
     }),
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let { redirect } = this.$route.query;
+          let { redirect } = this.$route.query
 
           const getToken = this.$api({
             ...endpoints.token,
             data: {
               username: this.ruleForm.email,
-              password: this.ruleForm.password,
-            },
-          });
+              password: this.ruleForm.password
+            }
+          })
           getToken
             .then((r) => {
               if (r.status == 200) {
-                this.setAuthUser(r.data);
+                this.setAuthUser(r.data)
                 if (redirect) {
-                  this.$router.push({ name: redirect });
+                  this.$router.push({ name: redirect })
                 } else {
-                  this.$router.push({ name: "Dashboard" });
+                  this.$router.push({ name: 'Dashboard' })
                 }
               }
             })
-            .catch((error) => console.error(error));
+            .catch((error) => console.error(error))
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .login-form {
   display: flex;
   flex-direction: column;
@@ -176,7 +176,7 @@ export default {
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;
-  font-feature-settings: "zero" on;
+  font-feature-settings: 'zero' on;
 
   /* Gray Dark */
 

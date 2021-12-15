@@ -23,22 +23,22 @@
 
 <script>
 export default {
-  name: "SvgIconServiceRequest",
+  name: 'SvgIconServiceRequest',
   props: {
     is_ticket: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     currentColor() {
       if (!this.is_ticket) {
-        return "rgba(0, 125, 183, 0.17)"
+        return 'rgba(0, 125, 183, 0.17)'
       } else {
-        return "#007DB7"
+        return '#007DB7'
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

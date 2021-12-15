@@ -17,18 +17,18 @@
 
 <script>
 export default {
-  name: "SvgIconTracked",
+  name: 'SvgIconTracked',
   props: {
     active: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   watch: {
     active: function (val) {
-      console.log(val);
-    },
-  },
-};
+      console.log(val)
+    }
+  }
+}
 </script>
 
 <style></style>

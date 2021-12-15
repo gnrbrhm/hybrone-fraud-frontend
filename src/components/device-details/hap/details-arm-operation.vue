@@ -1,6 +1,6 @@
 <template>
   <div class="details-arm-operation" :disabled="disabled">
-    <span >BÖLGE</span>
+    <span>BÖLGE</span>
     <el-select
       v-model="hardware_type"
       class="zones-input"
@@ -17,13 +17,13 @@
       >
       </el-option>
     </el-select>
-    <div class="status" >
+    <div class="status">
       <SvgIconOpen :state="armed_status"></SvgIconOpen>
       <span class="status-description">
-        {{ !armed_status ? "Sistem Devre Dışı" : "Sistem Ev Dışı Devrede" }}
+        {{ !armed_status ? 'Sistem Devre Dışı' : 'Sistem Ev Dışı Devrede' }}
       </span>
     </div>
-    <div class="armed-action" >
+    <div class="armed-action">
       <div class="action">
         <SvgIconActionOutHome></SvgIconActionOutHome>
         <div class="description">
@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="out-controller" >
+    <div class="out-controller">
       <div class="out-controller__title">Çıkış Kontrolü</div>
       <div class="out-controller__content"></div>
     </div>
@@ -47,29 +47,29 @@
 </template>
 
 <script>
-import SvgIconOpen from "@/components/atomic/device/hap/svg-icon-open.vue";
-import SvgIconActionOutHome from "@/components/atomic/device/hap/svg-icon-action-out-home.vue";
-import SvgIconActionInHome from "@/components/atomic/device/hap/svg-icon-action-in-home.vue";
+import SvgIconOpen from '@/components/atomic/device/hap/svg-icon-open.vue'
+import SvgIconActionOutHome from '@/components/atomic/device/hap/svg-icon-action-out-home.vue'
+import SvgIconActionInHome from '@/components/atomic/device/hap/svg-icon-action-in-home.vue'
 export default {
-  name: "DetailsArmOperation",
+  name: 'DetailsArmOperation',
   components: {
     SvgIconOpen,
     SvgIconActionOutHome,
-    SvgIconActionInHome,
+    SvgIconActionInHome
   },
   data() {
     return {
-      armed_status: false,
-    };
+      armed_status: false
+    }
   },
   props: {
-    disabled: { type: Boolean, default: true },
-  },
-};
+    disabled: { type: Boolean, default: true }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 .details-arm-operation {
   display: flex;
   flex-direction: column;
@@ -126,7 +126,7 @@ export default {
       border: 1px solid #2c3357;
       box-sizing: border-box;
       border-radius: 5px;
-      .description{
+      .description {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -175,7 +175,7 @@ export default {
 Bu Kısma Tekrardan dönülecek
 
 **/
-.details-arm-operation[disabled="disabled"] {
+.details-arm-operation[disabled='disabled'] {
   pointer-events: none;
   opacity: 0.4;
 }

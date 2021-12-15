@@ -274,13 +274,13 @@
 
 <script>
 // import { DEVICE_TYPES } from "@/constant";
-import { bus } from "@/main.js";
+import { bus } from '@/main.js'
 
-import { HARDWARE_TYPES } from "@/constant";
-import { mapGetters, mapActions } from "vuex";
+import { HARDWARE_TYPES } from '@/constant'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: "CreateHapDeviceForm",
+  name: 'CreateHapDeviceForm',
   data() {
     return {
       is_update: !!this.$route.params.device_id,
@@ -300,20 +300,20 @@ export default {
           type: null,
           prosec_partition_id: null,
           device: null,
-          channel: null,
-        },
+          channel: null
+        }
       ],
       partion: [
         {
           name: null,
           number: null,
-          zones: [],
-        },
+          zones: []
+        }
       ],
       hardware_options: [],
       hardware_type: null,
       brand_options: [],
-      brand_type: "",
+      brand_type: '',
       model_options: [],
       model_type: null,
       partions: [],
@@ -321,126 +321,126 @@ export default {
       partion_count: null,
       state_options: [
         {
-          label: "PASİF",
-          value: false,
+          label: 'PASİF',
+          value: false
         },
         {
-          label: "AKTİF",
-          value: true,
-        },
+          label: 'AKTİF',
+          value: true
+        }
       ],
       zone_type_options: [
-        { value: 1, label: "Manyetik Kontak" },
-        { value: 2, label: "PIR Dedektör" },
-        { value: 3, label: "Yangın Dedektörü" },
-        { value: 4, label: "Su Baskını Dedektörü" },
-        { value: 5, label: "Panik Butonu" },
-        { value: 6, label: "Kurma/Çözme Bölgesi" },
-        { value: 7, label: "Siren Sabotaj" },
-      ],
-    };
+        { value: 1, label: 'Manyetik Kontak' },
+        { value: 2, label: 'PIR Dedektör' },
+        { value: 3, label: 'Yangın Dedektörü' },
+        { value: 4, label: 'Su Baskını Dedektörü' },
+        { value: 5, label: 'Panik Butonu' },
+        { value: 6, label: 'Kurma/Çözme Bölgesi' },
+        { value: 7, label: 'Siren Sabotaj' }
+      ]
+    }
   },
   computed: {
     ...mapGetters({
-      getDeviceBrands: "model/getDeviceBrands",
-      getDeviceModels: "model/getDeviceModels",
+      getDeviceBrands: 'model/getDeviceBrands',
+      getDeviceModels: 'model/getDeviceModels'
     }),
     isVisiblePartion: function () {
-      return this.partion_count > 0;
+      return this.partion_count > 0
     },
     isVisibleZone: function () {
-      return this.zone_count > 0;
-    },
+      return this.zone_count > 0
+    }
   },
   methods: {
     ...mapActions({
-      createDevice: "device/createDevice",
-      updateDevice: "device/updateDevice",
-      deleteDevice: "device/deleteDevice",
-      getProsecDeviceById: "device/getProsecDeviceById",
+      createDevice: 'device/createDevice',
+      updateDevice: 'device/updateDevice',
+      deleteDevice: 'device/deleteDevice',
+      getProsecDeviceById: 'device/getProsecDeviceById'
     }),
     // handleChangePartion2(val) {},
     onDelete() {
       if (this.is_update) {
-        let deleted_device = this.deleteDevice(this.$route.params.device_id);
+        let deleted_device = this.deleteDevice(this.$route.params.device_id)
         deleted_device.then((r) => {
           if (r.status) {
-            this.$router.go(-1);
+            this.$router.go(-1)
           }
-        });
+        })
       }
     },
     onSubmit() {
-      let configured_partition = [];
-      console.log(this.partion);
+      let configured_partition = []
+      console.log(this.partion)
       this.partion.forEach((item, index) => {
-        item.number = index + 1;
+        item.number = index + 1
         configured_partition.push({
           id: item.number,
           name: item.name,
           number: index + 1,
-          zones: [],
-        });
-      });
-      console.log("Zone", this.zone);
+          zones: []
+        })
+      })
+      console.log('Zone', this.zone)
       configured_partition.forEach((key) => {
         let related_zone = this.zone.filter((item, index) => {
-          item.number = index + 1;
-          return item.prosec_partition_id == key.id;
-        });
-        console.log("Related Zone", related_zone);
+          item.number = index + 1
+          return item.prosec_partition_id == key.id
+        })
+        console.log('Related Zone', related_zone)
         // let related_zone2 = [];
         // related_zone.forEach((item, index) => {
         //   item.number = index + 1;
         //   related_zone2.push(item);
         // });
         if (!this.is_update) {
-          delete related_zone.prosec_partition_id;
-          delete key.id;
+          delete related_zone.prosec_partition_id
+          delete key.id
         }
-        key.zones.push(...related_zone);
-      });
+        key.zones.push(...related_zone)
+      })
 
       let prosec_device = {
-        name: "PROSEC DEVICE EDITED",
+        name: 'PROSEC DEVICE EDITED',
         premise_id: parseInt(this.$route.params.premise_id),
         device_brand_id: this.brand_type,
         device_model_id: this.model_type,
         hardware_type_id: this.hardware_type,
         subscriber: this.subscriber,
         inventory_number: this.inventory_number,
-        partitions: [...configured_partition],
-      };
+        partitions: [...configured_partition]
+      }
       if (this.is_update) {
         prosec_device = {
           ...prosec_device,
-          id: parseInt(this.$route.params.device_id),
-        };
-        console.log(prosec_device);
-        let pdu_request = this.updateDevice(prosec_device);
+          id: parseInt(this.$route.params.device_id)
+        }
+        console.log(prosec_device)
+        let pdu_request = this.updateDevice(prosec_device)
         pdu_request.then((r) => {
-          if (r.status) this.$router.push({ name: "Premises" });
-        });
+          if (r.status) this.$router.push({ name: 'Premises' })
+        })
       } else {
-        console.log(prosec_device);
+        console.log(prosec_device)
 
-        let pdc_request = this.createDevice(prosec_device);
+        let pdc_request = this.createDevice(prosec_device)
         pdc_request.then((r) => {
-          if (r.status) this.$router.push({ name: "Premises" });
-        });
+          if (r.status) this.$router.push({ name: 'Premises' })
+        })
       }
     },
     handlePartionCountChange(val) {
-      this.partion = [];
+      this.partion = []
       for (let index = 0; index < val; index++) {
         let partion_variable = {
-          name: null,
-        };
-        this.partion.push(partion_variable);
+          name: null
+        }
+        this.partion.push(partion_variable)
       }
     },
     handleZoneCountChange(val) {
-      this.zone = [];
+      this.zone = []
       for (let index = 0; index < val; index++) {
         let zone_variable = {
           state: null,
@@ -448,25 +448,25 @@ export default {
           type: null,
           partion: null,
           device: null,
-          channel: null,
-        };
-        this.zone.push(zone_variable);
+          channel: null
+        }
+        this.zone.push(zone_variable)
       }
     },
     handleHardwareTypeChange(val) {
-      this.brand_options = [];
-      this.brand_type = "";
-      this.model_options = [];
-      this.model_type = "";
+      this.brand_options = []
+      this.brand_type = ''
+      this.model_options = []
+      this.model_type = ''
       let hardwareType = [...HARDWARE_TYPES].filter((item) => {
-        return item.value == val;
-      });
-      console.log(hardwareType);
-      this.brand_options = hardwareType[0].brands;
+        return item.value == val
+      })
+      console.log(hardwareType)
+      this.brand_options = hardwareType[0].brands
 
-      this.model_options = hardwareType[0].brands[0].models;
+      this.model_options = hardwareType[0].brands[0].models
       // console.log("HardwareTypes", hardwareType);
-      console.log("Brands", this.brand_options);
+      console.log('Brands', this.brand_options)
       // console.log("Model", this.model_options);
       // this.brand_options = this.getHardwareTypesBrands(this.getDeviceBrands);
     },
@@ -474,91 +474,91 @@ export default {
       // this.model_options = this.getHardwareTypesBrands(this.getDeviceModels);
     },
     getHardwareTypesBrands(val) {
-      let brand_options = [];
-      let brand = null;
+      let brand_options = []
+      let brand = null
       val.forEach((item) => {
-        brand = { value: item.id, label: item.name.toUpperCase() };
-        brand_options.push(brand);
-      });
-      return brand_options;
-    },
+        brand = { value: item.id, label: item.name.toUpperCase() }
+        brand_options.push(brand)
+      })
+      return brand_options
+    }
   },
   created() {
     // this.hardware_options = [...DEVICE_TYPES];
-    this.hardware_options = [...HARDWARE_TYPES];
+    this.hardware_options = [...HARDWARE_TYPES]
     for (let index = 0; index < 65; index++) {
       let optionData = {
-        label: index == 0 ? "Yok" : index.toString(),
-        key: index,
-      };
-      this.zones.push(optionData);
+        label: index == 0 ? 'Yok' : index.toString(),
+        key: index
+      }
+      this.zones.push(optionData)
     }
     for (let index = 0; index < 16; index++) {
       let optionData = {
-        label: index == 0 ? "Yok" : index.toString(),
-        key: index,
-      };
-      this.partions.push(optionData);
+        label: index == 0 ? 'Yok' : index.toString(),
+        key: index
+      }
+      this.partions.push(optionData)
     }
     if (this.$route.params.device_id) {
-      let device = this.getProsecDeviceById(this.$route.params.device_id);
-      let zone_count = null;
+      let device = this.getProsecDeviceById(this.$route.params.device_id)
+      let zone_count = null
       device.then((r) => {
-        console.log(r);
-        this.handleHardwareTypeChange(r.hardware_type.id);
-        this.inventory_number = r.inventory_number;
-        this.subscriber = r.subscriber;
-        this.hardware_type = r.hardware_type.id;
-        this.brand_type = r.device_brand_id;
-        this.model_type = r.device_model_id;
-        this.partion = [];
+        console.log(r)
+        this.handleHardwareTypeChange(r.hardware_type.id)
+        this.inventory_number = r.inventory_number
+        this.subscriber = r.subscriber
+        this.hardware_type = r.hardware_type.id
+        this.brand_type = r.device_brand_id
+        this.model_type = r.device_model_id
+        this.partion = []
         r.partitions.forEach((item, index) => {
-          console.log("İtem", item);
+          console.log('İtem', item)
 
           this.partion.push({
             name: item.name,
             number: parseInt(index + item.id),
-            zones: item.zones,
-          });
-          console.log("partion", this.partion);
-        });
-        this.partion_count = r.partitions.length;
-        let zones = [];
+            zones: item.zones
+          })
+          console.log('partion', this.partion)
+        })
+        this.partion_count = r.partitions.length
+        let zones = []
         // let uniounZone = [];
         r.partitions.reverse().forEach((item) => {
           // zones = [...zones, ...item.zones];
-          zones = zones.concat(item.zones);
-          zone_count += item.zones.length;
-        });
-        this.zone_count = zone_count;
+          zones = zones.concat(item.zones)
+          zone_count += item.zones.length
+        })
+        this.zone_count = zone_count
         this.zone = zones.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
-      });
+          return a.name.localeCompare(b.name)
+        })
+      })
     }
   },
   mounted() {
-	bus.$on("buttonGroupClick", (param) =>{	
-		switch (param) {
-			case "onCreate":
-				this.onSubmit()
-				break;
-			case "onUpdate":
-				this.onSubmit()
-				break;
-			case "onDelete":
-				this.onDelete()
-				break;
-			default:
-				break;
-		}
-	});
+    bus.$on('buttonGroupClick', (param) => {
+      switch (param) {
+        case 'onCreate':
+          this.onSubmit()
+          break
+        case 'onUpdate':
+          this.onSubmit()
+          break
+        case 'onDelete':
+          this.onDelete()
+          break
+        default:
+          break
+      }
+    })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .create-hap-device-form {
   flex-basis: max-content;
@@ -568,7 +568,7 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
   min-height: 100vh !important;
-// min-height: 100% !important;
+  // min-height: 100% !important;
   p {
     @extend .sentinel-label;
     font-weight: 500;
@@ -632,7 +632,7 @@ export default {
       align-items: center;
       flex-direction: row;
       p {
-        @extend .sentinel-label; 
+        @extend .sentinel-label;
         display: flex;
         align-items: center;
         font-weight: normal;
@@ -710,7 +710,7 @@ export default {
   .footer-bottom-update {
     display: flex;
     margin-top: 10px;
-    justify-content:flex-end;
+    justify-content: flex-end;
     &__dangerous {
       display: flex;
       justify-content: flex-start !important;

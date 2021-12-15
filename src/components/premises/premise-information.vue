@@ -44,21 +44,21 @@
 
 <script>
 export default {
-  name: "PremiseInformation",
+  name: 'PremiseInformation',
   props: {
     premise: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
-  },
+        return {}
+      }
+    }
+  }
   // watch: {
   //   premise: (val) => {
   //     console.log("Watch", val);
   //   },
   // },
-};
+}
 </script>
 
 <style lang="scss" scoped>

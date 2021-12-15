@@ -59,11 +59,11 @@
 
 <script>
 export default {
-  name: "SvgIconIndicatorBattery",
+  name: 'SvgIconIndicatorBattery',
   props: {
-    status: { default: 3 },
-  },
-};
+    status: { default: 3 }
+  }
+}
 </script>
 
 <style></style>

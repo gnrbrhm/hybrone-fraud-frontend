@@ -58,8 +58,8 @@
 
 <script>
 export default {
-  name: "SvgIconActionInHome",
-};
+  name: 'SvgIconActionInHome'
+}
 </script>
 
 <style></style>

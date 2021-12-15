@@ -5,7 +5,7 @@
         <BackArrow></BackArrow>
       </router-link>
       <span class="title">{{
-        title ? "Yeni Mekan Ekle" : "Mekan Güncelle"
+        title ? 'Yeni Mekan Ekle' : 'Mekan Güncelle'
       }}</span>
     </div>
     <div class="header-element"></div>
@@ -13,17 +13,17 @@
 </template>
 
 <script>
-import BackArrow from "@/components/atomic/back-arrow.vue";
+import BackArrow from '@/components/atomic/back-arrow.vue'
 export default {
-  name: "CreateHeader",
+  name: 'CreateHeader',
   components: { BackArrow },
   props: {
-    title: { type: Boolean, default: true },
+    title: { type: Boolean, default: true }
   },
   data() {
-    return {};
-  },
-};
+    return {}
+  }
+}
 </script>
 
 <style lang="scss" scoped>

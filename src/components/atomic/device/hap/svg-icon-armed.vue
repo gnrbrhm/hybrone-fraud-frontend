@@ -54,30 +54,30 @@
 
 <script>
 export default {
-  name: "SvgIconBattery",
+  name: 'SvgIconBattery',
   data() {
     return {
-      selectedSvg: 0,
-    };
+      selectedSvg: 0
+    }
   },
   props: {
-    status,
+    status
   },
   computed: {
     onChangeSvg() {
       if (this.status == 1) {
-        return 1;
+        return 1
       } else {
-        if (this.status == 0) return 0;
-        else if (this.status == 2) return 2;
-        else return 1;
+        if (this.status == 0) return 0
+        else if (this.status == 2) return 2
+        else return 1
       }
-    },
+    }
   },
   mounted() {
-    console.log("mounted", this.onChangeSvg);
-  },
-};
+    console.log('mounted', this.onChangeSvg)
+  }
+}
 </script>
 
 <style></style>

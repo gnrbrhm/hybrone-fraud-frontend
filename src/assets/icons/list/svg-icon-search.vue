@@ -17,8 +17,8 @@
 
 <script>
 export default {
-  name: "SvgIconSearch",
-};
+  name: 'SvgIconSearch'
+}
 </script>
 
 <style></style>

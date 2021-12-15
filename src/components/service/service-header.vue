@@ -9,30 +9,30 @@
 </template>
 
 <script>
-import ServiceFilter from "@/components/service/service-filter.vue";
+import ServiceFilter from '@/components/service/service-filter.vue'
 export default {
-  name: "ServiceHeader",
+  name: 'ServiceHeader',
   components: {
-    ServiceFilter,
+    ServiceFilter
   },
   methods: {
     handleFiltredParam(val) {
-      this.$emit("onhandleFiltredParam", val);
+      this.$emit('onhandleFiltredParam', val)
     },
     handleUpdate(val) {
-      console.log(val);
-      this.$emit("onUpdateTable", val);
+      console.log(val)
+      this.$emit('onUpdateTable', val)
     },
     handleFiltred(val) {
-      console.log(val);
-      this.$emit("onFiltred", val);
-    },
-  },
-};
+      console.log(val)
+      this.$emit('onFiltred', val)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/style.scss";
+@import '@/assets/scss/style.scss';
 
 .header {
   padding: 2px 20px 12px 23px;

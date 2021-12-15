@@ -1,18 +1,18 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import createPersistedState from "vuex-persistedstate";
+import Vue from 'vue'
+import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
-import auth from "./auth";
-import dataTable from "./dataTable";
-import maps from "./maps";
-import premise from "./premise";
-import model from "./model";
-import device from "./device";
-import pagination from "./pagination";
-import logs from "./logs";
-import service from "./service";
+import auth from './auth'
+import dataTable from './dataTable'
+import maps from './maps'
+import premise from './premise'
+import model from './model'
+import device from './device'
+import pagination from './pagination'
+import logs from './logs'
+import service from './service'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {},
@@ -27,12 +27,12 @@ export default new Vuex.Store({
     device,
     pagination,
     logs,
-    service,
+    service
     // locale,
   },
   plugins: [
     createPersistedState({
-      paths: ["auth"],
-    }),
-  ],
-});
+      paths: ['auth']
+    })
+  ]
+})

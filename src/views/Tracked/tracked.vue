@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: "Tracked",
-};
+  name: 'Tracked'
+}
 </script>
 
 <style></style>

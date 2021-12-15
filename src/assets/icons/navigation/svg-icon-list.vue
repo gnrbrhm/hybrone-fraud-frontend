@@ -17,8 +17,8 @@
 
 <script>
 export default {
-  name: "SvgIconList",
-};
+  name: 'SvgIconList'
+}
 </script>
 
 <style></style>

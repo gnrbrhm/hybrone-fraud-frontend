@@ -20,26 +20,26 @@
 
 <script>
 export default {
-  name: "SvgIconSabotage",
+  name: 'SvgIconSabotage',
   props: {
     status: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
+        return {}
+      }
+    }
   },
   computed: {
     changeColor() {
       if (this.status == 1) {
-        return "#6FCF97";
+        return '#6FCF97'
       } else {
-        if (this.status == 2) return "#EB5757";
-        else return "#B7B7B7";
+        if (this.status == 2) return '#EB5757'
+        else return '#B7B7B7'
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style></style>
