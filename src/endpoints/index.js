@@ -3,6 +3,11 @@ export default {
     method: 'GET',
     url: '/user/list'
   },
+  getUsersByFiltered: {
+    method: 'GET',
+    url: '/user/list',
+    params: {}
+  },
   createUser: {
     method: 'POST',
     url: '/user/create',
@@ -18,7 +23,7 @@ export default {
   },
   deleteUser: {
     method: 'DELETE',
-    url: '/user/create',
+    url: '/user/delete',
     data: {}
   },
   updateUserPermission: {
