@@ -7,6 +7,7 @@
           class="sentinel-input"
           v-model="search"
           placeholder="Kullanıcı Adı veya mail adresini giriniz."
+          @change="handleSearchChange"
         ></el-input>
       </div>
       <div class="component">
@@ -46,6 +47,9 @@ export default {
       this.$emit('onUsersFilteredData', {
         search: this.search
       })
+    },
+    handleSearchChange(val) {
+      console.log(val)
     },
     createUserClick() {
       bus.$emit('onClickCreateUser')

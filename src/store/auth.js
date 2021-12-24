@@ -44,9 +44,18 @@ export default {
       commit('SET_AUTH_USER', payload)
       commit('SET_TOKEN', payload.data.token)
     },
-    getUsers(_, payload) {
+    async getUsers(_, payload) {
       let users = Vue.prototype.$api({
         ...endpoints.getUsers
+      })
+      return users.then((r) => {
+        if (r.status == 200) return r
+      })
+    },
+    async getUsersByFiltered(_, payload) {
+      let users = Vue.prototype.$api({
+        ...endpoints.getUsersByFiltered,
+        params: { ...payload }
       })
       return users.then((r) => {
         if (r.status == 200) return r
@@ -64,7 +73,7 @@ export default {
     deleteUser(_, payload) {
       console.log('PAyload', payload)
       let user = Vue.prototype.$api({
-        ...endpoints.deteteUser,
+        ...endpoints.deleteUser,
         data: payload
       })
       return user.then((r) => {

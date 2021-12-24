@@ -124,9 +124,14 @@
                 @click="handleCloseCreateUserDialog"
                 ><span> Vazgeç</span></el-button
               >
-              <el-button class="apply-button" @click="deleteUser('ruleForm2')"
+              <el-button
+                class="apply-button"
+                @click="deleteUserApply('ruleForm2')"
                 ><span> Evet</span></el-button
               >
+              <!--            <el-button class="apply-button" @click="deleteUser('ruleForm2')"
+                ><span> Evet</span></el-button
+              > -->
             </div>
           </el-form-item>
         </el-form>
@@ -191,7 +196,8 @@ export default {
         ]
       },
       createDialogVisible: false,
-      userPasswordAsk: true,
+      userPasswordAsk: false,
+      is_admin_request: false,
       permission_list: [],
       user_permissions: {},
       permission_value: {
@@ -245,18 +251,23 @@ export default {
         }
       })
     },
-    deleteUser(form) {
+    deleteUserApply(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          let result = this.deleteUser({
-            id: this.current_user.id,
-            auth_password: this.ruleForm2.auth_password
-          })
-          result.then((r) => {
-            console.log(r)
-          })
-          console.log(result)
-        } else console.log('INVALID')
+          if (this.is_admin_request) {
+            this.handleisAdminRequest()
+          } else {
+            let result = this.deleteUser({
+              id: this.current_user.id,
+              auth_password: this.ruleForm2.auth_password
+            })
+            if (result) {
+              this.userPasswordAsk = false
+              this.ruleForm2.auth_password = ''
+              this.$emit('deleteUser')
+            }
+          }
+        }
       })
     },
     handleCloseCreateUserDialog() {
@@ -265,16 +276,24 @@ export default {
       this.ruleForm.email = ''
       this.createDialogVisible = false
     },
+    handleisAdminRequest() {
+      let result = this.updateUserPermission({
+        user_id: this.current_user.id,
+        permission_name: 'is_admin',
+        value: true
+      })
+    },
     handleChangePermission(value) {
-      if (value == 'is_admin') {
-        console.log(value)
-      } else {
-        let result = this.updateUserPermission({
-          user_id: this.current_user.id,
-          permission_name: value,
-          value: this.permission_value[value]
-        })
-      }
+      //   if (value == 'is_admin') {
+      //     this.userPasswordAsk = true
+      //     console.log(value)
+      //   } else {
+      let result = this.updateUserPermission({
+        user_id: this.current_user.id,
+        permission_name: value,
+        value: this.permission_value[value]
+      })
+      //   }
       console.log('permission_name', value)
       console.log('device_id', this.current_user.id)
       console.log('value', this.permission_value[value])
@@ -299,6 +318,8 @@ export default {
           if (this.permission_value[item] != undefined)
             this.permission_value[item] = this.current_user.permission[item]
         })
+        // console.log(this.current_user)
+        // this.permission_value['is_admin'] = this.current_user.is_admin
       }
     }
   },

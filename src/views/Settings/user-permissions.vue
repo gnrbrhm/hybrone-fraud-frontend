@@ -1,9 +1,13 @@
 <template>
   <div class="user-premise">
-    <div class="header"><UserPermissionHeader></UserPermissionHeader></div>
+    <div class="header">
+      <UserPermissionHeader
+        @onUsersFilteredData="handleUserFiltredData"
+      ></UserPermissionHeader>
+    </div>
     <div class="content">
       <DataTable :data="data"></DataTable>
-      <UserPermissionList></UserPermissionList>
+      <UserPermissionList @deleteUser="getUserList"></UserPermissionList>
     </div>
   </div>
 </template>
@@ -27,10 +31,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUsers: 'auth/getUsers'
+      getUsers: 'auth/getUsers',
+      getUsersByFiltered: 'auth/getUsersByFiltered'
     }),
-    getUserList() {
-      let result = this.getUsers()
+    handleUserFiltredData(val) {
+      this.getUserList(val)
+    },
+    getUserList(val) {
+      console.log('GetUserList', val)
+      let result =
+        val == undefined ? this.getUsers() : this.getUsersByFiltered({ ...val })
       result.then((r) => {
         this.data = r.data.data.users
       })
