@@ -15,6 +15,7 @@ import CreateDevice from '../views/Devices/Hap/create-device.vue'
 import DeviceDetail from '../views/Devices/Hap/device-detail.vue'
 import Settings from '../views/Settings/settings.vue'
 import Logs from '../views/Settings/logs.vue'
+import UserPermissions from '../views/Settings/user-permissions.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,14 @@ const routes = [
   {
     path: '/',
     name: 'Login',
+    component: Auth,
+    meta: {
+      layout: 'anon'
+    }
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
     component: Auth,
     meta: {
       layout: 'anon'
@@ -163,8 +172,8 @@ const routes = [
     component: CreatePremise
   },
   /*
-Bu bölüm iyi planlanmalı
-*/
+	   Bu bölüm iyi planlanmalı
+	   */
   {
     path: '/premises/create-device/:premise_id',
     name: 'CreateDevice',
@@ -200,6 +209,15 @@ Bu bölüm iyi planlanmalı
       layout: 'auth'
     },
     component: Logs
+  },
+  {
+    path: '/settings/users',
+    name: 'UserPermissions',
+    beforeEnter: MiddlewareAuth,
+    meta: {
+      layout: 'auth'
+    },
+    component: UserPermissions
   }
 ]
 

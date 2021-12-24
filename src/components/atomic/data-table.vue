@@ -311,6 +311,54 @@
       </template>
     </el-table-column>
   </el-table>
+  <!--Kullanıcı Tablosu İşlemleri-->
+  <el-table
+    v-loading="loading"
+    v-else-if="['UserPermissions'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    stripe
+    multiple_selection
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    height="100%"
+    :header-cell-style="
+      this.$route.name !== 'UserPermissions'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : { color: '#444444' }
+    "
+    @selection-change="handleSelectionChange"
+  >
+    <el-table-column type="selection" width="55"> </el-table-column>
+    <el-table-column header-align="left" prop="name" label="ADI SOYADI">
+      <!-- <template slot-scope="scope"
+        >{{ scope.row.user.name + '' + scope.row.user.surname }}
+      </template> -->
+    </el-table-column>
+    <!-- <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
+    </el-table-column> -->
+    <el-table-column header-align="left" prop="username" label="EMAİL ADRESİ">
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="permission_grup"
+      label="YETKİ GRUBU"
+    >
+      <template slot-scope="scope">
+        {{ getTitle(scope.row.type)[0].label }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="created_at"
+      header-align="right"
+      align="right"
+      label="OLUŞTURULMA ZAMANI"
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.created_at) }}
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
@@ -325,6 +373,7 @@ import SvgIconEnergy from '@/components/atomic/device/hap/svg-icon-energy.vue'
 import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
 // import SvgIconQuery from "@/components/atomic/device/hap/svg-icon-query.vue";
 
+import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
 import { dateTimeChange } from '@/utils.js'
 import { mapActions } from 'vuex'
@@ -356,13 +405,18 @@ export default {
   },
   watch: {
     data: function (val) {
+      console.log(' Wacher val', val)
       if (val) {
         this.loading = false
       } else {
         if (
-          ['Dashboard', 'List', 'Premises', 'DeviceLastSignals'].includes(
-            this.$route.name
-          )
+          [
+            'Dashboard',
+            'List',
+            'Premises',
+            'DeviceLastSignals'
+            // 'UserPermissions'
+          ].includes(this.$route.name)
         )
           this.loading = false
         else this.loading = true
@@ -376,6 +430,11 @@ export default {
       setSelectedRow: 'dataTable/setSelectedRow'
       // setLocation: "map/setLocation",
     }),
+    getTitle(val) {
+      return PERSONAL_TITLES.filter((item) => {
+        return item.key === val
+      })
+    },
     formattedDatetime(val) {
       console.log(val)
       return dateTimeChange(val)
@@ -417,7 +476,9 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    console.log('Mounted Data TAble', this.getTitle(this.data[0].type.label))
+  }
 }
 </script>
 

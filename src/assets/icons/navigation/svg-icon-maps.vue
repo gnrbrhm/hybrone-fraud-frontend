@@ -18,6 +18,7 @@
 <script>
 export default {
   name: 'SvgIconMaps'
+  //   props: { disabled: { type: Boolean, default: false } }
 }
 </script>
 

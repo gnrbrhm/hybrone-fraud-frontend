@@ -9,7 +9,8 @@ export default {
     user: {}
   },
   getters: {
-    isLoggedIn: (state) => !!state.user.token
+    isLoggedIn: (state) => !!state.user.token,
+    getPermissions: (state) => state.user.data.user.permission
   },
   mutations: {
     SET_TOKEN(state, data) {
@@ -42,6 +43,37 @@ export default {
       this.dispatch('locale/setLang', payload.language)
       commit('SET_AUTH_USER', payload)
       commit('SET_TOKEN', payload.data.token)
+    },
+    updateUserPermission(_, payload) {
+      let result = Vue.prototype.$api({
+        ...endpoints.updateUserPermission,
+        data: payload
+      })
+      return result.then((r) => {
+        if (r.status) {
+          return r.data
+        }
+      })
+    },
+    resetUserPassword(_, payload) {
+      let result = Vue.prototype.$api({
+        ...endpoints.forgotUserPasswordReset,
+        data: payload
+      })
+      return result.then((r) => {
+        if (r.status) {
+          return r
+        }
+      })
+    },
+    forgotUserPassword(_, payload) {
+      let request = Vue.prototype.$api({
+        ...endpoints.forgotUserPassword,
+        data: { ...payload }
+      })
+      return request.then((r) => {
+        return r.status == 200
+      })
     },
     logout({ commit }) {
       Vue.prototype

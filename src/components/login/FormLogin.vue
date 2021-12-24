@@ -1,30 +1,44 @@
 <template>
-  <div class="login-form">
-    <img
-      class="top_logo"
-      src="@/assets/logo/sentinel-logo.svg"
-      alt="hybrone logo"
-    />
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="300">
-      <span class="label">KULLANICI ADI</span>
-      <el-form-item prop="email">
-        <el-input id="email" type="email" v-model="ruleForm.email"></el-input>
-      </el-form-item>
-      <span class="label">ŞİFRE</span>
-      <el-form-item prop="password">
-        <el-input
-          id="password"
-          height="50px"
-          type="password"
-          v-model="ruleForm.password"
-        ></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="submitForm('ruleForm')"
-          ><span> OTURUM AÇ</span></el-button
-        >
-      </el-form-item>
-    </el-form>
+  <div>
+    <div class="login-form">
+      <img
+        class="top_logo"
+        src="@/assets/logo/sentinel-logo.svg"
+        alt="hybrone logo"
+      />
+      <!-- <span class="error-label"></span> -->
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="300"
+      >
+        <span class="label">KULLANICI ADI</span>
+        <el-form-item prop="email">
+          <el-input id="email" type="email" v-model="ruleForm.email"></el-input>
+        </el-form-item>
+        <span class="label">ŞİFRE</span>
+        <el-form-item prop="password">
+          <el-input
+            id="password"
+            height="50px"
+            type="password"
+            v-model="ruleForm.password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="submitForm('ruleForm')"
+            ><span> OTURUM AÇ</span></el-button
+          >
+        </el-form-item>
+      </el-form>
+      <div class="remember-me">
+        <el-checkbox v-model="remember_me">Beni Hatırla</el-checkbox>
+      </div>
+    </div>
+    <router-link :to="{ name: 'ForgotPassword' }" class="forgot-password">
+      <span>Şifremi Unuttum</span>
+    </router-link>
   </div>
 </template>
 
@@ -35,6 +49,7 @@ export default {
   name: 'FormLogin',
   data() {
     return {
+      remember_me: false,
       ruleForm: {
         email: '',
         password: ''
@@ -81,13 +96,19 @@ export default {
           })
           getToken
             .then((r) => {
-              if (r.status == 200) {
+              if ([200].includes(r.status)) {
                 this.setAuthUser(r.data)
                 if (redirect) {
                   this.$router.push({ name: redirect })
                 } else {
                   this.$router.push({ name: 'Dashboard' })
                 }
+              } else if ([202].includes(r.status)) {
+                this.setAuthUser(r.data)
+                this.$router.push({
+                  name: 'Settings',
+                  query: { is_random_password: true }
+                })
               }
             })
             .catch((error) => console.error(error))
@@ -117,8 +138,29 @@ export default {
   flex-grow: 0;
   margin: 0;
 }
+.login-form .error-label {
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #eb5757;
+}
+.login-form .remember-me {
+  display: flex;
+  min-width: 100%;
+  min-height: 60px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+.forgot-password {
+  margin-top: 130px;
+}
 .login-form img {
-  margin-bottom: 90px;
+  margin-bottom: 50px;
 }
 .login-form button {
   display: flex;

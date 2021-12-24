@@ -4,7 +4,8 @@
       <span class="settings-title">Ayarlar</span>
     </div>
     <div class="content">
-      <div v-if="false" class="period">
+      <!-- Sorgulama Periyodu -->
+      <div class="process-logs">
         <div class="chart-title">Sorgulama Periyodu</div>
         <span class="span-text"
           >Cihaz Durumlarını otomatik olarak sorgulama prediyodunu
@@ -29,14 +30,15 @@
           >
         </div>
       </div>
-      <div v-if="false" class="import-file">
+      <!-- Cihaz Listesi İçe Aktar -->
+      <div class="process-logs">
         <div class="chart-title">Cihaz Listesi İçe Aktar</div>
         <span class="span-text"
           >Hazırlanan XLS formatındaki listeyi sisteme
           aktarabilirsiniz.Tekrarlanan veriler aktarılmayacaktır.</span
         >
         <div class="chart-actions">
-          <el-upload
+          <!-- <el-upload
             class="upload-demo"
             :auto-upload="false"
             accept=".xlsx"
@@ -50,16 +52,34 @@
               >Dosya Seç</el-button
             >
             <div width="50px" slot="tip" class="el-upload__tip"></div>
-          </el-upload>
+          </el-upload> -->
           <el-button
-            :disabled="importDisabled"
-            class="save-button"
+            class="save-button logs"
             type="primary"
-            @click="uploadFiles"
+            @click="handleImportDevice"
             >İçeri Aktar</el-button
+          >
+          <!-- @click="uploadFiles" -->
+        </div>
+        <!-- Sorgulama Periyodu -->
+        <!-- Sorgulama Periyodu -->
+      </div>
+      <!-- Cihaz Listesi Dışa Aktar -->
+      <div class="process-logs">
+        <div class="chart-title">Cihaz Listesini Dışa Aktar</div>
+        <span class="span-text"
+          >Cihaz listesini XLS / CSV formatlarında yedekleyebilirsiniz.</span
+        >
+        <div class="chart-actions">
+          <el-button
+            class="save-button logs"
+            type="primary"
+            @click="getBackupFile"
+            >Dışa Aktar</el-button
           >
         </div>
       </div>
+      <!-- İşlem Logları -->
       <div class="process-logs">
         <div class="chart-title">İşlem Logları</div>
         <span class="span-text"
@@ -75,63 +95,161 @@
           >
         </div>
       </div>
-      <!-- <div class="process-logs">
-        <div class="chart-title">Sistemi Yedekle</div>
-        <span class="span-text">Tüm sistemin yedeğini alabilirsiniz.</span>
+      <!-- Kullanıcı Yetki Yönetimi -->
+      <div class="process-logs">
+        <div class="chart-title">Kullanıcılar</div>
+        <span class="span-text"
+          >Sistem kullanıcılarını listeleyebilir, yetkilerini düzenleyebilir,
+          kullanıcı ekleyip kaldırabilirsiniz.</span
+        >
         <div class="chart-actions">
           <el-button
             class="save-button logs"
             type="primary"
-            @click="getBackupFile"
-            >Yedekle</el-button
+            @click="onClicksUsers"
+            >Kullanıcılar</el-button
           >
         </div>
-      </div> -->
-      <!-- <div class="process-logs">
-        <div class="chart-title">Yedeklenen Veriyi Geri Yükle</div>
-        <span class="span-text"
-          >Yedeklenen verilerinizi geri yükleyebilirsiniz.</span
-        >
+      </div>
+      <!-- Şifre DEğiştirme-->
+      <div class="process-logs">
+        <div class="chart-title">Şifre Değiştir</div>
+        <span class="span-text">Kullanıcı şifrenizi değiştirebilirsiniz.</span>
         <div class="chart-actions">
-          <el-upload
-            class="upload-demo"
-            :auto-upload="false"
-            :file-list="backupList"
-            :on-change="handleBackupChange"
-            :on-remove="handleBackupRemove"
-          >
-            <el-button
-              v-if="isBackupEmpyt"
-              type="primary"
-              class="select-file-button"
-              >Dosya Seç</el-button
-            >
-
-            <div width="50px" slot="tip" class="el-upload__tip"></div>
-          </el-upload>
           <el-button
-            :disabled="backupDisabled"
-            class="save-button"
+            class="save-button logs"
             type="primary"
-            @click="uploadBackupFiles"
-            >Geri Yükle</el-button
+            @click="changeUserPassword"
+            >Şifre Değiştir</el-button
           >
         </div>
-      </div> -->
+      </div>
     </div>
-
+    <!-- İmport Device -->
     <el-dialog
       class="dialog-popup"
-      width="600"
-      :visible.sync="dialogImportVisible"
+      width="510px"
+      :visible.sync="dialogImportDevicePopupVisible"
     >
-      <div class="dialog-content">
-        <SvgIconSettingDownload></SvgIconSettingDownload>
-        <span class="event">İçe Aktarılıyor...</span>
-        <span class="file-name">{{ this.filename }}</span>
-        <el-button class="error-button">İptal</el-button>
+      <div class="password-change-user-dialog-content">
+        <div class="span-title">
+          İçeri aktarmak istediğiniz XLS dosyasını seçiniz.
+        </div>
+        <el-upload
+          class="upload-demo"
+          :auto-upload="false"
+          accept=".xlsx"
+          :file-list="fileList"
+          :on-change="handleChange"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-success="handleSuccess"
+        >
+          <span class="label">DOSYA SEÇ</span>
+          <el-input v-if="isEmpyt" type="primary" class="select-file-input"
+            ><el-button slot="append" width="44px" height="39px"
+              ><SvgIconFileUpload></SvgIconFileUpload></el-button
+          ></el-input>
+          <div width="50px" slot="tip" class="el-upload__tip"></div>
+        </el-upload>
+        <div class="form">
+          <div class="action-button-group">
+            <el-button
+              class="canceled-button"
+              @click="() => (this.dialogImportDevicePopupVisible = false)"
+              ><span> Vazgeç</span></el-button
+            >
+            <el-button
+              class="apply-button"
+              @click="handleImportDevicePopupApply"
+              ><span>Aktar</span></el-button
+            >
+          </div>
+        </div>
       </div>
     </el-dialog>
+    <!-- İmport Device Confirm -->
+    <el-dialog
+      class="dialog-popup"
+      width="510px"
+      :visible.sync="dialogImportDeviceConfirmPopupVisible"
+    >
+      <div class="password-change-user-dialog-content">
+        <div class="span-title">
+          Lokasyon bilgileri güncellenecek, devam etmek istediğinize emin
+          misiniz?
+        </div>
+        <div class="form">
+          <div class="action-button-group">
+            <el-button
+              class="canceled-button"
+              @click="
+                () => (this.dialogImportDeviceConfirmPopupVisible = false)
+              "
+              ><span> Vazgeç</span></el-button
+            >
+            <el-button class="apply-button" @click="uploadFiles"
+              ><span>Aktar</span></el-button
+            >
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- İmport Device Progress Bar -->
+    <el-dialog
+      class="dialog-popup"
+      width="510px"
+      :visible.sync="dialogImportDeviceProgressPopupVisible"
+    >
+      <div class="password-change-user-dialog-content">
+        <div class="span-title">Lokasyon bilgileri güncelleniyor...</div>
+        <div class="form">
+          <el-progress
+            :percentage="percentage"
+            :color="customColor"
+          ></el-progress>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- Import Device Error -->
+    <el-dialog
+      class="dialog-popup"
+      width="510px"
+      :visible.sync="dialogImportDeviceErrorPopup"
+    >
+      <div class="password-change-user-dialog-content">
+        <div class="span-text__error">Lokasyon bilgileri güncellenemedi.</div>
+        <div class="form">
+          <div class="action-button-group">
+            <el-button
+              class="apply-button"
+              @click="() => (this.dialogImportDeviceErrorPopup = false)"
+              ><span>Tamam</span></el-button
+            >
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- Import Device Error -->
+    <el-dialog
+      class="dialog-popup"
+      width="510px"
+      :visible.sync="dialogImportDeviceSuccessPopup"
+    >
+      <div class="password-change-user-dialog-content">
+        <div class="span-text">Lokasyon bilgileri güncellendi.</div>
+        <div class="form">
+          <div class="action-button-group">
+            <el-button
+              class="apply-button"
+              @click="() => (this.dialogImportDeviceSuccessPopup = false)"
+              ><span>Tamam</span></el-button
+            >
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- Result İmport Device Table 
     <el-dialog
       class="dialog-popup"
       width="600"
@@ -167,6 +285,74 @@
           >
         </div>
       </div>
+    </el-dialog>-->
+    <!-- Password Reset Dialog -->
+    <el-dialog
+      class="dialog-popup"
+      width="500px"
+      :visible.sync="passwordResetDialogVisible"
+    >
+      <div class="password-change-user-dialog-content">
+        <div class="span-title">
+          Yeni kullanıcı için aşağıdaki bilgileri giriniz.
+        </div>
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="300"
+          class="form"
+          :show-close="!this.$route.query.is_random_password"
+          :close-on-press-escape="!this.$route.query.is_random_password"
+        >
+          <span class="label">MEVCUT ŞİFRE</span>
+          <el-form-item prop="name">
+            <el-input
+              id="current_password"
+              type="current_password"
+              v-model="ruleForm.name"
+            ></el-input>
+          </el-form-item>
+          <span class="label">YENİ ŞİFRE</span>
+          <el-form-item prop="new_password">
+            <el-input
+              id="new_password"
+              height="50px"
+              v-model="ruleForm.new_password"
+            ></el-input>
+          </el-form-item>
+          <span class="label">YENİ ŞİFRE TEKRAR</span>
+          <el-form-item prop="confirm_new_password">
+            <el-input
+              id="confirm_new_password"
+              height="50px"
+              v-model="ruleForm.confirm_new_password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <div
+              class="action-button-group"
+              :style="
+                this.$route.query.is_random_password
+                  ? 'justify-content: center;'
+                  : ''
+              "
+            >
+              <el-button
+                v-if="!this.$route.query.is_random_password"
+                class="canceled-button"
+                @click="handleCloseCreateUserDialog"
+                ><span> Vazgeç</span></el-button
+              >
+              <el-button
+                class="apply-button"
+                @click="resetUserPasswordSubmitForm('ruleForm')"
+                ><span> Oluştur</span></el-button
+              >
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -174,16 +360,59 @@
 <script>
 import axios from 'axios'
 import endpoints from '@/endpoints'
-import SvgIconSettingDownload from '@/assets/icons/settings/svg-icon-settings-download.vue'
+import SvgIconFileUpload from '@/assets/icons/settings/svg-icon-file-upload.vue'
 import store from '../../store'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'Settings',
   components: {
-    SvgIconSettingDownload
+    SvgIconFileUpload
   },
   data() {
     return {
+      passwordResetDialogVisible: false || this.$route.query.is_random_password,
+      is_random_password: false,
+      dialogImportDevicePopupVisible: false,
+      dialogImportDeviceConfirmPopupVisible: false,
+      dialogImportDeviceProgressPopupVisible: false,
+      dialogImportDeviceErrorPopup: false,
+      dialogImportDeviceSuccessPopup: false,
+      customColor: '#007DB7',
+      percentage: 0,
+      ruleForm: {
+        current_password: '',
+        new_password: '',
+        confirm_new_password: ''
+      },
+      rules: {
+        current_password: [
+          {
+            required: true,
+            message: 'Lütfen adı giriniz !',
+            trigger: 'blur'
+          },
+          {
+            min: 3,
+            max: 50,
+            message: 'Length should be 3 to 5',
+            trigger: 'blur'
+          }
+        ],
+        new_password: [
+          {
+            required: true,
+            message: 'Lütfen soyadı giriniz.',
+            trigger: 'blur'
+          }
+        ],
+        confirm_new_password: [
+          {
+            required: true,
+            message: 'Lütfen email giriniz.',
+            trigger: 'blur'
+          }
+        ]
+      },
       import_result: {
         total_count: null,
         fail_count: null,
@@ -203,34 +432,74 @@ export default {
       backupDisabled: true,
       query_state_option: [
         {
-          label: 'Kapalı',
-          value: 'closed'
+          label: '5 Dakika',
+          value: '5'
+        },
+        {
+          label: '10 Dakika',
+          value: '10'
+        },
+        {
+          label: '15 Dakika',
+          value: '15'
+        },
+        {
+          label: '30 Dakika',
+          value: '30'
         },
         {
           label: '1 Saat',
-          value: '1'
+          value: '60'
         },
         {
           label: '3 Saat',
-          value: '3'
+          value: '24'
         },
         {
-          label: '6 Saat',
-          value: '6'
+          label: '5 Saat',
+          value: '300'
         },
         {
           label: '12 Saat',
-          value: '12'
-        },
-        {
-          label: '24 Saat',
-          value: '24'
+          value: '720'
         }
       ],
       resultTable: []
     }
   },
   methods: {
+    ...mapActions({
+      resetUserPassword: 'auth/resetUserPassword'
+    }),
+    handleImportDevicePopupApply() {
+      this.dialogImportDevicePopupVisible = false
+      this.dialogImportDeviceConfirmPopupVisible = true
+    },
+    resetUserPasswordSubmitForm(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          let result = this.resetUserPassword({
+            secret: this.ruleForm.current,
+            password: this.ruleForm.new_password
+          })
+          if (result.status == 200) {
+            this.passwordResetDialogVisible = false
+            this.ruleForm.current_password = ''
+            this.ruleForm.new_password = ''
+            this.ruleForm.confirm_new_password = ''
+          }
+        }
+      })
+    },
+    changeUserPassword() {
+      this.passwordResetDialogVisible = true
+    },
+    onClicksUsers() {
+      this.$router.push({ name: 'UserPermissions' })
+    },
+    handleImportDevice() {
+      this.dialogImportDevicePopupVisible = true
+    },
     getBackupFile() {
       this.$api({
         ...endpoints.getBackupFiles
@@ -287,42 +556,49 @@ export default {
       }
     },
     uploadFiles() {
-      this.$confirm('Toplu cihaz ekleme işlemi için emin misiniz ?', {
-        confirmButtonText: 'Evet',
-        cancelButtonText: 'Hayır'
-      }).then(() => {
-        let token = store.state.auth.user.token
-        const config = {
-          headers: {
-            'Content-Type':
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            Authorization: `Bearer ${token}`
-          }
+      let token = store.state.auth.user.token
+      let perc = 0
+      const config = {
+        headers: {
+          'Content-Type':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          Authorization: `Bearer ${token}`
+        },
+        onUploadProgress: (progressEvent) => {
+          perc = Math.round((event.loaded * 100) / event.total)
+          console.log('onUploadProgress', perc)
         }
-        this.dialogImportVisible = true
-        const form = new FormData()
-        form.append('excel', this.fileList[0].raw, this.fileList[0].name)
-        axios
-          .post(
-            'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/premises/excel',
-            // 'http://10.81.102.51:3000/api/v1/premises/excel',
-            // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/premises/excel',
-            // 'http://192.168.3.202:3000/api/v1/premises/excel',
-            form,
-            config
-          )
-          .then((r) => {
+      }
+      const form = new FormData()
+      form.append('excel', this.fileList[0].raw, this.fileList[0].name)
+      axios
+        .post('http://34.79.135.127:3000/api/v1/premises/excel', form, config)
+        .then((r) => {
+          console.log(r)
+          if (r.status == 200) {
+            this.dialogImportDeviceConfirmPopupVisible = false
+            this.dialogImportDeviceProgressPopupVisible = true
+            this.percentage = perc
             this.import_result = { ...r.data.data }
             this.import_result.total_count =
               parseInt(this.import_result.fail_count) +
               parseInt(this.import_result.success_count)
             this.resultTable = r.data.data.failed_rows
-          })
-        setTimeout(() => {
-          this.dialogImportVisible = false
-          this.dialogTableVisible = true
-        }, 1500)
-      })
+            this.dialogImportDeviceSuccessPopup = true
+          } else {
+            alert('else')
+            this.dialogImportDeviceErrorPopup = true
+          }
+        })
+        .catch(() => {
+          this.dialogImportDeviceConfirmPopupVisible = false
+          this.dialogImportDeviceProgressPopupVisible = false
+          this.dialogImportDeviceErrorPopup = true
+        })
+      //   setTimeout(() => {
+      //     this.dialogImportVisible = false
+      //     this.dialogTableVisible = true
+      //   }, 1500)
     },
     uploadBackupFiles() {
       this.$confirm(
@@ -387,6 +663,9 @@ export default {
   },
   created() {
     this.getSettings()
+    if (this.$route.query.is_random_password) {
+      this.is_random_password = this.$route.query.is_random_password
+    }
   }
 }
 </script>
@@ -433,24 +712,29 @@ export default {
 .chart-title {
   // font-family: Roboto;
   // font-style: normal;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 18px;
   line-height: 21px;
   display: flex;
   align-items: center;
-  color: #000000;
+
+  /* Gray Dark */
+
+  color: #444444;
   @extend .sentinel-label;
 }
-.span-text {
-  // font-family: Roboto;
-  // font-style: normal;
-  font-weight: 200;
+.process-logs .span-text {
+  @extend .sentinel-label;
+  font-weight: normal;
   font-size: 14px;
   line-height: 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  align-self: flex-start;
   margin-top: 20px;
-  @extend .sentinel-label;
+  /* Gray Dark */
+
+  color: #444444;
 }
 .chart-actions {
   display: flex;
@@ -591,5 +875,114 @@ button span {
   display: flex;
   justify-content: center;
   grid-column: 2;
+}
+.password-change-user-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 376px;
+  .span-title {
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .span-text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    /* Gray Dark */
+
+    color: #444444;
+    &__error {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 21px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #e04141;
+    }
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    min-width: 276px;
+    span {
+      display: flex;
+      justify-content: flex-start;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 14px;
+      font-feature-settings: 'zero' on;
+      margin-bottom: 4px;
+
+      /* Gray Dark */
+
+      color: #444444;
+    }
+    input {
+      min-width: 100% !important;
+    }
+    .action-button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      .canceled-button {
+        width: 120px;
+        height: 39px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19px;
+          text-align: center;
+
+          /* Hybrone Blue */
+
+          color: #2c3357 !important;
+
+          text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+        }
+      }
+      .apply-button {
+        background: $hybrone_light_blue;
+        box-shadow: 0px 2px 4px rgba(91, 134, 245, 0.05);
+        border-radius: 4px;
+        width: 120px;
+        display: flex;
+        height: 39px;
+        align-items: center;
+        justify-content: center;
+        span {
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19px;
+          text-align: center;
+
+          /* White */
+
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }
 </style>

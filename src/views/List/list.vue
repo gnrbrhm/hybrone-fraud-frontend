@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getDevices: 'device/getDevices'
+      getVguardDevices: 'device/getVguardDevices'
     }),
     handleChangePagination() {
       this.fillDataTable({
@@ -79,7 +79,7 @@ export default {
       this.modal_visible = val
     },
     async fillDataTable(params) {
-      let devices = this.getDevices({ page: 1, limit: 20, ...params })
+      let devices = this.getVguardDevices({ page: 1, limit: 20, ...params })
       devices.then((r) => {
         this.table_data = r
       })

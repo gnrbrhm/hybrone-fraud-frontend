@@ -5,7 +5,7 @@
         src="@/assets/logo/hybrone_logo.png"
         width="72"
         height="65"
-        style="margin: 20px 14px 20px 14px; margin-bottom: 70px"
+        style="margin: 20px 14px 20px 14px; margin-bottom: 30px"
         alt="Hybrone"
       />
       <div class="navigation">
@@ -15,6 +15,7 @@
           :key="nav.id"
           :to="nav.route"
           active-class="nav-active"
+          :disabled="nav.disabled"
         >
           <SvgIconTracked
             style="color: #ffffff"
@@ -26,11 +27,26 @@
           <SvgIconServices
             v-else-if="nav.label == 'Servisler'"
           ></SvgIconServices>
-          <SvgIconPremise v-else-if="nav.label == 'Mekanlar'"></SvgIconPremise>
+          <SvgIconStation
+            v-else-if="nav.label == 'İstasyonlar'"
+          ></SvgIconStation>
           <SvgIconSettings v-else-if="nav.label == 'Ayarlar'"></SvgIconSettings>
 
           <span v-if="nav.label != 'Çıkış'">{{ nav.label }}</span></router-link
         >
+      </div>
+      <div class="oto-query">
+        <span
+          >Otomatik <br />
+          Sorgu</span
+        >
+        <el-switch
+          active-color="#007DB7"
+          inactive-color="#ff4949"
+          v-model="auto_query"
+          @click="handleAutoReloadClick"
+        >
+        </el-switch>
       </div>
       <div @click="logoutFunc()">
         <SvgIconLogout></SvgIconLogout>
@@ -45,33 +61,45 @@ import { NAVIGATON } from '@/constant'
 import SvgIconTracked from '@/assets/icons/navigation/tracked.vue'
 import Dashboard from '@/assets/icons/navigation/dashboard.vue'
 import SvgIconList from '@/assets/icons/navigation/svg-icon-list.vue'
-// import SvgIconServices from "@/assets/icons/navigation/svg-icon-services.vue";
+import SvgIconServices from '@/assets/icons/navigation/svg-icon-services.vue'
 import SvgIconMaps from '@/assets/icons/navigation/svg-icon-maps.vue'
 import SvgIconSettings from '@/assets/icons/navigation/svg-icon-settings.vue'
 import SvgIconLogout from '@/assets/icons/navigation/svg-icon-logout.vue'
-import SvgIconPremise from '@/assets/icons/navigation/svg-icon-premise.vue'
-import { mapActions } from 'vuex'
+// import SvgIconPremise from '@/assets/icons/navigation/svg-icon-premise.vue'
+import SvgIconStation from '@/assets/icons/navigation/svg-icon-station.vue'
+import { mapActions, mapGetters } from 'vuex'
+// import auth from '../../store/auth'
 export default {
   name: 'Sidebar',
   components: {
     SvgIconTracked,
     Dashboard,
     SvgIconList,
-    // SvgIconServices,
+    SvgIconServices,
     SvgIconMaps,
     SvgIconSettings,
     SvgIconLogout,
-    SvgIconPremise
+    SvgIconStation
+    // SvgIconPremise
   },
   data() {
     return {
+      auto_query: false,
       navigation: {}
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     ...mapActions({
       logout: 'auth/logout'
     }),
+    handleAutoReloadClick() {
+      console.log('AutoReload')
+    },
     logoutFunc() {
       this.logout()
     }
@@ -93,6 +121,15 @@ export default {
     console.log('Screen Width', screen.width)
     console.log('Screen Height', height)
     this.navigation = { ...NAVIGATON }
+  },
+  mounted() {
+    console.log('Sidebar', this.getPermissions)
+    this.navigation.filter((item) => {
+      if (item.label == 'Harita') {
+        alert(item.label)
+        item.disabled = this.getPermissions['device_show_in_map']
+      }
+    })
   }
 }
 </script>
@@ -145,6 +182,7 @@ $high: 1920px;
     font-weight: bold;
     color: #2c3e50;
   }
+
   .link-box {
     display: flex;
     width: 100px;
@@ -159,6 +197,7 @@ $high: 1920px;
     // @media screen and (min-width: $high) {
     //   width: $high * 10/100;
     // }
+
     &:hover {
       svg {
         path {
@@ -166,6 +205,7 @@ $high: 1920px;
         }
       }
     }
+
     span {
       font-family: Roboto, sans-serif;
       font-style: normal;
@@ -210,6 +250,11 @@ $high: 1920px;
     // }
   }
 }
+#nav .navigation a[disabled='disabled'] {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
 // .router-link-active {
 //   svg {
 //     path {

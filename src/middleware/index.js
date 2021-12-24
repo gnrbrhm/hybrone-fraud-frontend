@@ -21,8 +21,8 @@ const clientInstance = (baseURL) =>
   })
 // const cyclops = clientInstance('http://192.168.3.199:3000/api/v1/')
 
-const cyclops = clientInstance('http://34.140.224.22:3000/api/v1/')
-const map = 'http://192.168.3.202:8081/tile/{z}/{x}/{y}.png'
+const cyclops = clientInstance('http://34.79.135.127:3000/api/v1/')
+const map = 'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png'
 
 const clients = [cyclops]
 
@@ -51,7 +51,11 @@ clients.forEach((client) => {
           type: status ? 'success' : 'error'
         })
       }
-
+      console.log(response)
+      //   if ([202].includes(response.status)) {
+      //     // router.push({ name: 'Settings', query: { is_random_password: true } })
+      //     router.push({ name: 'Settings' })
+      //   }
       return response
     },
     (error) => {
@@ -72,8 +76,9 @@ clients.forEach((client) => {
 
       if (url != '/login' && [403].includes(status)) {
         router.push({ name: 'Login' })
-        // store.dispatch("auth/logout");
+        store.dispatch('auth/logout')
       }
+
       return error
     }
   )

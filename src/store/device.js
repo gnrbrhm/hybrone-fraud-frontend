@@ -40,6 +40,29 @@ export default {
         return r.data.data.paginated.records
       })
     },
+    getVguardDevices({ commit }, params) {
+      const device = Vue.prototype.$api({
+        ...endpoints.getVguardDevices,
+        params: { page: 1, limit: 10, ...params }
+      })
+      return device.then((r) => {
+        commit('SET_DEVICES', r.data.data.paginated)
+
+        this.dispatch(
+          'pagination/setCurrentPage',
+          r.data.data.paginated.to / r.data.data.paginated.per_page
+        )
+        this.dispatch(
+          'pagination/setCurrentLimit',
+          r.data.data.paginated.per_page
+        )
+        this.dispatch(
+          'pagination/setTotalRecord',
+          r.data.data.paginated.total_record
+        )
+        return r.data.data.paginated.records
+      })
+    },
     getProsecDevicesByFilter(_, custom_premise_id) {
       const device = Vue.prototype.$api({
         ...endpoints.getProsecDeviceByPremiseId,

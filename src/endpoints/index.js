@@ -7,6 +7,21 @@ export default {
       password: ''
     }
   },
+  updadateUserPermission: {
+    url: '/user/permissionupdate',
+    method: 'PUT',
+    data: {}
+  },
+  forgotUserPasswordReset: {
+    url: '/forgot/password/reset',
+    method: 'POST',
+    data: {}
+  },
+  forgotUserPassword: {
+    url: '/user/forgot/password',
+    method: 'POST',
+    data: {}
+  },
   logout: {
     method: 'GET',
     url: '/user/logout'
@@ -80,6 +95,10 @@ export default {
   },
   getProsecDevices: {
     url: '/prosec/devices',
+    method: 'GET'
+  },
+  getVguardDevices: {
+    url: '/vguard/devices',
     method: 'GET'
   },
   getProsecDeviceById: {

@@ -1,11 +1,11 @@
 export const NAVIGATON = [
-  // { label: "Takip", route: "tracked" },
-  { label: 'Dashboard', route: '/dashboard/panel' },
-  { label: 'Liste', route: '/list/panel' },
-  // { label: "Harita", route: "/map" },
-  //   { label: "Servisler", route: "/services" },
-  { label: 'Mekanlar', route: '/premises' },
-  { label: 'Ayarlar', route: '/settings' }
+  // { label: "Takip", route: "tracked" ,disabled:false},
+  { label: 'Dashboard', route: '/dashboard/panel', disabled: false },
+  { label: 'Liste', route: '/list/panel', disabled: false },
+  { label: 'Harita', route: '/map', disabled: false },
+  { label: 'Servisler', route: '/services', disabled: false },
+  { label: 'İstasyonlar', route: '/premises', disabled: false },
+  { label: 'Ayarlar', route: '/settings', disabled: false }
   // { label: "Çıkış", route: "/logout" },
 ]
 export const HARDWARE_TYPES = [
@@ -293,3 +293,147 @@ export const PERSONAL_TITLES = [
   { key: 1, label: 'Bölge Sorumlusu' },
   { key: 2, label: 'Satış Sorumlusu' }
 ]
+export const USER_PERMISSIONS = {
+  IS_ADMIN: [
+    {
+      title: '',
+      key: 'is_admin',
+      label: 'Admin Kullanıcısı',
+      value: false
+    }
+  ],
+  LİSTE: [
+    {
+      title: 'Liste',
+      key: 'device_list_status_report_create',
+      label: 'Cihaz listesi durum raporu oluşturma',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'device_show_in_map',
+      label: 'Harita üzerinde cihazları görüntüleme',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'device_show_in_dashboard',
+      label: 'Cihaz dashboard görüntüleme',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'device_show_event',
+      label: 'Cihaz olaylarını görüntüleme',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'device_events_status_report_create',
+      label: 'Cihaz olayları durum raporu oluşturma',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'take_snapshot',
+      label: 'Anlık görüntü alma',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'download_record',
+      label: 'Kayıt indirme',
+      value: false
+    },
+    {
+      title: 'Liste',
+      key: 'device_access_web_ui',
+      label: 'Cihaz web arayüzüne erişim',
+      value: false
+    }
+  ],
+  LOKASYON: [
+    {
+      title: 'Lokasyon',
+      key: 'location_create',
+      label: 'Lokasyon oluşturma',
+      value: false
+    },
+    {
+      title: 'Lokasyon',
+      key: 'location_edit',
+      label: 'Lokasyon dünzenleme',
+      value: false
+    },
+    {
+      title: 'Lokasyon',
+      key: 'location_delete',
+      label: 'Lokasyon silme',
+      value: false
+    }
+  ],
+  CİHAZ: [
+    {
+      title: 'Cihaz',
+      key: 'device_create',
+      label: 'Cihaz oluşturma',
+      value: false
+    },
+    {
+      title: 'Cihaz',
+      key: 'device_edit',
+      label: 'Cihaz düzenleme',
+      value: false
+    },
+    {
+      title: 'Cihaz',
+      key: 'device_delete',
+      label: 'Cihaz silme',
+      value: false
+    }
+  ],
+  SERVİS: [
+    {
+      title: 'Servis',
+      key: 'service_create',
+      label: 'Servis kaydı oluşturma',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'service_delete',
+      label: 'Servis kaydı silme',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'service_status_finished',
+      label: 'Servis kaydı tamamlama',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'service_report_create_and_download',
+      label: 'Rapor oluşturma ve indirme',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'service_data_import',
+      label: 'Servis verisini içeri aktarma',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'query_period_edit',
+      label: 'Servis verisini içeri aktarma',
+      value: false
+    },
+    {
+      title: 'Servis',
+      key: 'service_data_import',
+      label: 'Servis verisini içeri aktarma',
+      value: false
+    }
+  ]
+}

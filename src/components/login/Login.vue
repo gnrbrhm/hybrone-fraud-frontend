@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="right-box">
-      <FormLogin></FormLogin>
+      <FormLogin v-if="['Login'].includes(this.$route.name)"></FormLogin>
+      <ForgotPassword v-else></ForgotPassword>
     </div>
     <div class="left-box">
       <SentinelAvatar></SentinelAvatar>
@@ -11,12 +12,14 @@
 
 <script>
 import FormLogin from './FormLogin.vue'
+import ForgotPassword from './ForgotPassword.vue'
 import SentinelAvatar from './SentinelAvatar.vue'
 export default {
   name: 'Login',
   components: {
     FormLogin,
-    SentinelAvatar
+    SentinelAvatar,
+    ForgotPassword
   }
 }
 </script>
