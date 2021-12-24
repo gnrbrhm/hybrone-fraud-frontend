@@ -319,17 +319,18 @@
     class="data-table"
     :data="data"
     stripe
-    multiple_selection
-    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    highlight-current-row
+    style="width: 99%; min-height: calc(100vh - 180px); overflow: none"
     height="100%"
     :header-cell-style="
       this.$route.name !== 'UserPermissions'
         ? { background: '#f5f5f5', color: '#444444' }
         : { color: '#444444' }
     "
-    @selection-change="handleSelectionChange"
+    @current-change="handleCurrentChange"
+    :row-class-name="rowClassName"
   >
-    <el-table-column type="selection" width="55"> </el-table-column>
+    <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
     <el-table-column header-align="left" prop="name" label="ADI SOYADI">
       <!-- <template slot-scope="scope"
         >{{ scope.row.user.name + '' + scope.row.user.surname }}
@@ -376,7 +377,7 @@ import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
 import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
 import { dateTimeChange } from '@/utils.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'DataTable',
   data() {
@@ -402,6 +403,11 @@ export default {
     data: {
       default: []
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   watch: {
     data: function (val) {
@@ -436,11 +442,14 @@ export default {
       })
     },
     formattedDatetime(val) {
-      console.log(val)
+      //   console.log(val)
       return dateTimeChange(val)
     },
     handleDBClick(val) {
-      if (['List', 'Dashboard'].includes(this.$route.name)) {
+      if (
+        ['List', 'Dashboard'].includes(this.$route.name) &&
+        this.getPermissions['device_show_in_dashboard']
+      ) {
         this.$router.push({
           name: 'DeviceDetail',
           params: { device_id: val.id }
@@ -471,6 +480,10 @@ export default {
         this.$store.dispatch('setLocation', {
           location: { ...location }
         })
+        bus.$emit('onCurrentChangeRowPremise', row)
+      } else {
+        console.log('Else', row)
+        this.setSelectedRow(row)
         bus.$emit('onCurrentChangeRowPremise', row)
       }
     }

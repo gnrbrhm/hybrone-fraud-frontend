@@ -15,7 +15,7 @@
           :key="nav.id"
           :to="nav.route"
           active-class="nav-active"
-          :disabled="nav.disabled"
+          :disabled="!nav.disabled"
         >
           <SvgIconTracked
             style="color: #ffffff"
@@ -121,15 +121,16 @@ export default {
     console.log('Screen Width', screen.width)
     console.log('Screen Height', height)
     this.navigation = { ...NAVIGATON }
-  },
-  mounted() {
-    console.log('Sidebar', this.getPermissions)
-    this.navigation.filter((item) => {
-      if (item.label == 'Harita') {
-        alert(item.label)
-        item.disabled = this.getPermissions['device_show_in_map']
+    Object.keys(this.navigation).forEach((item) => {
+      if (this.navigation[item].label == 'Harita') {
+        console.log(item)
+        this.navigation[item].disabled =
+          this.getPermissions['device_show_in_map']
       }
     })
+  },
+  mounted() {
+    console.log('Sidebar', this.getPermissions['device_show_in_map'])
   }
 }
 </script>

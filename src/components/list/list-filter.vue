@@ -79,7 +79,14 @@
       </div>
       <div class="component">
         <span>RAPOR</span>
-        <el-button :disabled="isSelected" @click="handleActionsClick('report')">
+        <el-button
+          :disabled="
+            isSelected && this.getPermissions[device_list_status_report_create]
+              ? false
+              : true
+          "
+          @click="handleActionsClick('report')"
+        >
           <SvgIconReport></SvgIconReport>
         </el-button>
       </div>
@@ -94,6 +101,7 @@ import SvgIconAction from '@/assets/icons/list/svg-icon-action.vue'
 import SvgIconService from '@/assets/icons/list/svg-icon-service.vue'
 import SvgIconReport from '@/assets/icons/list/svg-icon-report.vue'
 import { DEVICE_TYPES, DEVICE_STATUS } from '@/constant'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ListFilter',
   components: {
@@ -104,6 +112,10 @@ export default {
     SvgIconReport
   },
   computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    }),
+
     isSelected() {
       return !(this.$store.state.dataTable.selectedRows.length > 0)
     },

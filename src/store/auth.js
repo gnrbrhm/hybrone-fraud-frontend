@@ -44,12 +44,41 @@ export default {
       commit('SET_AUTH_USER', payload)
       commit('SET_TOKEN', payload.data.token)
     },
+    getUsers(_, payload) {
+      let users = Vue.prototype.$api({
+        ...endpoints.getUsers
+      })
+      return users.then((r) => {
+        if (r.status == 200) return r
+      })
+    },
+    createUser(_, payload) {
+      let user = Vue.prototype.$api({
+        ...endpoints.createUser,
+        data: payload
+      })
+      return user.then((r) => {
+        if (r.status == 201) return r
+      })
+    },
+    deleteUser(_, payload) {
+      console.log('PAyload', payload)
+      let user = Vue.prototype.$api({
+        ...endpoints.deteteUser,
+        data: payload
+      })
+      return user.then((r) => {
+        console.log('R', r)
+        if (r.status == 201) return r
+      })
+    },
     updateUserPermission(_, payload) {
       let result = Vue.prototype.$api({
         ...endpoints.updateUserPermission,
         data: payload
       })
       return result.then((r) => {
+        console.log('R', r)
         if (r.status) {
           return r.data
         }

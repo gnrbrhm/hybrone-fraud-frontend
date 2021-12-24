@@ -1,11 +1,15 @@
 export const NAVIGATON = [
   // { label: "Takip", route: "tracked" ,disabled:false},
-  { label: 'Dashboard', route: '/dashboard/panel', disabled: false },
-  { label: 'Liste', route: '/list/panel', disabled: false },
-  { label: 'Harita', route: '/map', disabled: false },
-  { label: 'Servisler', route: '/services', disabled: false },
-  { label: 'İstasyonlar', route: '/premises', disabled: false },
-  { label: 'Ayarlar', route: '/settings', disabled: false }
+  { label: 'Dashboard', route: '/dashboard/panel', disabled: true },
+  { label: 'Liste', route: '/list/panel', disabled: true },
+  {
+    label: 'Harita',
+    route: '/map',
+    disabled: true
+  },
+  { label: 'Servisler', route: '/services', disabled: true },
+  { label: 'İstasyonlar', route: '/premises', disabled: true },
+  { label: 'Ayarlar', route: '/settings', disabled: true }
   // { label: "Çıkış", route: "/logout" },
 ]
 export const HARDWARE_TYPES = [
@@ -290,6 +294,8 @@ export const SIGNALS_TYPES = [
   { label: 'Bypass', value: 'bypass' }
 ]
 export const PERSONAL_TITLES = [
+  { key: 0, label: 'Kullanıcı' },
+  { key: 1, label: 'Admin' },
   { key: 1, label: 'Bölge Sorumlusu' },
   { key: 2, label: 'Satış Sorumlusu' }
 ]
