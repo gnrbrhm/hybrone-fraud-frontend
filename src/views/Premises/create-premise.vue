@@ -3,7 +3,7 @@
     <CreateHeader :title="this.$route.name === 'CreatePremise'"></CreateHeader>
     <div class="form">
       <CreateForm></CreateForm>
-      <!-- <CreateMap></CreateMap> -->
+      <CreateMap></CreateMap>
     </div>
     <div class="form-bottom">
       <el-button type="primary" @click="handleOnSaveClick">{{
@@ -15,14 +15,14 @@
 
 <script>
 import CreateHeader from '@/components/premises/create-header.vue'
-// import CreateMap from "@/components/premises/create-map.vue";
+import CreateMap from '@/components/premises/create-map.vue'
 import CreateForm from '@/components/premises/create-form.vue'
 import { mapGetters, mapActions } from 'vuex'
-// import Vue from "vue";
+import Vue from 'vue'
 import { bus } from '@/main'
 export default {
   name: 'CreatePremise',
-  components: { CreateHeader, CreateForm },
+  components: { CreateHeader, CreateForm, CreateMap },
   data() {
     return {
       is_update: false
@@ -39,15 +39,15 @@ export default {
     }),
     handleOnSaveClick() {
       bus.$emit('onClickSave', true)
-      // if (this.getSelectedLocation.lat) {
-      //   bus.$emit("onClickSave", true);
-      // } else {
-      //   // Vue.notify({
-      //   //   text: "Lütfen Harita Üzerinden Seçin Yapınız",
-      //   //   group: "error-template",
-      //   //   type: "error",
-      //   // });
-      // }
+      if (this.getSelectedLocation.lat) {
+        bus.$emit('onClickSave', true)
+      } else {
+        Vue.notify({
+          text: 'Lütfen Harita Üzerinden Seçin Yapınız',
+          group: 'error-template',
+          type: 'error'
+        })
+      }
     }
   },
   created() {

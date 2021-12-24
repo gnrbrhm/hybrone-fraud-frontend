@@ -1,4 +1,13 @@
 export default {
+  getUsers: {
+    method: 'GET',
+    url: '/user/list'
+  },
+  createUser: {
+    method: 'POST',
+    url: '/user/create',
+    data: {}
+  },
   token: {
     url: '/user/login',
     method: 'POST',
@@ -7,8 +16,13 @@ export default {
       password: ''
     }
   },
-  updadateUserPermission: {
-    url: '/user/permissionupdate',
+  deleteUser: {
+    method: 'DELETE',
+    url: '/user/create',
+    data: {}
+  },
+  updateUserPermission: {
+    url: '/user/permission/update',
     method: 'PUT',
     data: {}
   },

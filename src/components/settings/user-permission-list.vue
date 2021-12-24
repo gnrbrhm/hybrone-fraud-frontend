@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div
-      class="permission-list-container"
-      :disabled="this.getSelectedRows.length > 0 ? false : true"
-    >
+    <div class="permission-list-container">
       <div class="permission-header">
         <div class="title">YETKİLER</div>
-        <el-button type="danger">Kullanıcıyı Sil</el-button>
+        <el-button @click="() => (userPasswordAsk = true)" type="danger"
+          >Kullanıcıyı Sil</el-button
+        >
       </div>
-      <div class="permissions-table">
+      <div
+        class="permissions-table"
+        :disabled="this.current_user ? false : true"
+      >
         <div v-for="item in permission_list" :key="item">
           <div v-if="item != 'IS_ADMIN'" class="permission-title">
             {{ item }}
@@ -28,7 +30,7 @@
               active-color="#007DB7"
               inactive-color="#B4BBBB"
               v-model="permission_value[index.key]"
-              @change="handleAutoReloadChange(index.key)"
+              @change="handleChangePermission(index.key)"
             ></el-switch>
             <el-switch
               v-else
@@ -38,17 +40,14 @@
               active-color="#007DB7"
               inactive-color="#B4BBBB"
               v-model="permission_value[index.key]"
-              @change="handleAutoReloadChange(index.key)"
+              @change="handleChangePermission(index.key)"
             ></el-switch>
           </div>
         </div>
       </div>
     </div>
-    <el-dialog
-      :visible.sync="createDialogVisible"
-      @close="handleCloseCreateUserDialog"
-      width="500px"
-    >
+    <el-dialog :visible.sync="createDialogVisible" width="500px">
+      <!-- @close="handleCloseCreateUserDialog" -->
       <div class="create-user-dialog-content">
         <div class="span-title">
           Yeni kullanıcı için aşağıdaki bilgileri giriniz.
@@ -97,6 +96,42 @@
         </el-form>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="userPasswordAsk" width="500px" height="274px">
+      <!-- @close="handleCloseCreateUserDialog" -->
+      <div class="create-user-dialog-content">
+        <div class="span-title">
+          Kullaınıcı için tüm yetkiler tanımlanacaktır. Onaylamak için şifrenizi
+          giriniz.
+        </div>
+        <el-form
+          :model="ruleForm2"
+          :rules="rulesApply"
+          ref="ruleForm2"
+          label-width="300"
+          class="form"
+        >
+          <span class="label">ŞİFRE</span>
+          <el-form-item prop="auth_password">
+            <el-input
+              id="auth_password"
+              v-model="ruleForm2.auth_password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <div class="action-button-group">
+              <el-button
+                class="canceled-button"
+                @click="handleCloseCreateUserDialog"
+                ><span> Vazgeç</span></el-button
+              >
+              <el-button class="apply-button" @click="deleteUser('ruleForm2')"
+                ><span> Evet</span></el-button
+              >
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,10 +144,22 @@ export default {
   name: 'UserPermissionList',
   data() {
     return {
+      ruleForm2: { auth_password: '' },
+      rulesApply: {
+        auth_password: [
+          {
+            required: true,
+            message: 'Lütfen şifrenizi giriniz !',
+            trigger: 'blur'
+          }
+        ]
+      },
       ruleForm: {
         name: '',
         surname: '',
-        email: ''
+        email: '',
+        admin_password: '1234567',
+        is_admin: false
       },
       rules: {
         name: [
@@ -144,6 +191,7 @@ export default {
         ]
       },
       createDialogVisible: false,
+      userPasswordAsk: true,
       permission_list: [],
       user_permissions: {},
       permission_value: {
@@ -167,23 +215,48 @@ export default {
         service_status_finished: false,
         service_report_create_and_download: false,
         service_data_import: false
-      }
+      },
+      current_user: {}
     }
   },
   computed: {
     getSelectedRows() {
-      return this.$store.state.dataTable.selectedRows
+      return this.$store.state.dataTable.selectedRow
     }
   },
   methods: {
     ...mapActions({
-      updateUserPermission: 'auth/updateUserPermission'
+      updateUserPermission: 'auth/updateUserPermission',
+      createUser: 'auth/createUser',
+      deleteUser: 'auth/deleteUser'
     }),
     createUserSubmitForm(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log(form)
+          let result = this.createUser({
+            name: this.ruleForm.name,
+            surname: this.ruleForm.surname,
+            email: this.ruleForm.email,
+            admin_password: '1234567',
+            is_admin: false,
+            username: this.ruleForm.email
+          })
+          if (result) this.handleCloseCreateUserDialog()
         }
+      })
+    },
+    deleteUser(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          let result = this.deleteUser({
+            id: this.current_user.id,
+            auth_password: this.ruleForm2.auth_password
+          })
+          result.then((r) => {
+            console.log(r)
+          })
+          console.log(result)
+        } else console.log('INVALID')
       })
     },
     handleCloseCreateUserDialog() {
@@ -192,12 +265,18 @@ export default {
       this.ruleForm.email = ''
       this.createDialogVisible = false
     },
-    handleAutoReloadChange(value) {
+    handleChangePermission(value) {
+      if (value == 'is_admin') {
+        console.log(value)
+      } else {
+        let result = this.updateUserPermission({
+          user_id: this.current_user.id,
+          permission_name: value,
+          value: this.permission_value[value]
+        })
+      }
       console.log('permission_name', value)
-      console.log(
-        'device_id',
-        this.getDeviceIdToArray(this.getSelectedRows).join()
-      )
+      console.log('device_id', this.current_user.id)
       console.log('value', this.permission_value[value])
       console.log('handleAutoReloadChange', this.permission_value)
     },
@@ -206,6 +285,21 @@ export default {
       let ids = []
       value.forEach((value) => ids.push(value.id))
       return ids
+    },
+    async resetPermissionValue() {
+      Object.keys(this.permission_value).forEach((item) => {
+        this.permission_value[item] = false
+      })
+      return true
+    },
+    handleSelectedUserChange(val) {
+      this.current_user = val
+      if (this.resetPermissionValue()) {
+        Object.keys(this.current_user.permission).forEach((item) => {
+          if (this.permission_value[item] != undefined)
+            this.permission_value[item] = this.current_user.permission[item]
+        })
+      }
     }
   },
   created() {
@@ -221,10 +315,14 @@ export default {
     // console.log(this.permission_value.get('is_admin'))
   },
   mounted() {
+    console.log(this.getSelectedRow)
     bus.$on('onClickCreateUser', () => {
       this.createDialogVisible
         ? (this.createDialogVisible = false)
         : (this.createDialogVisible = true)
+    })
+    bus.$on('onCurrentChangeRowPremise', (val) => {
+      this.handleSelectedUserChange(val)
     })
   }
 }
@@ -294,7 +392,7 @@ export default {
     }
   }
 }
-.permission-list-container[disabled='disabled'] {
+.permissions-table[disabled='disabled'] {
   pointer-events: none;
   opacity: 0.4;
 }

@@ -111,7 +111,7 @@
           >
         </div>
       </div>
-      <!-- Şifre DEğiştirme-->
+      <!-- Şifre Değiştirme-->
       <div class="process-logs">
         <div class="chart-title">Şifre Değiştir</div>
         <span class="span-text">Kullanıcı şifrenizi değiştirebilirsiniz.</span>
