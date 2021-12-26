@@ -101,9 +101,9 @@ export default {
     params: { city_id: null }
   },
   getPremiseDevice: {
-    url: '/devices/',
+    url: 'vguard/devices/',
     method: 'GET',
-    params: { premis_id: null }
+    params: { premise_id: null }
   },
   getDeviceModels: {
     url: '/device-models/',
@@ -148,14 +148,14 @@ export default {
     params: { custom_premise_id: null }
   },
   createDevice: {
-    url: '/prosec/devices',
+    url: '/vguard/devices',
     method: 'POST',
-    data: { prosec_device: null }
+    data: { vguard_device: null }
   },
   updateDevice: {
-    url: '/prosec/devices',
+    url: '/vguard/devices',
     method: 'PUT',
-    data: { prosec_device: null }
+    data: { vguard_device: null }
   },
   deleteProsecDevice: {
     url: '/prosec/devices',

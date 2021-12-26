@@ -175,7 +175,7 @@ export default {
     createDevice(_, payload) {
       const device = Vue.prototype.$api({
         ...endpoints.createDevice,
-        data: { prosec_device: payload }
+        data: { vguard_device: payload }
       })
       return device.then((r) => {
         if (r.status) {
@@ -186,8 +186,8 @@ export default {
     updateDevice(_, payload) {
       const device = Vue.prototype.$api({
         ...endpoints.updateDevice,
-        url: '/prosec/devices/' + payload.id,
-        data: { prosec_device: payload }
+        url: '/vguard/devices/' + payload.id,
+        data: { vguarddevice: payload }
       })
       return device.then((r) => {
         if (r.status) {

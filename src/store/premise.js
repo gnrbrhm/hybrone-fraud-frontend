@@ -114,13 +114,25 @@ export default {
         if (r.data.data.users.length > 0)
           commit('SET_PREMISE_USERS', r.data.data.users)
 
-        return r.data.data.pagination.records
+        return r.data.data.paginated.records
       })
     },
     getTrackedPremises(_, payload) {
       const tracked_premise = Vue.prototype.$api({
         ...endpoints.getTrackedPremises,
         url: 'prosec/devices/',
+        params: payload
+      })
+      return tracked_premise.then((r) => {
+        if (r.status == 200) {
+          return r.data.data.paginated.records
+        }
+      })
+    },
+    getTrackedVguard(_, payload) {
+      const tracked_premise = Vue.prototype.$api({
+        ...endpoints.getTrackedPremises,
+        url: 'vguard/devices/',
         params: payload
       })
       return tracked_premise.then((r) => {

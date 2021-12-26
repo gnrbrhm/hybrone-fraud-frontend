@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getTrackedPremises: 'premise/getTrackedPremises'
+      getTrackedVguard: 'premise/getTrackedVguard'
     }),
     handleSelectRow(val) {
       this.selectedRow = val
@@ -32,7 +32,7 @@ export default {
       this.fillDataTable()
     },
     fillDataTable() {
-      let tracked_premises = this.getTrackedPremises({
+      let tracked_premises = this.getTrackedVguard({
         page: 1,
         limit: 5,
         is_tracked: true
