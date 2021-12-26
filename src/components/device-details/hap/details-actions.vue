@@ -1,12 +1,24 @@
 <template>
   <div class="details-actions">
     <div v-if="isLastSignals" class="component">
-      <span>Geçmiş</span>
+      <span>OLAYLAR</span>
       <el-button @click="openSignalsHistory">
         <SvgIconHistory></SvgIconHistory>
       </el-button>
     </div>
-    <div v-else class="component">
+    <div class="component">
+      <span>Servis</span>
+      <el-button @click="openServiceModal"
+        ><SvgIconService></SvgIconService
+      ></el-button>
+    </div>
+    <div class="component">
+      <span>Arayüz</span>
+      <el-button @click="openSignalsHistory">
+        <SvgIconInterface></SvgIconInterface>
+      </el-button>
+    </div>
+    <div v-if="false" class="component">
       <span>Özet</span>
       <el-button @click="openDeviceDetails">
         <SvgIconSummary></SvgIconSummary>
@@ -18,15 +30,12 @@
         ><SvgIconListRaport></SvgIconListRaport
       ></el-button>
     </div>
-    <div v-if="false" class="component">
-      <span>Servis</span>
-      <el-button @click="openServiceModal"
-        ><SvgIconService></SvgIconService
-      ></el-button>
-    </div>
-    <div v-if="false" class="component">
+
+    <div class="component">
       <span>Yenile</span>
-      <el-button><SvgIconRefresh></SvgIconRefresh></el-button>
+      <el-button @click="refreshDeviceData"
+        ><SvgIconRefresh></SvgIconRefresh
+      ></el-button>
     </div>
   </div>
 </template>
@@ -35,13 +44,16 @@
 import SvgIconRefresh from '@/assets/icons/list/svg-icon-refresh.vue'
 import SvgIconService from '@/assets/icons/list/svg-icon-service.vue'
 import SvgIconSummary from '@/assets/icons/list/svg-icon-summary.vue'
+import SvgIconInterface from '@/assets/icons/device-details/hap/svg-icon-interface'
 import SvgIconHistory from '@/assets/icons/device-details/hap/svg-icon-history'
 import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
+import { bus } from '@/main'
 export default {
   name: 'DetailsActions',
   components: {
     SvgIconListRaport,
     SvgIconHistory,
+    SvgIconInterface,
     SvgIconService,
     SvgIconRefresh,
     SvgIconSummary
@@ -65,6 +77,10 @@ export default {
     },
     downloadSignalsHistory() {
       this.$emit('downloadSignalsHistory')
+    },
+    refreshDeviceData() {
+      bus.$emit('onRefreshDeviceData')
+      //   if (['DeviceLastSignals'].includes(this.$route.name))
     }
   }
 }
@@ -84,7 +100,7 @@ export default {
     align-items: self-end;
     justify-content: space-between;
     flex-wrap: nowrap;
-    margin-right: 10px;
+    margin-right: 24px;
 
     &:nth-child(0) {
       margin-left: 23px;

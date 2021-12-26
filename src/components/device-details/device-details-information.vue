@@ -25,7 +25,7 @@ export default {
 .information {
   min-width: 140px;
   min-height: 150px;
-  background: $hybrone_blue;
+  background: $hybrone_light_blue;
   border-radius: 0px 0px 10px 10px;
   text-align: center;
   display: flex;

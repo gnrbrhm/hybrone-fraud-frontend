@@ -46,7 +46,7 @@ export default {
       getFilterPremises: 'premise/getFilterPremises',
       updateDevice: 'device/updateDevice',
       getProsecDevicesByFilter: 'device/getProsecDevicesByFilter',
-      getProsecDeviceById: 'device/getProsecDeviceById'
+      getVguardDeviceById: 'device/getVguardDeviceById'
     }),
     onSubmit() {
       console.log(this.selected_premise)
@@ -64,7 +64,7 @@ export default {
         this.getSelectedRows.forEach((item) => {
           console.log(item)
           let un_tracked_payload = null
-          let un_tracked_device = this.getProsecDeviceById(item.id)
+          let un_tracked_device = this.getVguardDeviceById(item.id)
 
           un_tracked_device.then((r) => {
             un_tracked_payload = { ...r, is_tracked: false }
@@ -112,7 +112,7 @@ export default {
     },
     handleSelect(device) {
       console.log('Device', device)
-      let tracked_device = this.getProsecDeviceById(device.data.id)
+      let tracked_device = this.getVguardDeviceById(device.data.id)
       tracked_device.then((r) => {
         console.log('R', r)
         this.selected_premise = { ...r, is_tracked: true }

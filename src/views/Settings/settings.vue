@@ -309,14 +309,15 @@
           <el-form-item prop="name">
             <el-input
               id="current_password"
-              type="current_password"
-              v-model="ruleForm.name"
+              type="password"
+              v-model="ruleForm.current_password"
             ></el-input>
           </el-form-item>
           <span class="label">YENİ ŞİFRE</span>
           <el-form-item prop="new_password">
             <el-input
               id="new_password"
+              type="password"
               height="50px"
               v-model="ruleForm.new_password"
             ></el-input>
@@ -325,6 +326,7 @@
           <el-form-item prop="confirm_new_password">
             <el-input
               id="confirm_new_password"
+              type="password"
               height="50px"
               v-model="ruleForm.confirm_new_password"
             ></el-input>
@@ -346,7 +348,7 @@
               >
               <el-button
                 class="apply-button"
-                @click="resetUserPasswordSubmitForm('ruleForm')"
+                @click="changeUserPasswordSubmitForm('ruleForm')"
                 ><span> Oluştur</span></el-button
               >
             </div>
@@ -469,19 +471,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      resetUserPassword: 'auth/resetUserPassword'
+      changeUserPasswordVerify: 'auth/changeUserPasswordVerify'
     }),
     handleImportDevicePopupApply() {
       this.dialogImportDevicePopupVisible = false
       this.dialogImportDeviceConfirmPopupVisible = true
     },
-    resetUserPasswordSubmitForm(form) {
+    changeUserPasswordSubmitForm(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          let result = this.resetUserPassword({
-            secret: this.ruleForm.current,
-            password: this.ruleForm.new_password
+          let result = this.changeUserPasswordVerify({
+            old_password: this.ruleForm.current_password,
+            new_password: this.ruleForm.new_password
           })
+          console.log(result)
           if (result.status == 200) {
             this.passwordResetDialogVisible = false
             this.ruleForm.current_password = ''

@@ -99,6 +99,19 @@ export default {
         data: payload
       })
       return result.then((r) => {
+        console.log('R', r)
+        if (r.status) {
+          return r
+        }
+      })
+    },
+    changeUserPasswordVerify(_, payload) {
+      console.log('STORE')
+      let result = Vue.prototype.$api({
+        ...endpoints.changeUserPassword,
+        data: payload
+      })
+      return result.then((r) => {
         if (r.status) {
           return r
         }

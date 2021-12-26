@@ -41,6 +41,11 @@ export default {
     method: 'POST',
     data: {}
   },
+  changeUserPassword: {
+    url: '/user/change/password/with/verify',
+    method: 'POST',
+    data: {}
+  },
   logout: {
     method: 'GET',
     url: '/user/logout'
@@ -120,6 +125,19 @@ export default {
     url: '/vguard/devices',
     method: 'GET'
   },
+  getVguardDevicesForMap: {
+    url: '/vguard/device/list/for/map',
+    method: 'GET'
+  },
+  refreshVguardDevice: {
+    url: '/vguard/device/data/refresh',
+    method: 'POST',
+    data: {}
+  },
+  getVguardDeviceById: {
+    url: '/vguard/devices',
+    method: 'GET'
+  },
   getProsecDeviceById: {
     url: '/prosec/devices',
     method: 'GET'
@@ -145,6 +163,11 @@ export default {
   },
   getProsecDeviceLastSignals: {
     url: 'prosec/signals',
+    method: 'GET',
+    params: { page: 1, limit: 20 }
+  },
+  getVguardDeviceChannelsEvents: {
+    url: '/vguard/channel/events',
     method: 'GET',
     params: { page: 1, limit: 20 }
   },

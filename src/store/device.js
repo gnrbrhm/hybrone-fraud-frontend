@@ -50,7 +50,7 @@ export default {
 
         this.dispatch(
           'pagination/setCurrentPage',
-          r.data.data.paginated.to / r.data.data.paginated.per_page
+          r.data.data.paginated.per_page / r.data.data.paginated.per_page
         )
         this.dispatch(
           'pagination/setCurrentLimit',
@@ -83,6 +83,17 @@ export default {
         return r.data.data.prosec_device
       })
     },
+    async getVguardDeviceById({ commit }, device_id) {
+      const device = Vue.prototype.$api({
+        ...endpoints.getVguardDeviceById,
+        url: '/vguard/devices/' + device_id
+        // params: { page: 1, limit: 10 }
+      })
+      return device.then((r) => {
+        commit('SET_DEVICE', r.data.data.vguard_device)
+        return r.data.data.vguard_device
+      })
+    },
     async getProsecDeviceLastSignals(_, payload) {
       // let device_id = null
       // payload.device_id ?  device_id = payload.device_id : device_id = ''
@@ -108,6 +119,42 @@ export default {
           r.data.data.pagination.total_record
         )
         return r.data.data.pagination.records
+      })
+    },
+    async getVguardDeviceChannelsEvents(_, payload) {
+      Object.keys(payload).forEach((item) => {
+        if (payload[item] == '') delete payload[item]
+      })
+      const last_signals = Vue.prototype.$api({
+        ...endpoints.getVguardDeviceChannelsEvents,
+        params: {
+          ...endpoints.getVguardDeviceChannelsEvents.params,
+          ...payload
+        }
+      })
+      return last_signals.then((r) => {
+        this.dispatch(
+          'pagination/setCurrentPage',
+          r.data.data.paginated.to / r.data.data.paginated.per_page
+        )
+        this.dispatch(
+          'pagination/setCurrentLimit',
+          r.data.data.paginated.per_page
+        )
+        this.dispatch(
+          'pagination/setTotalRecord',
+          r.data.data.paginated.total_record
+        )
+        return r.data.data.paginated.records
+      })
+    },
+    async refreshVguardDeviceData(_, payload) {
+      const refresh = Vue.prototype.$api({
+        ...endpoints.refreshVguardDevice,
+        data: { ...payload }
+      })
+      return refresh.then((r) => {
+        if (r.status) return r
       })
     },
     async downloadProsecDeviceLastSignals(_, payload) {

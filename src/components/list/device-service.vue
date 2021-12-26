@@ -29,10 +29,10 @@
       </div>
       <div class="content">
         <span class="span-label">PLANLANAN BAŞLANGIÇ ZAMANI</span>
-        <el-form-item prop="to_created">
+        <el-form-item prop="start_time">
           <el-date-picker
             style="width: 100%"
-            v-model="ruleForm.to_created"
+            v-model="ruleForm.start_time"
             type="datetime"
             placeholder="Tarih ve Saat seçiniz"
           >
@@ -41,10 +41,10 @@
       </div>
       <div class="content">
         <span class="span-label">PLANLANAN BİTİŞ ZAMANI</span>
-        <el-form-item prop="from_created">
+        <el-form-item prop="finish_time">
           <el-date-picker
             style="width: 100%"
-            v-model="ruleForm.from_created"
+            v-model="ruleForm.finish_time"
             type="datetime"
             placeholder="Tarih ve Saat seçiniz"
           >
@@ -81,27 +81,27 @@ export default {
         ticket_type: [
           { required: true, message: 'Durum Seçiniz', trigger: 'change' }
         ],
-        to_created: [
+        start_time: [
           {
             type: 'date',
             required: true,
-            message: 'Tarih giriniz.',
+            message: 'Başlangıç tarihi giriniz.',
             trigger: 'change'
           }
         ],
-        from_created: [
+        finish_time: [
           {
             type: 'date',
             required: true,
-            message: 'Tarih giriniz.',
+            message: 'Bitiş tarihi giriniz.',
             trigger: 'change'
           }
         ]
       },
       ruleForm: {
         ticket_type: '',
-        to_created: '',
-        from_created: '',
+        start_time: '',
+        finish_time: '',
         description: ''
       }
     }
@@ -120,16 +120,20 @@ export default {
       createService: 'service/createService'
     }),
     handleServiceSubmit(val) {
-      console.log(val)
+      console.log('RuleForm', this.ruleForm)
+      let premise_id = this.$route.params.device_id
+        ? this.$route.params.device_id
+        : this.getSelectedRowsPremiseId[0]
+
       let service = this.createService({
         ...this.ruleForm,
         // premise_id: this.getSelectedRowsPremiseId.join(),
-        premise_id: this.getSelectedRowsPremiseId[0],
+        premise_id: parseInt(premise_id),
         status_code: 3
       })
       service.then((r) => {
         console.log(r)
-        this.$emit('onClose')
+        if (r.status == 200) this.$emit('onClose')
       })
     }
   },

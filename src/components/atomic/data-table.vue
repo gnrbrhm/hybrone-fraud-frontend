@@ -275,33 +275,40 @@
         : ''
     "
   >
-    <el-table-column header-align="left" prop="zone" label="BÖLGE">
+    <el-table-column type="selection" width="55"> </el-table-column>
+    <el-table-column header-align="left" prop="channel_id" label="KANAL">
       <template slot-scope="scope">
-        {{ scope.row.zone == 0 ? 'Genel' : scope.row.zone }}
+        <SvgIconFirstChannel
+          :status="true"
+          :device_id="scope.row.channel_id"
+        ></SvgIconFirstChannel>
       </template>
     </el-table-column>
     <el-table-column
       header-align="left"
-      prop="signal_type.sub_category"
+      prop="channel_id"
       label="DURUM"
+      width="450"
     >
     </el-table-column>
     <!-- <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
     </el-table-column> -->
-    <el-table-column
-      header-align="left"
-      prop="signal_type.category"
-      label="KATEGORİ"
-    >
+    <el-table-column header-align="left" prop="channel_id" label="OLAY KAYDI">
+      <template slot-scope="scope">
+        <SvgIconDownload
+          @click.native.prevent="downloadEventRecord(scope.row.event_id)"
+          :status="scope.row.is_active"
+        ></SvgIconDownload>
+      </template>
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       header-align="left"
       prop="signal_type.description"
       label="OLAY AÇIKLAMASI"
     >
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
-      prop="subscriber_id"
+      prop="channel_id"
       header-align="right"
       align="right"
       label="OLAY ZAMANI"
@@ -363,8 +370,9 @@
 </template>
 
 <script>
+import SvgIconDownload from '@/assets/icons/device-details/svg-icon-download.vue'
 import SvgIconArmed from '@/components/atomic/device/hap/svg-icon-armed.vue'
-// import SvgIconDateTime from "@/components/atomic/device/hap/svg-icon-datetime.vue";
+import SvgIconFirstChannel from '@/assets/icons/device-details/svg-icon-first-channel.vue'
 import SvgIconAlarm from '@/components/atomic/device/hap/svg-icon-alarm.vue'
 import SvgIconFault from '@/components/atomic/device/hap/svg-icon-fault.vue'
 import SvgIconSabotage from '@/components/atomic/device/hap/svg-icon-sabotage.vue'
@@ -388,8 +396,9 @@ export default {
     }
   },
   components: {
+    SvgIconDownload,
     SvgIconArmed,
-    // SvgIconDateTime,
+    SvgIconFirstChannel,
     SvgIconAlarm,
     SvgIconFault,
     SvgIconSabotage,
@@ -447,8 +456,8 @@ export default {
     },
     handleDBClick(val) {
       if (
-        ['List', 'Dashboard'].includes(this.$route.name) &&
-        this.getPermissions['device_show_in_dashboard']
+        ['List', 'Dashboard'].includes(this.$route.name)
+        // && this.getPermissions['device_show_in_dashboard']
       ) {
         this.$router.push({
           name: 'DeviceDetail',
@@ -486,6 +495,9 @@ export default {
         this.setSelectedRow(row)
         bus.$emit('onCurrentChangeRowPremise', row)
       }
+    },
+    downloadEventRecord(val) {
+      this.$emit('onDownloadEventRecord', val)
     }
   },
   created() {},
