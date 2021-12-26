@@ -1,34 +1,30 @@
 <template>
   <div
-    :id="'device-card-' + data.device.id"
+    :id="'device-card-' + data.id"
     :class="
-      selected_device_id == data.device.id
-        ? 'device-card__selected'
-        : 'device-card'
+      selected_device_id == data.id ? 'device-card__selected' : 'device-card'
     "
-    @click="handleCardClick(data.device.id)"
+    @click="handleCardClick(data.id)"
   >
     <div class="right">
-      <span>{{
-        getHardwareType(this.data.hardware_type.name.toUpperCase()).label
-      }}</span>
+      <span> Kayıt Cihazı </span>
     </div>
     <div class="left">
       <span
         >Marka:
-        <p>{{ brand[0].label }}</p></span
+        <p>Vguard</p></span
       >
-      <span
-        >Model:
-        <p>{{ brand[0].models[0].label }}</p></span
-      >
+      <span>
+        Model:
+        <p>VG-4C1A-LRU</p>
+      </span>
       <span
         >Envanter No:
-        <p>{{ data.device.inventory_number }}</p></span
+        <p>{{ data.inventory_number }}</p></span
       >
       <span
         >Seri No:
-        <p>{{ data.device.subscriber }}</p></span
+        <p>{{ data.serial_number }}</p></span
       >
     </div>
   </div>
@@ -71,11 +67,11 @@ export default {
     ...mapActions({
       getDeviceModelId: 'model/getDeviceModelId'
     }),
-    getHardwareType(val) {
-      return (this.hardware_type = [...DEVICE_TYPES].find((t) => {
-        return t.key == val
-      }))
-    },
+    // getHardwareType(val) {
+    //   return (this.hardware_type = [...DEVICE_TYPES].find((t) => {
+    //     return t.key == val
+    //   }))
+    // },
     handleCardClick(device_id) {
       console.log('Click !!', device_id)
       this.$emit('selectedDevice', device_id)
@@ -84,9 +80,9 @@ export default {
   // created() {
   // },
   mounted() {
-    this.brand = [...HARDWARE_TYPES].find((t) => {
-      return t.key == this.hardware_type.key
-    }).brands
+    // this.brand = [...HARDWARE_TYPES].find((t) => {
+    //   return t.key == this.hardware_type.key
+    // }).brands
   }
 }
 </script>

@@ -52,7 +52,10 @@ export default {
       getPremiseDevice: 'premise/getPremiseDevice'
     }),
     handleContainerClick(e) {
-      if (document.getElementById('card').contains(e.target)) {
+      if (
+        document.getElementById('card') &&
+        document.getElementById('card').contains(e.target)
+      ) {
         console.log(this.selectedDevice)
       } else {
         console.log(this.selectedDevice)
@@ -82,13 +85,18 @@ export default {
     },
     async handleCurrentChangeRowPremise(val) {
       this.devices = []
-      console.log(val)
-      let devices = this.getPremiseDevice(val)
-      await devices.then((r) => {
-        console.log('DEvices', r)
-        this.devices = r
-        this.selectedDevice = this.devices[0].id
+      const { data } = await this.$api.get(`vguard/devices`, {
+        params: {
+          premise_id: val,
+          page: 1,
+          limit: 20
+        }
       })
+
+      console.log('****', data, '*****')
+
+      this.devices = data.data.paginated.records
+      this.selectedDevice = this.devices[0].id
     }
   },
 

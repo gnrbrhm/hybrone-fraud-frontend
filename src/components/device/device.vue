@@ -1,17 +1,17 @@
 <template>
   <div>
-    <CreateHapDevice :is_update="is_update"></CreateHapDevice>
+    <CreateVguardDevice :is_update="is_update"></CreateVguardDevice>
     <DeviceCreateUpdateButtonGroup></DeviceCreateUpdateButtonGroup>
   </div>
 </template>
 
 <script>
-import CreateHapDevice from '@/components/device/hap/create-hap-device'
+import CreateVguardDevice from './create-vguard-device.vue'
 import DeviceCreateUpdateButtonGroup from '@/components/device/device-create-update-button-group'
 import { mapActions } from 'vuex'
 export default {
   name: 'Device',
-  components: { CreateHapDevice, DeviceCreateUpdateButtonGroup },
+  components: { CreateVguardDevice, DeviceCreateUpdateButtonGroup },
   data() {
     return {
       is_update: false
