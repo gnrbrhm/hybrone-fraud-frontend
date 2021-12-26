@@ -1,0 +1,728 @@
+<template>
+  <div>
+    <!-- <MapFilter
+      @onSubmitFilter="onSubmitFilter"
+      @onSubmitLocationFilter="onLocationFilter"
+      @onStateFilter="handleStateFilter"
+    ></MapFilter> -->
+    <div class="legand-map">
+      <spam class="legand-text">
+        <i class="normal"></i>
+        Normal
+      </spam>
+      <spam class="legand-text">
+        <i class="non-device"></i>
+        Cihaz Yok
+      </spam>
+      <spam class="legand-text"> <i class="fault"></i> Hatalı </spam>
+    </div>
+    <div id="map"></div>
+  </div>
+</template>
+
+<script>
+import endpoints from '@/endpoints'
+import leaflet from 'leaflet'
+// import ls from 'leaflet-search'
+import * as L1 from 'leaflet.markercluster'
+// import MapFilter from '@/components/filter/map-filter'
+export default {
+  name: 'Mapss',
+  data() {
+    return {
+      map: null,
+      markers: null,
+      device_id: '',
+      location: [],
+      locations: [],
+      premises: [],
+      premise: [],
+      device_state: {
+        state: {
+          is_connection: null,
+          is_storage: null,
+          is_record: null,
+          is_last_signal: null
+        },
+        channels: {
+          first: null,
+          second: null,
+          thirdth: null,
+          forth: null
+        }
+      }
+    }
+  },
+  components: {
+    // MapFilter
+  },
+  methods: {
+    handleStateFilter(val) {
+      console.log(val)
+      this.map.removeLayer(this.markers)
+      console.log('handleStateFilter')
+      this.locations = []
+      this.premises = val.data.devices
+      this.premises.forEach((element) => {
+        console.log('element')
+        console.log(element)
+        this.location.push(element.premise.location.lat)
+        this.location.push(element.premise.location.long)
+        this.location.push(element.premise.location.province)
+        this.location.push(element)
+        this.location.push(element.premise.custom_premise_id)
+        this.locations.push(this.location)
+        this.location = []
+        console.log(this.locations)
+      })
+      this.createMarker(this.locations)
+    },
+    routeDeviceDetail() {
+      this.$router.push({
+        name: 'DeviceDetail',
+        params: { id: this.device_id }
+      })
+    },
+    onSubmitFilter(val) {
+      this.map.flyTo([val.data.lat, val.data.long], 14)
+    },
+    onLocationFilter(val) {
+      console.log(val)
+      console.log('val')
+
+      if (val) this.map.flyTo([val.data.lat, val.data.long], 10)
+      else
+        this.$notify({
+          text: 'Aradığınız ilde ATM bulunmamaktadır.',
+          type: 'error'
+        })
+    },
+    async createPopup(status) {
+      console.log('içeride')
+      console.log(status)
+      let popup = {
+        popupContent:
+          "<div><span>ATM ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
+        popupOptions: {
+          maxWidth: '500',
+          className: 'another-popup' // classname for another popup
+        }
+      }
+      console.log(popup)
+      return popup
+    },
+    async getDeviceStatus(config) {
+      if (
+        config.statuses != null &&
+        !config.statuses.includes('network_error')
+      ) {
+        this.device_state.channels.first = config.config_struct.channels[1]
+          ? config.config_struct.last_status.channel_statuses
+            ? config.config_struct.last_status.channel_statuses[1].is_ok
+            : false
+          : null
+        this.device_state.channels.second = config.config_struct.channels[2]
+          ? config.config_struct.last_status.channel_statuses
+            ? config.config_struct.last_status.channel_statuses[2].is_ok
+            : false
+          : null
+        this.device_state.channels.thirdth = config.config_struct.channels[3]
+          ? config.config_struct.last_status.channel_statuses
+            ? config.config_struct.last_status.channel_statuses[3].is_ok
+            : false
+          : null
+        this.device_state.channels.forth = config.config_struct.channels[4]
+          ? config.config_struct.last_status.channel_statuses
+            ? config.config_struct.last_status.channel_statuses[4].is_ok
+            : false
+          : null
+      } else {
+        this.device_state.channels.first = false
+        this.device_state.channels.second = false
+        this.device_state.channels.thirdth = false
+        this.device_state.channels.forth = false
+      }
+      this.device_state.state.is_connection =
+        config.config_struct.last_status.is_online
+      this.device_state.state.is_storage =
+        config.statuses != null &&
+        !config.statuses.includes('disk_error') &&
+        config.config_struct.last_status.is_online
+          ? true
+          : false
+      let is_recording_channels = true
+      if (config.config_struct.cctv_config.is_recording)
+        Object.keys(config.config_struct.cctv_config.is_recording).forEach(
+          (el) => {
+            is_recording_channels &=
+              config.config_struct.cctv_config.is_recording[el] == 'open'
+          }
+        )
+      else is_recording_channels = false
+      this.device_state.state.is_record =
+        config.statuses != null &&
+        !config.statuses.includes('record_error') &&
+        config.config_struct.last_status.is_online &&
+        is_recording_channels
+          ? true
+          : false
+      this.device_state.state.is_last_signal =
+        config.statuses != null &&
+        !config.statuses.includes('datetime_error') &&
+        config.config_struct.last_status.is_online
+          ? true
+          : false
+
+      return this.device_state
+    },
+    createMarker(addressPoints) {
+      let L = leaflet
+      let device_status
+      // var markers = new L.MarkerClusterGroup()
+      this.markers = new L.MarkerClusterGroup()
+      addressPoints.forEach((item) => {
+        console.log(item[3])
+        if (item[3]) {
+          device_status = this.getDeviceStatus(item[3])
+        }
+        var title = item[2].name
+        var myIcon
+        var marker
+        if (item[3]) {
+          // .statuses.includes('normal')
+          this.device_id = item[3].id
+          myIcon = L.divIcon({
+            className:
+              item[3].config_struct.last_status.is_online &&
+              item[3].statuses.includes('normal')
+                ? 'leaflet-custom-success-marker'
+                : 'leaflet-custom-fault-marker',
+            html: `<span class="custom-marker-span">ID : ` + item[4] + `</span>`
+          })
+          marker = L.marker(new L.LatLng(item[0], item[1]), {
+            icon: myIcon
+          })
+          var popupContent =
+            `<div class='column-1'>
+         <div class="atm_id_label">ATM ID</div>
+          <span class="atm_id_text">` +
+            item[4] +
+            `</span>
+          </div>
+          <div class='column-2'>
+          <div class='first-row'>Kanal Durumları</div>
+          <div class='second-row'>
+          <div class='` +
+            (this.device_state.channels.first != null
+              ? this.device_state.channels.first
+                ? 'first-channel-success'
+                : 'first-channel-fault'
+              : 'first-channel-undefined') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.channels.second != null
+              ? this.device_state.channels.second
+                ? 'second-channel-success'
+                : 'second-channel-fault'
+              : 'second-channel-undefined') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.channels.thirdth != null
+              ? this.device_state.channels.thirdth
+                ? 'thirdth-channel-success'
+                : 'thirdth-channel-fault'
+              : 'thirdth-channel-undefined') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.channels.forth != null
+              ? this.device_state.channels.forth
+                ? 'forth-channel-success'
+                : 'forth-channel-fault'
+              : 'forth-channel-undefined') +
+            `'></div>
+
+            </div>
+            <div class='third-row'>Sağlık Durumları</div>
+            <div class='fourht-row'>
+          <div class='` +
+            (this.device_state.state.is_connection
+              ? 'connection-success'
+              : 'connection-fault') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.state.is_storage
+              ? 'record-success'
+              : 'record-fault') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.state.is_record
+              ? 'signal-success'
+              : 'signal-fault') +
+            `'></div>
+                      <div class='` +
+            (this.device_state.state.is_last_signal
+              ? 'senkron-success'
+              : 'senkron-fault') +
+            `'></div>
+            </div>
+            </div>`
+          var popupOptions = {
+            maxWidth: '500',
+            className: 'another-popup' // classname for another popup
+          }
+          marker.bindPopup(popupContent, popupOptions)
+        } else {
+          myIcon = L.divIcon({
+            className: 'leaflet-custom-non-device-marker',
+            html: `<span class="custom-marker-span">ID : ` + item[4] + `</span>`
+          })
+          marker = L.marker(new L.LatLng(item[0], item[1]), {
+            icon: myIcon
+          })
+          // var popupNonDeviceContent = 'Cihaz Bulunmamaktadır.'
+          // var popupNonDeviceOptions = {
+          //   maxWidth: '500',
+          //   className: 'another-non-device-popup' // classname for another popup
+          // }
+          // marker.bindPopup(popupNonDeviceContent, popupNonDeviceOptions)
+        }
+        marker.on('mouseover', function (e) {
+          this.openPopup()
+        })
+        marker.on('mouseout', function (e) {
+          this.closePopup()
+        })
+        let temp = {
+          gotoDetail: () => {
+            this.$router.push({
+              name: 'DeviceDetail',
+              params: { id: item[3].id }
+            })
+          }
+        }
+        marker.on('click', function (e) {
+          temp.gotoDetail()
+        })
+        this.markers.addLayer(marker)
+      })
+      for (var i = 0; i < addressPoints.lenght; i++) {
+        var a = addressPoints[i]
+        var title = a[2]
+        var marker = L.marker(new L.LatLng(a[0], a[1]), {
+          title: title,
+          iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+          iconUrl: require('leaflet/dist/images/marker-icon.png'),
+          shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+        })
+        marker.bindPopup(title)
+        marker.on('click', function (e) {
+          console.log(e)
+          this.routeDeviceDetail()
+        })
+        marker.on('mouseover', function (e) {
+          this.openPopup()
+        })
+        marker.on('mouseout', function (e) {
+          this.closePopup()
+        })
+        this.markers.addLayer(marker)
+      }
+      // markers.refreshClusters(marker_icon);
+
+      this.map.addLayer(this.markers)
+    },
+    async mapingFunction(val) {
+      this.premises = val
+      this.premises.forEach((element) => {
+        console.log('element')
+        console.log(element)
+        this.location.push(element.location.lat)
+        this.location.push(element.location.long)
+        this.location.push(element.location.province)
+        this.location.push(element.devices[0])
+        this.location.push(element.custom_premise_id)
+        this.locations.push(this.location)
+        this.location = []
+      })
+      this.createMarker(this.locations)
+    },
+    async getPremiseLocation() {
+      await this.$api({
+        ...endpoints.getPremises
+      }).then((r) => {
+        this.mapingFunction(r.data.data.premises)
+      })
+    }
+  },
+  created() {
+    // this.getPremiseLocation()
+  },
+  mounted() {
+    let L = leaflet
+    this.map = L.map('map').setView([38.963745, 35.243322], 6)
+    delete L.Icon.Default.prototype._getIconUrl
+    // eslint-disable-next-line
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+    })
+
+    var addressPoints = new Array(this.locations)
+    // console.log(addressPoints[0].__ob__.value)
+    // this.map = L.map('map').setView([0, 0], 3)
+
+    L.tileLayer(
+      //   'http://192.168.3.202:8081/tile/{z}/{x}/{y}.png',
+      'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png',
+      //   'http://127.0.0.1:8081/tile/{z}/{x}/{y}.png',
+      //   'https://openstreetmap-hybrone-qa.apps.ocptest3.akbank.com/tile/{z}/{x}/{y}.png',
+      //   'https://openstreetmap-hybrone-prod.apps.ocp3.akbank.com/tile/{z}/{x}/{y}.png',
+      // 'http://localhost:8081/tile/{z}/{x}/{y}.png',
+      {
+        maxZoom: 6,
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        id: 'base'
+      }
+    )
+      .addTo(this.map)
+      .on('mouseover,')
+    console.log(this.locations)
+    var markers = new L.MarkerClusterGroup()
+    // for (var i = 0; i < addressPoints.length; i++) {
+    //   var a = addressPoints[i]
+    //   var title = a[2]
+    //   var marker = L.marker(new L.LatLng(a[0], a[1]), {
+    //     title: title,
+    //     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    //     iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    //     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+    //   })
+    //   marker.bindPopup(title)
+    //   marker.on('mouseover', function(e) {
+    //     this.openPopup()
+    //   })
+    //   marker.on('mouseout', function(e) {
+    //     this.closePopup()
+    //   })
+    //   markers.addLayer(marker)
+    // }
+    // markers.refreshClusters(marker_icon);
+
+    this.map.addLayer(markers)
+  }
+}
+</script>
+
+<style lang="scss">
+// .layout {
+//   margin-left: 0px;
+//   margin-right: 0px;
+// }
+#map {
+  width: 100%;
+  height: 100vh;
+  margin-left: 14px;
+}
+.leaflet-zoom-animated {
+  left: -5px !important;
+  bottom: -20px !important;
+}
+// Marker Class
+.leaflet-custom-success-marker {
+  background-image: url('../../assets/maps-icon/success-marker.svg');
+  background-repeat: no-repeat;
+  width: 56px !important;
+  height: 39px !important;
+}
+.leaflet-custom-fault-marker {
+  background-image: url('../../assets/maps-icon/fault-marker.svg');
+  background-repeat: no-repeat;
+  width: 56px !important;
+  height: 39px !important;
+}
+.leaflet-custom-non-device-marker {
+  background-image: url('../../assets/maps-icon/non-device-marker.svg');
+  background-repeat: no-repeat;
+  width: 56px !important;
+  height: 39px !important;
+}
+.custom-marker-span {
+  color: #ffffff;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+// Custom Popup class
+.another-popup .leaflet-popup-content-wrapper {
+  background: #ffffff;
+  font-size: 12px;
+  line-height: 24px;
+  border-radius: 5px;
+  width: 308px;
+  height: 162px;
+  left: 50px;
+}
+.another-non-device-popup .leaflet-popup-content-wrapper {
+  background: #ffffff;
+  font-size: 12px;
+  line-height: 24px;
+  border-radius: 5px;
+  width: auto;
+  height: auto;
+  left: 0px !important;
+}
+.another-popup .leaflet-popup-content {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 140px 6px;
+  // grid-template-rows: repeat(1, 140px);
+  grid-gap: 20px;
+}
+.another-popup .leaflet-popup-content .atm_id_label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 10px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+}
+.another-popup .leaflet-popup-content .atm_id_text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+}
+.another-popup .leaflet-popup-content .column-1 {
+  grid-column: 1/2;
+  display: grid;
+  grid-template-rows: repeat(4, 0.25fr);
+  grid-gap: 5px;
+}
+.another-popup .leaflet-popup-content .column-2 {
+  grid-column: 2/5;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 5px;
+}
+.another-popup .leaflet-popup-content .column-2 .first-row {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 10px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+}
+.another-popup .leaflet-popup-content .column-2 .third-row {
+  @extend .first-row;
+}
+.another-popup .leaflet-popup-content .column-2 .second-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .first-channel-success {
+  background-image: url('../../assets/maps-icon/channel-1-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .first-channel-fault {
+  background-image: url('../../assets/maps-icon/channel-1-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .first-channel-undefined {
+  background-image: url('../../assets/maps-icon/channel-1-undefined.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .second-channel-success {
+  background-image: url('../../assets/maps-icon/channel-2-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .second-channel-fault {
+  background-image: url('../../assets/maps-icon/channel-2-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .second-channel-undefined {
+  background-image: url('../../assets/maps-icon/channel-2-undefined.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .thirdth-channel-success {
+  background-image: url('../../assets/maps-icon/channel-3-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .thirdth-channel-fault {
+  background-image: url('../../assets/maps-icon/channel-3-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .thirdth-channel-undefined {
+  background-image: url('../../assets/maps-icon/channel-3-undefined.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .forth-channel-success {
+  background-image: url('../../assets/maps-icon/channel-4-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .forth-channel-fault {
+  background-image: url('../../assets/maps-icon/channel-4-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .second-row
+  .forth-channel-undefined {
+  background-image: url('../../assets/maps-icon/channel-4-undefined.svg');
+  background-repeat: no-repeat;
+}
+.another-popup
+  .leaflet-popup-content
+  .column-2
+  .fourht-row
+  .connection-success {
+  background-image: url('../../assets/maps-icon/healt-icon/connection-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .connection-fault {
+  background-image: url('../../assets/maps-icon/healt-icon/connection-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .record-success {
+  background-image: url('../../assets/maps-icon/healt-icon/record-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .record-fault {
+  background-image: url('../../assets/maps-icon/healt-icon/record-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .signal-success {
+  background-image: url('../../assets/maps-icon/healt-icon/signal-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .signal-fault {
+  background-image: url('../../assets/maps-icon/healt-icon/signal-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .senkron-success {
+  background-image: url('../../assets/maps-icon/healt-icon/senkron-success.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content .column-2 .fourht-row .senkron-fault {
+  background-image: url('../../assets/maps-icon/healt-icon/senkron-fault.svg');
+  background-repeat: no-repeat;
+}
+.another-popup .leaflet-popup-content-wrapper a {
+  color: rgba(200, 200, 200, 0.1);
+}
+.another-popup .leaflet-popup-tip-container {
+  width: 450px;
+  height: 200px;
+}
+.another-popup .leaflet-popup-tip {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.legand-map {
+  position: absolute;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  left: 90%;
+  top: 87%;
+  width: 150px;
+  height: 100px;
+  z-index: 9999;
+  opacity: 0.5;
+}
+.legand-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  display: flex;
+  align-items: center;
+}
+.normal {
+  background-color: #6fcf97;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 7px;
+}
+.non-device {
+  background-color: #f2994a;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 7px;
+}
+.fault {
+  background-color: #eb5757;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 7px;
+}
+</style>

@@ -38,10 +38,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProsecDeviceById: 'device/getProsecDeviceById'
+      getVguardDeviceById: 'device/getVguardDeviceById'
     }),
     async getDeviceDetails(device_id) {
-      return await this.getProsecDeviceById(device_id)
+      return await this.getVguardDeviceById(device_id)
     },
     getPartionsZones(prosec_device) {
       console.log('ProsecDevice', prosec_device)
@@ -75,7 +75,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   flex-basis: auto;
-  // min-width: 100%;
+  min-width: 80%;
   min-height: 425px;
   // min-height: calc(100% * 405px / 1680px);
   border: 0.5px solid #2c3357;

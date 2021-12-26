@@ -222,10 +222,30 @@ export const ACTIONS_FIELDS = {
     {
       state: {
         options: [
-          { label: 'Genel Kontrol (Bakım)', value: 'general' },
-          { label: 'Genel Arıza', value: 'general_fault' },
-          { label: 'Batarya Hatası', value: 'battery_fault' },
-          { label: 'İletişim Hatası', value: 'communication_fault' }
+          //   { label: 'Genel Kontrol (Bakım)', value: 'general' },
+          //   { label: 'Genel Arıza', value: 'general_fault' },
+          //   { label: 'Batarya Hatası', value: 'battery_fault' },
+          //   { label: 'İletişim Hatası', value: 'communication_fault' }
+          {
+            label: 'Kamera Arızası',
+            value: 'Kamera Arızası'
+          },
+          {
+            label: 'İletişim Arızası',
+            value: 'İletişim Arızası'
+          },
+          {
+            label: 'Disk Arızası',
+            value: 'Disk Arızası'
+          },
+          {
+            label: 'Kayıt Arızası',
+            value: 'Kayıt Arızası'
+          },
+          {
+            label: 'Genel Kontrol',
+            value: 'Genel Kontrol'
+          }
         ]
       }
     }

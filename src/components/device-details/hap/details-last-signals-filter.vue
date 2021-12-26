@@ -119,7 +119,7 @@ export default {
   // justify-content: flex-start;
   align-items: center;
   height: 85px;
-  padding-left: 29px;
+  //   padding-left: 29px;
   .component {
     display: flex;
     flex-direction: column;

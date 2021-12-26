@@ -1,10 +1,13 @@
 <template>
   <div :class="getRouteForClass">
-    <DeviceDetailsHeader :premise_information="data"></DeviceDetailsHeader>
-    <DeviceDetailsTitle
+    <DeviceDetailsHeader
+      :premise_information="data"
+      @openServiceModal="openModal"
+    ></DeviceDetailsHeader>
+    <!-- <DeviceDetailsTitle
       @onDownloadSignalsHistory="handleDownloadSignalsHistory"
       @onServiceModal="openModal"
-    ></DeviceDetailsTitle>
+    ></DeviceDetailsTitle> -->
     <DeviceLastSignals
       v-if="isLastSignals"
       @filterData="handleFilteredData"
@@ -22,14 +25,14 @@
 import SentinelModal from '@/components/modal/sentinel-modal.vue'
 import DeviceLastSignals from '@/components/device-details/hap/device-last-signals.vue'
 import DeviceDetailsHeader from '@/components/device-details/device-details-header.vue'
-import DeviceDetailsTitle from '@/components/device-details/device-details-title.vue'
+// import DeviceDetailsTitle from '@/components/device-details/device-details-title.vue'
 import DeviceDetailsContent from '@/components/device-details/device-details-content.vue'
 import { mapActions } from 'vuex'
 export default {
   name: 'DeviceDetail',
   components: {
     DeviceDetailsHeader,
-    DeviceDetailsTitle,
+    // DeviceDetailsTitle,
     DeviceDetailsContent,
     DeviceLastSignals,
     SentinelModal
@@ -58,7 +61,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProsecDeviceById: 'device/getProsecDeviceById',
+      getVguardDeviceById: 'device/getVguardDeviceById',
       getProsecDeviceLastSignals: 'device/getProsecDeviceLastSignals',
       downloadProsecDeviceLastSignals: 'device/downloadProsecDeviceLastSignals'
     }),
@@ -98,7 +101,7 @@ export default {
   },
   created() {
     this.device_id = this.$route.params.device_id
-    let device = this.getProsecDeviceById(this.device_id)
+    let device = this.getVguardDeviceById(this.device_id)
     device.then((r) => {
       this.data = r
     })

@@ -46,14 +46,14 @@ export default {
       })
     },
     createService(_, payload) {
-      let new_payload = {
-        premise_id: payload.premise_id,
-        description: payload.description
-      }
+      //   let new_payload = {
+      //     premise_id: payload.premise_id,
+      //     description: payload.description
+      //   }
 
       let new_service = Vue.prototype.$api({
         ...endpoints.createService,
-        data: { ticket: { ...new_payload } }
+        data: { ticket: { ...payload } }
         // data: { ...payload },
       })
       return new_service.then((r) => {

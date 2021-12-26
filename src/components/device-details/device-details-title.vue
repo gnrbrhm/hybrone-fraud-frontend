@@ -1,6 +1,14 @@
 <template>
   <div :class="getRouteForClass">
-    <span class="device-name">{{ getDevice.name }}</span>
+    <span
+      v-if="!['DeviceLastSignals'].includes(this.$route.name)"
+      class="device-name"
+      >{{ getDevice.name }}</span
+    >
+    <DeviceDetailsLastSignalsFilter
+      v-else
+      @onFilteredData="handleFilteredData"
+    ></DeviceDetailsLastSignalsFilter>
     <DetailsActions
       @downloadSignalsHistory="handleDownloadSignalsHistory"
       @openServiceModal="handleServiceModal"
@@ -11,10 +19,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import DetailsActions from '@/components/device-details/hap/details-actions'
+import DeviceDetailsLastSignalsFilter from '@/components/device-details/hap/details-last-signals-filter.vue'
+
 export default {
   name: 'DeviceDetailsTitle',
   components: {
-    DetailsActions
+    DetailsActions,
+    DeviceDetailsLastSignalsFilter
   },
   computed: {
     ...mapGetters({
@@ -24,7 +35,9 @@ export default {
       if (!this.$route.path.split('/').includes('last-signals')) {
         return 'details-title'
       } else {
-        return 'details-title__last-signals'
+        return 'details-title'
+
+        // return 'details-title__last-signals'
       }
     }
   },
@@ -46,11 +59,17 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 10px 0px 0 6px;
+  min-width: 100%;
 
   .device-name {
+    display: flex;
+    align-items: center;
     font-style: normal;
-    font-weight: normal;
-    font-size: 24px;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 42px;
+    display: flex;
+    align-items: center;
   }
   &__last-signals {
     display: flex;

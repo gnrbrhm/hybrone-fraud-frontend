@@ -6,7 +6,7 @@ import Auth from '../views/Auth/auth.vue'
 import Dashboard from '../views/Dashboard/dashboard.vue'
 import Tracked from '../views/Tracked/tracked.vue'
 import List from '../views/List/list.vue'
-import Map from '../views/Map/map.vue'
+import Mapss from '../views/Map/maps.vue'
 import Services from '../views/Services/services.vue'
 import Premises from '../views/Premises/premises.vue'
 import CreatePremise from '../views/Premises/create-premise.vue'
@@ -137,12 +137,12 @@ const routes = [
   },
   {
     path: '/map',
-    name: 'Map',
+    name: 'Mapss',
     beforeEnter: MiddlewareAuth,
     meta: {
       layout: 'auth'
     },
-    component: Map
+    component: Mapss
   },
   {
     path: '/premises',
