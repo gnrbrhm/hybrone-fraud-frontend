@@ -152,8 +152,48 @@ export const LIST_FILTER = [
 ]
 
 export const DEVICE_STATUS = [
-  { label: 'Sistem Kuruldu', value: '1' },
-  { label: 'Sistem Çözüldü', value: '2' }
+  //   { label: 'Sistem Kuruldu', value: '1' },
+  //   { label: 'Sistem Çözüldü', value: '2' }
+  {
+    label: 'Tüm Durumlar',
+    value: 'all_state'
+  },
+  {
+    label: 'Video Kaybı',
+    value: 'has_video_loss'
+  },
+  {
+    label: 'Sahne Değişimi',
+    value: 'has_scene_change'
+  },
+  {
+    label: 'Hareket Algılama',
+    value: 'motion_detect'
+  },
+  {
+    label: 'Video Sabotaj',
+    value: 'has_sabotage'
+  },
+  {
+    label: 'Normal',
+    value: 'normal'
+  },
+  {
+    label: 'Disk Hatası',
+    value: 'disk_error'
+  },
+  {
+    label: 'Ağ Hatası',
+    value: 'network_error'
+  },
+  {
+    label: 'Kayıt Hatası',
+    value: 'record_error'
+  },
+  {
+    label: 'Zaman Hatası',
+    value: 'datetime_error'
+  }
 ]
 export const PREMISE_DEVICES = [
   {

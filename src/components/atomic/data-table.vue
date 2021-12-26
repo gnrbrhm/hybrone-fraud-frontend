@@ -62,24 +62,40 @@
       <template slot-scope="scope">
         <ul>
           <li class="device-channel-icon">
-            <SvgIconArmed
-              :status="scope.row.communication == 0 ? 0 : scope.row.arm_dis_arm"
-            ></SvgIconArmed>
+            <SvgIconFirstChannels
+              :status="
+                scope.row.is_active == true
+                  ? scope.row.events[0].is_active
+                  : null
+              "
+            ></SvgIconFirstChannels>
           </li>
           <li class="device-channel-icon">
-            <SvgIconAlarm
-              :status="scope.row.communication == 0 ? 0 : scope.row.alarm"
-            ></SvgIconAlarm>
+            <SvgIconSecondChannel
+              :status="
+                scope.row.is_active == true
+                  ? scope.row.events[1].is_active
+                  : null
+              "
+            ></SvgIconSecondChannel>
           </li>
           <li class="device-channel-icon">
-            <SvgIconFault
-              :status="scope.row.communication == 0 ? 0 : scope.row.trouble"
-            ></SvgIconFault>
+            <SvgIconThirdChannel
+              :status="
+                scope.row.is_active == true
+                  ? scope.row.events[1].is_active
+                  : null
+              "
+            ></SvgIconThirdChannel>
           </li>
           <li class="device-channel-icon">
-            <SvgIconSabotage
-              :status="scope.row.communication == 0 ? 0 : scope.row.sabotage"
-            ></SvgIconSabotage>
+            <SvgIconFourthChannel
+              :status="
+                scope.row.is_active == true
+                  ? scope.row.events[1].is_active
+                  : null
+              "
+            ></SvgIconFourthChannel>
           </li>
         </ul>
       </template>
@@ -89,22 +105,32 @@
         <ul>
           <li class="device-state-icon">
             <SvgIconCommunication
-              :status="scope.row.communication"
+              :status="
+                scope.row.is_active == true ? scope.row.network_error : null
+              "
             ></SvgIconCommunication>
           </li>
           <li class="device-state-icon">
-            <SvgIconEnergy
-              :status="scope.row.communication == 0 ? 0 : scope.row.energy"
-            ></SvgIconEnergy>
+            <SvgIconDisk
+              :status="
+                scope.row.is_active == true ? scope.row.disk_error : null
+              "
+            ></SvgIconDisk>
           </li>
           <li class="device-state-icon">
-            <SvgIconBattery
-              :status="scope.row.communication == 0 ? 0 : scope.row.battery"
-            ></SvgIconBattery>
+            <SvgIconRecord
+              :status="
+                scope.row.is_active == true ? scope.row.record_error : null
+              "
+            ></SvgIconRecord>
           </li>
-          <!-- <li class="device-state-icon">
-            <SvgIconDateTime :status="scope.row.time"></SvgIconDateTime>
-          </li> -->
+          <li class="device-state-icon">
+            <SvgIconDateTime
+              :status="
+                scope.row.is_active == true ? scope.row.datetime_error : null
+              "
+            ></SvgIconDateTime>
+          </li>
         </ul>
       </template>
     </el-table-column>
@@ -371,7 +397,14 @@
 
 <script>
 import SvgIconDownload from '@/assets/icons/device-details/svg-icon-download.vue'
-import SvgIconArmed from '@/components/atomic/device/hap/svg-icon-armed.vue'
+// import SvgIconArmed from '@/components/atomic/device/hap/svg-icon-armed.vue'
+import SvgIconFirstChannels from '@/components/atomic/device/camera/svg-icon-first-channel'
+import SvgIconSecondChannel from '@/components/atomic/device/camera/svg-icon-second-channel'
+import SvgIconThirdChannel from '@/components/atomic/device/camera/svg-icon-third-channel'
+import SvgIconFourthChannel from '@/components/atomic/device/camera/svg-icon-fourth-channel'
+import SvgIconDisk from '@/components/atomic/device/camera/svg-icon-disk'
+import SvgIconRecord from '@/components/atomic/device/camera/svg-icon-record'
+import SvgIconDateTime from '@/components/atomic/device/camera/svg-icon-datetime'
 import SvgIconFirstChannel from '@/assets/icons/device-details/svg-icon-first-channel.vue'
 import SvgIconAlarm from '@/components/atomic/device/hap/svg-icon-alarm.vue'
 import SvgIconFault from '@/components/atomic/device/hap/svg-icon-fault.vue'
@@ -397,14 +430,21 @@ export default {
   },
   components: {
     SvgIconDownload,
-    SvgIconArmed,
+    // SvgIconArmed,
     SvgIconFirstChannel,
-    SvgIconAlarm,
-    SvgIconFault,
-    SvgIconSabotage,
+    SvgIconFirstChannels,
+    // SvgIconAlarm,
+    SvgIconSecondChannel,
+    SvgIconThirdChannel,
+    SvgIconFourthChannel,
+    // SvgIconSabotage,
+    // SvgIconFault,
     SvgIconCommunication,
-    SvgIconEnergy,
-    SvgIconBattery
+    // SvgIconEnergy,
+    // SvgIconBattery,
+    SvgIconDisk,
+    SvgIconRecord,
+    SvgIconDateTime
     // SvgIconServiceRequest,
     // SvgIconQuery,
   },
@@ -463,6 +503,7 @@ export default {
           name: 'DeviceDetail',
           params: { device_id: val.id }
         })
+        this.setSelectedRow(val)
       }
     },
     rowClassName({ row }) {

@@ -57,9 +57,7 @@ export default {
         // data: { ...payload },
       })
       return new_service.then((r) => {
-        if (r.status) {
-          return r
-        }
+        r
       })
     },
     getTicketDownloadList(_, payload) {
