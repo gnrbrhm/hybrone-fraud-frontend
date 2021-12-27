@@ -24,29 +24,44 @@ export default {
     DashboardDonutChart
   },
   created() {
-    this.indicators = { ...DASHBOARD_VARIABLES['HAP'] }
+    this.indicators = { ...DASHBOARD_VARIABLES['CAMERA'] }
     let dashboard_data = this.$api({
-      ...endpoints.getDashboardData
+      ...endpoints.getVguardDashboardData
     }).then((r) => {
       this.indicators[0].state.series.total.value =
-        r.data.data.report.total_device
-      this.indicators[0].state.series.online.value = r.data.data.report.online
-      this.indicators[0].state.series.offline.value = r.data.data.report.offline
-      this.indicators[1].state.series.normal.value = r.data.data.report.normal
-      this.indicators[1].state.series.alarm.value = r.data.data.report.alarmed
-      this.indicators[2].state.series.arm.value = r.data.data.report.armed
-      this.indicators[2].state.series.disarm.value =
-        r.data.data.report.dis_armed
-      this.indicators[3].state.series.normal.value = r.data.data.report.normal
-      this.indicators[3].state.series.low_charge.value =
-        r.data.data.report.no_energy
+        r.data.data.report.total_device_count
+      this.indicators[0].state.series.online.value =
+        r.data.data.report.online_count
+      this.indicators[0].state.series.offline.value =
+        r.data.data.report.offline_count
+      this.indicators[1].state.series.normal.value =
+        r.data.data.report.recording_count
+      this.indicators[1].state.series.alarm.value =
+        r.data.data.report.not_recording_count
+      this.indicators[2].state.series.total.value =
+        r.data.data.report.total_disk_count
+      this.indicators[2].state.series.normal.value =
+        r.data.data.report.normal_disk_count
+      this.indicators[2].state.series.fault.value =
+        r.data.data.report.faulty_disk_count
+      this.indicators[3].state.series.total.value =
+        r.data.data.report.total_channel_count
+      this.indicators[3].state.series.active.value =
+        r.data.data.report.active_channel_count
+      this.indicators[3].state.series.pasif.value =
+        r.data.data.report.passive_channel_count
       this.indicators[4].state.series.normal.value =
-        r.data.data.report.battery_normal
-      this.indicators[4].state.series.low.value = r.data.data.report.battery_low
-      this.indicators[5].state.series.normal.value = r.data.data.report.normal
+        r.data.data.report.normal_video_count
+      this.indicators[4].state.series.video_loss.value =
+        r.data.data.report.video_loss_count
+      this.indicators[4].state.series.other_state.value =
+        r.data.data.report.other_status_count
+      this.indicators[5].state.series.motion_detect.value =
+        r.data.data.report.motion_detect_count
       this.indicators[5].state.series.sabotage.value =
-        r.data.data.report.sabotage
-      this.indicators[5].state.series.fault.value = r.data.data.report.trouble
+        r.data.data.report.sabotage_count
+      this.indicators[5].state.series.scene_change.value =
+        r.data.data.report.scene_change_count
     })
     console.log(dashboard_data)
   }

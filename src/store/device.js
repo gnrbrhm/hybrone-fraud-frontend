@@ -85,13 +85,22 @@ export default {
     },
     async getVguardDeviceById({ commit }, device_id) {
       const device = Vue.prototype.$api({
-        ...endpoints.getVguardDeviceById,
-        url: '/vguard/devices/' + device_id
-        // params: { page: 1, limit: 10 }
+        ...endpoints.getProsecDeviceById,
+        url: '/vguard/devices/' + device_id,
+        params: { page: 1, limit: 10 }
       })
       return device.then((r) => {
-        commit('SET_DEVICE', r.data.data.vguard_device)
+        commit('SET_DEVICE', r.data.data.prosec_device)
         return r.data.data.vguard_device
+      })
+    },
+    async updateTrackedVguardDevice(_, payload) {
+      const device = Vue.prototype.$api({
+        ...endpoints.updateTrackedVguardDevice,
+        data: payload
+      })
+      return device.then((r) => {
+        return r
       })
     },
     async getProsecDeviceLastSignals(_, payload) {
@@ -195,6 +204,7 @@ export default {
         }
       })
     },
+
     deleteDevice(_, device_id) {
       const deleted_device = Vue.prototype.$api({
         ...endpoints.deleteProsecDevice,

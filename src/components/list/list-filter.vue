@@ -150,7 +150,6 @@ export default {
   },
   methods: {
     handleClickSelectedDevicesRefresh() {
-      console.log('handleClickSelectedDevicesRefresh')
       bus.$emit('onSelectedDevicesRefresh')
     },
     handleHardwareTypeChange(val) {

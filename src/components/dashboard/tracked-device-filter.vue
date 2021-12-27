@@ -30,7 +30,7 @@ export default {
     return {
       search_key: '',
       search_ids: null,
-      selected_premise: null
+      selected_device: null
     }
   },
   computed: {
@@ -43,45 +43,42 @@ export default {
   },
   methods: {
     ...mapActions({
-      getFilterPremises: 'premise/getFilterPremises',
-      updateDevice: 'device/updateDevice',
-      getProsecDevicesByFilter: 'device/getProsecDevicesByFilter',
-      getVguardDeviceById: 'device/getVguardDeviceById'
+      /*
+		Bu Kısım Prosec Hırsız Alarm Paneli Senaryosuna Uygundur.
+		
+        getFilterPremises: 'premise/getFilterPremises',
+        updateDevice: 'device/updateDevice',
+        getProsecDevicesByFilter: 'device/getProsecDevicesByFilter', */
+      getVguardDeviceById: 'device/getVguardDeviceById',
+      getVguardDevices: 'device/getVguardDevices',
+      updateTrackedVguardDevice: 'device/updateTrackedVguardDevice'
     }),
     onSubmit() {
-      console.log(this.selected_premise)
-      let new_tracked_device = this.updateDevice(this.selected_premise)
-      new_tracked_device.then((r) => {
-        // if (r.status) {
-        console.log(r)
-        this.$emit('onCreateTrackedPremise')
+      let tracked_payload = {
+        device_id: this.selected_device,
+        is_tracked: true
+      }
+      let result = this.updateTrackedStatus(tracked_payload)
+      if (result) {
         this.search_key = ''
-        // }
-      })
+      }
     },
     deleteButton() {
       if (this.getSelectedRows.length > 0) {
         this.getSelectedRows.forEach((item) => {
-          console.log(item)
-          let un_tracked_payload = null
-          let un_tracked_device = this.getVguardDeviceById(item.id)
-
-          un_tracked_device.then((r) => {
-            un_tracked_payload = { ...r, is_tracked: false }
-            let delete_tracked_device = this.updateDevice({
-              ...un_tracked_payload
-            })
-            delete_tracked_device.then((r) => {
-              console.log('UntrackedDevice', r)
-              this.$emit('onCreateTrackedPremise')
-            })
-          })
+          let un_tracked_payload = { device_id: item.id, is_tracked: false }
+          this.updateTrackedStatus(un_tracked_payload)
         })
       }
-      /*
-        Burada Takip edilen cihazlardan
-        Çıkış Endpointine gidilecek ...
-     */
+    },
+    updateTrackedStatus(payload) {
+      let change_tracked_status = this.updateTrackedVguardDevice({
+        ...payload
+      })
+      return change_tracked_status.then((r) => {
+        this.$emit('onCreateTrackedPremise')
+        return r
+      })
     },
     querySearch(queryString, cb) {
       if (queryString.length > 0) {
@@ -93,8 +90,7 @@ export default {
     },
     async handleOnChange(val) {
       this.search_ids = []
-      console.log('val', val)
-      let device = this.getProsecDevicesByFilter({
+      let device = this.getVguardDevices({
         page: 1,
         limit: 5,
         custom_premise_id: val
@@ -111,12 +107,11 @@ export default {
       })
     },
     handleSelect(device) {
-      console.log('Device', device)
-      let tracked_device = this.getVguardDeviceById(device.data.id)
-      tracked_device.then((r) => {
-        console.log('R', r)
-        this.selected_premise = { ...r, is_tracked: true }
-      })
+      this.selected_device = device.data.id
+      //   let tracked_device = this.getVguardDeviceById(device.data.id)
+      //   tracked_device.then((r) => {
+      //     this.selected_device = { ...r, is_tracked: true }
+      //   })
     }
   },
   mounted() {}
