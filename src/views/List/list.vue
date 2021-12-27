@@ -25,6 +25,7 @@ import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
 import ListFilter from '@/components/list/list-filter'
 import SentinelModal from '@/components/modal/sentinel-modal.vue'
 
+import { bus } from '@/main.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'List',
@@ -45,11 +46,15 @@ export default {
   computed: {
     ...mapGetters({
       getCurrentPage: 'pagination/getCurrentPage',
-      getCurrentLimit: 'pagination/getCurrentLimit'
+      getCurrentLimit: 'pagination/getCurrentLimit',
+      getSelectedRows() {
+        return this.$store.state.dataTable.selectedRows
+      }
     })
   },
   methods: {
     ...mapActions({
+      refreshVguardDeviceData: 'device/refreshVguardDeviceData',
       getVguardDevices: 'device/getVguardDevices'
     }),
     handleChangePagination() {
@@ -73,6 +78,7 @@ export default {
       }
     },
     async handleFilteredData(val) {
+      console.log('LİSt', val)
       await this.fillDataTable(val)
     },
     handleModalClose(val) {
@@ -83,10 +89,32 @@ export default {
       devices.then((r) => {
         this.table_data = r
       })
+    },
+    refreshVguardDeviceAndData() {
+      console.log('REFRESH TRİGERED')
+      let refresh = this.refreshVguardDeviceData({
+        device_id: [parseInt(this.$route.params.device_id)]
+      })
+      let selected_devices_integer = []
+      this.getSelectedRows.forEach((row) => {
+        console.log(row)
+        this.selected_devices_integer.push(parseInt(row))
+      })
+      if (refresh.status == 200) {
+        this.getDeviceDetails(this.$route.params.device_id)
+      }
+      //   refresh.then((r) => {
+      //     if (r.status == 200) {
+      //       this.getDeviceDetails(this.$route.params.device_id)
+      //     }
+      //   })
     }
   },
   created() {
     this.fillDataTable()
+  },
+  mounted() {
+    bus.$on('onSelectedDevicesRefresh', this.refreshVguardDeviceAndData)
   }
 }
 </script>

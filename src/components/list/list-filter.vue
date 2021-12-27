@@ -11,7 +11,7 @@
           placeholder="Aranacak İfadeyi Giriniz..."
         ></el-input>
       </div>
-      <div class="component">
+      <!-- <div class="component">
         <span>CİHAZ TİPİ</span>
         <el-select
           v-model="hardware_type"
@@ -28,11 +28,11 @@
           >
           </el-option>
         </el-select>
-      </div>
+      </div> -->
       <div class="component">
         <span>DURUMLAR</span>
         <el-select
-          v-model="filtered_data.arm_disarm"
+          v-model="filtered_data.state"
           multiple
           collapse-tags
           placeholder="Seçiniz"
@@ -54,11 +54,19 @@
       <div class="component">
         <el-button @click="handleClearFilterData">Temizle</el-button>
       </div>
+      <div class="component">
+        <span v-if="is_total_count_visible" class="total_count">
+          {{ getTotalRecord }} Sonuç Bulundu</span
+        >
+      </div>
     </div>
     <div class="actions">
       <div class="component">
         <span>YENİLE</span>
-        <el-button :disabled="isSelected" @click="handleSearch">
+        <el-button
+          :disabled="isSelected"
+          @click="handleClickSelectedDevicesRefresh"
+        >
           <SvgIconRefresh></SvgIconRefresh>
         </el-button>
       </div>
@@ -68,7 +76,7 @@
           <SvgIconAction></SvgIconAction>
         </el-button>
       </div>
-      <div v-if="false" class="component">
+      <div class="component">
         <span>SERVİS</span>
         <el-button
           :disabled="isSelected"
@@ -102,6 +110,8 @@ import SvgIconService from '@/assets/icons/list/svg-icon-service.vue'
 import SvgIconReport from '@/assets/icons/list/svg-icon-report.vue'
 import { DEVICE_TYPES, DEVICE_STATUS } from '@/constant'
 import { mapGetters } from 'vuex'
+import { bus } from '@/main.js'
+
 export default {
   name: 'ListFilter',
   components: {
@@ -113,7 +123,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getPermissions: 'auth/getPermissions'
+      getPermissions: 'auth/getPermissions',
+      getTotalRecord: 'pagination/getTotalRecord'
     }),
 
     isSelected() {
@@ -126,16 +137,21 @@ export default {
   },
   data() {
     return {
+      is_total_count_visible: false,
+      total_records: 0,
       hardware_type: '',
       filtered_data: {
-        custom_premise_id: '',
-        arm_disarm: ''
+        search: '',
+        state: []
       },
       status_options: [],
       hardware_options: []
     }
   },
   methods: {
+    handleClickSelectedDevicesRefresh() {
+      bus.$emit('onSelectedDevicesRefresh')
+    },
     handleHardwareTypeChange(val) {
       this.$router.push({ path: '/list/' + val.toLowerCase() })
     },
@@ -149,10 +165,15 @@ export default {
       this.$emit('onActionClick', val)
     },
     handleSearch() {
+      let state = ''
       Object.keys(this.filtered_data).forEach((item) => {
         if (this.filtered_data[item] == false) delete this.filtered_data[item]
       })
-      this.$emit('onFilteredData', this.filtered_data)
+      if (this.filtered_data.state != undefined)
+        state = this.filtered_data.state.join()
+
+      this.$emit('onFilteredData', { ...this.filtered_data, state: state })
+      this.is_total_count_visible = true
     }
   },
   created() {
@@ -197,6 +218,23 @@ export default {
       .sentinel-input {
         width: 275px !important;
       }
+    }
+    &:nth-child(5) {
+      min-height: 100%;
+      display: flex !important;
+      align-items: flex-end !important;
+      align-items: flex-end !important;
+      justify-content: flex-end !important;
+    }
+    .total_count {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 19px;
+      /* identical to box height */
+
+      /* Hybrone Light Blue */
+      margin-top: 40px;
+      color: #007db7;
     }
   }
 

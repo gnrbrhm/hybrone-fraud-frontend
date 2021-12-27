@@ -63,6 +63,11 @@ export default {
       title: null
     }
   },
+  computed: {
+    getSelectedRows() {
+      return this.$store.state.dataTable.selectedRows
+    }
+  },
   watch: {
     type: function (value) {
       switch (value) {

@@ -71,21 +71,21 @@ export default {
     data: { prosec_device: null }
   },
   getPremiseById: {
-    url: '/premises/',
+    url: '/premises',
     method: 'GET',
     params: {
       premise_id: null
     }
   },
   createPremise: {
-    url: '/premises/',
+    url: '/premises',
     method: 'POST',
     data: {
       premise: null
     }
   },
   updatePremise: {
-    url: '/premises/',
+    url: '/premises',
     method: 'PATCH',
     data: {
       premise: null
@@ -124,6 +124,11 @@ export default {
   getVguardDevices: {
     url: '/vguard/devices',
     method: 'GET'
+  },
+  updateTrackedVguardDevice: {
+    url: '/vguard/device/tracked/update',
+    method: 'POST',
+    data: {}
   },
   getVguardDevicesForMap: {
     url: '/vguard/device/list/for/map',
@@ -179,6 +184,10 @@ export default {
   },
   getDashboardData: {
     url: '/prosec/dashboard-report',
+    method: 'GET'
+  },
+  getVguardDashboardData: {
+    url: '/vguard/devices/dashboard/report',
     method: 'GET'
   },
   /**

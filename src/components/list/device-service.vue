@@ -110,31 +110,40 @@ export default {
     getSelectedRowsPremiseId() {
       let selected_premise_ids = []
       this.$store.state.dataTable.selectedRows.forEach((item) => {
-        selected_premise_ids.push(item.premise_id)
+        selected_premise_ids.push(parseInt(item.premise_id))
       })
       return selected_premise_ids
+    },
+    getSelectedRowPremiseId() {
+      return this.$store.state.dataTable.selectedRow.premise_id
     }
   },
   methods: {
     ...mapActions({
       createService: 'service/createService'
     }),
+    formClean() {
+      Object.keys(this.ruleForm).forEach((key) => {
+        this.ruleForm[key] = ''
+      })
+    },
     handleServiceSubmit(val) {
       console.log('RuleForm', this.ruleForm)
+      console.log('premiseId', this.getSelectedRowPremiseId)
       let premise_id = this.$route.params.device_id
-        ? this.$route.params.device_id
-        : this.getSelectedRowsPremiseId[0]
+        ? this.getSelectedRowPremiseId
+        : this.getSelectedRowsPremiseId
 
       let service = this.createService({
         ...this.ruleForm,
         // premise_id: this.getSelectedRowsPremiseId.join(),
-        premise_id: parseInt(premise_id),
+        premise_id: premise_id,
         status_code: 3
       })
-      service.then((r) => {
-        console.log(r)
-        if (r.status == 200) this.$emit('onClose')
-      })
+      console.log('SERVİCE STAUS', service)
+      //   if (service.status == 201) {
+      this.$emit('onClose')
+      //   }
     }
   },
   created() {
