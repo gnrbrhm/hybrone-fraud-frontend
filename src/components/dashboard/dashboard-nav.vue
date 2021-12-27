@@ -1,24 +1,38 @@
 <template>
   <div class="header-content">
-    <router-link
-      v-for="device_type in device_types"
-      :key="device_type.id"
-      :to="parentRoute + prefixRoute"
-      active-class="nav-active"
-    >
-      <!-- :to="'/dashboard' + device_type.route" -->
+    <div v-if="false">
+      <router-link
+        v-for="device_type in device_types"
+        :key="device_type.id"
+        :to="parentRoute + prefixRoute"
+        active-class="nav-active"
+      >
+        <!-- :to="'/dashboard' + device_type.route" -->
 
-      <el-button v-if="device_type.valid" class="__nav-button">
-        <span>{{ device_type.label }}</span>
-      </el-button>
-    </router-link>
+        <el-button v-if="device_type.valid" class="__nav-button">
+          <span>{{ device_type.label }}</span>
+        </el-button>
+      </router-link>
+    </div>
+    <div class="refresh-button">
+      <div class="component">
+        <span>Yenile</span>
+        <el-button @click="refreshDeviceData"
+          ><SvgIconRefresh></SvgIconRefresh
+        ></el-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { DEVICE_TYPES } from '@/constant'
+import SvgIconRefresh from '@/assets/icons/list/svg-icon-refresh.vue'
+import { bus } from '@/main.js'
+
 export default {
   name: 'DashboardNav',
+  components: { SvgIconRefresh },
   data() {
     return { device_types: {} }
   },
@@ -47,7 +61,11 @@ export default {
       }
     }
   },
-  methods: {},
+  methods: {
+    refreshDeviceData() {
+      bus.$emit('onDashboardDataRefresh', true)
+    }
+  },
   created() {
     this.device_types = { ...DEVICE_TYPES }
   },
@@ -62,6 +80,7 @@ export default {
 
 .header-content {
   display: flex;
+  justify-content: flex-end;
   margin-bottom: 25px;
   a {
     text-decoration: none;
@@ -145,6 +164,42 @@ export default {
       margin: 0px;
 
       color: #444444 !important;
+    }
+  }
+  .refresh-button {
+    display: flex;
+    flex-direction: row;
+    align-content: left;
+    justify-content: space-between;
+    align-items: center;
+    max-width: inner-content;
+    .component {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: self-end;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      //   margin-right: 24px;
+
+      //   &:nth-child(0) {
+      //     margin-left: 23px;
+      //   }
+      span {
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 14px;
+        text-transform: uppercase;
+        align-self: center;
+      }
+      button {
+        width: 51px;
+        height: 51px;
+        display: flex;
+        justify-content: center;
+        padding-left: 25px;
+        padding-right: 25px;
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="tab-pane-container">
     <el-tabs
-      :stretch="true"
+      :stretch="false"
       type="card"
       @tab-click="handleClick"
       style="width: 100%"
@@ -9,7 +9,7 @@
       <el-tab-pane label="LOKASYON">
         <PremiseDetail></PremiseDetail>
       </el-tab-pane>
-      <el-tab-pane label="KİŞİLER"
+      <el-tab-pane v-if="false" label="KİŞİLER"
         ><PremisePersons></PremisePersons>
       </el-tab-pane>
       <el-tab-pane label="CİHAZLAR"
@@ -73,7 +73,7 @@ export default {
   // border-bottom: 1px solid black !important;
 }
 .el-tabs__item {
-  width: 150px !important;
+  width: 230px !important;
   height: 50px !important;
   background-color: #e5e5e5;
   // border-bottom: 1px solid black !important;
