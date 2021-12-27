@@ -188,7 +188,8 @@ export default {
   },
   getVguardDashboardData: {
     url: '/vguard/devices/dashboard/report',
-    method: 'GET'
+    method: 'GET',
+    params: {}
   },
   /**
    * LOGS ENDPOINTS
