@@ -181,9 +181,9 @@ export default {
     }
   },
   mounted() {
-    bus.$on('onSubmitService', (val) => {
-      this.handleServiceSubmit(val)
-    })
+    // bus.$on('onSubmitService', (val) => {
+    //   this.handleServiceSubmit(val)
+    // })
     bus.$on('onRefreshDeviceData', this.refreshDeviceAndData)
     let vguard_device = this.getDeviceDetails(this.$route.params.device_id)
     vguard_device.then((r) => {

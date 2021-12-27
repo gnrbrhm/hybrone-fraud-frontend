@@ -53,7 +53,7 @@ export default {
 
       let new_service = Vue.prototype.$api({
         ...endpoints.createService,
-        data: { ticket: { ...payload } }
+        data: { ...payload }
         // data: { ...payload },
       })
       return new_service.then((r) => {
