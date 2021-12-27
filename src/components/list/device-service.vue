@@ -130,9 +130,10 @@ export default {
     handleServiceSubmit(val) {
       console.log('RuleForm', this.ruleForm)
       console.log('premiseId', this.getSelectedRowPremiseId)
-      let premise_id = this.$route.params.device_id
-        ? this.getSelectedRowPremiseId
-        : this.getSelectedRowsPremiseId
+      let premise_id = []
+      this.$route.params.device_id
+        ? premise_id.push(this.getSelectedRowPremiseId)
+        : (premise_id = this.getSelectedRowsPremiseId)
 
       let service = this.createService({
         ...this.ruleForm,
@@ -142,6 +143,7 @@ export default {
       })
       console.log('SERVİCE STAUS', service)
       //   if (service.status == 201) {
+      this.formClean()
       this.$emit('onClose')
       //   }
     }
