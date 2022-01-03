@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { bus } from '@/main.js'
 import MapView from '@/components/map/map-view'
 import PremiseInformation from '@/components/premises/premise-information.vue'
 export default {
@@ -39,8 +40,13 @@ export default {
     // },
   },
   methods: {
+    ...mapActions({
+      deletePremise: 'premise/deletePremise'
+    }),
     deleteClick() {
-      console.log(this.getSelectedRow)
+      let delete_premise = this.deletePremise(this.getSelectedRow)
+      console.log(delete_premise)
+      bus.$emit('onDeletePremise', true)
     },
     handleUpdate() {
       this.$router.push({

@@ -219,8 +219,10 @@
     style="width: 100%; max-height: calc(100vh - 180px); overflow: none"
     stripe
     highlight-current-row
+    @selection-change="handleSelectionChange"
     height="100%"
   >
+    <el-table-column type="selection" width="55"> </el-table-column>
     <el-table-column property="premise_id" label="MAĞAZA KODU" min-width="55">
     </el-table-column>
     <el-table-column property="location" label="LOKASYON" min-width="80">
@@ -231,10 +233,11 @@
         {{ scope.custom_premise_id }}
       </template> -->
     </el-table-column>
-    <!-- <el-table-column property="fault_type" label="Arıza Tipi" min-width="150">
+    <el-table-column property="fault_type" label="Arıza Tipi" min-width="150">
     </el-table-column>
     <el-table-column property="service_state" label="Durum" min-width="80">
-    </el-table-column> -->
+    </el-table-column>
+    <!---->
     <el-table-column
       property="started_at"
       label="BAŞLANGIÇ TARİHİ"

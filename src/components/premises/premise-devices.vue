@@ -35,6 +35,7 @@ export default {
   },
   data() {
     return {
+      counter: 0,
       devices: [],
       selectedDevice: null
     }
@@ -84,6 +85,7 @@ export default {
       this.selectedDevice = device_id
     },
     async handleCurrentChangeRowPremise(val) {
+      console.log(this.counter++)
       this.devices = []
       const { data } = await this.$api.get(`vguard/devices`, {
         params: {
@@ -97,6 +99,9 @@ export default {
 
       this.devices = data.data.paginated.records
       this.selectedDevice = this.devices[0].id
+    },
+    refreshCounter() {
+      console.log(this.counter++)
     }
   },
 
@@ -105,6 +110,9 @@ export default {
       this.handleCurrentChangeRowPremise(val.id)
       // this.handleCurrentChangeRowPremise(this.premise_id);
     })
+  },
+  destroyed() {
+    bus.$off('onCurrentChangeRowPremise')
   }
 }
 </script>

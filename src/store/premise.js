@@ -65,6 +65,28 @@ export default {
         }
       })
     },
+    getPremisesForMap() {
+      const premise = Vue.prototype.$api({
+        ...endpoints.getPremises
+      })
+      return premise.then((r) => {
+        if (r.status == 200) {
+          this.dispatch(
+            'pagination/setCurrentPage',
+            r.data.data.pagination.to / r.data.data.pagination.per_page
+          )
+          this.dispatch(
+            'pagination/setCurrentLimit',
+            r.data.data.pagination.per_page
+          )
+          this.dispatch(
+            'pagination/setTotalRecord',
+            r.data.data.pagination.total_record
+          )
+          return r.data.data.pagination.records //Pagination keyleri device ile farklı
+        }
+      })
+    },
     getFilterPremises(_, filter_data) {
       const premise = Vue.prototype.$api({
         ...endpoints.getPremises,
@@ -76,26 +98,28 @@ export default {
         }
       })
     },
-    createPremise(_, payload) {
+    async createPremise(_, payload) {
       const newPremise = Vue.prototype.$api({
         ...endpoints.createPremise,
         data: {
           premise: payload
         }
       })
+      let result = null
       return newPremise.then((r) => {
         if (r.status == 201) {
           return r
         }
       })
     },
-    deletePremise(premise_id) {
+    deletePremise(_, premise_id) {
       const deletePremise = Vue.prototype.$api({
         ...endpoints.deletePremise,
-        query: { premise_id: premise_id }
+        url: endpoints.deletePremise.url + '/' + premise_id.id
+        // query: { premise_id: premise_id }
       })
-      deletePremise.then((r) => {
-        return r.data
+      return deletePremise.then((r) => {
+        return r
       })
     },
     updatePremise(_, payload) {

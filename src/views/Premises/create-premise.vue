@@ -38,7 +38,7 @@ export default {
       getPremiseById: 'premise/getPremiseById'
     }),
     handleOnSaveClick() {
-      bus.$emit('onClickSave', true)
+      //   bus.$emit('onClickSave', true)
       if (this.getSelectedLocation.lat) {
         bus.$emit('onClickSave', true)
       } else {

@@ -157,6 +157,17 @@ export default {
         return r.data.data.paginated.records
       })
     },
+    async getVguardDevicesForMap(_, payload) {
+      const device = Vue.prototype.$api({
+        ...endpoints.getVguardDevicesForMap
+      })
+      let result = []
+      await device.then((r) => {
+        console.log(r.data.data.vguard_devices)
+        result = r.data.data.vguard_devices
+      })
+      return result
+    },
     async refreshVguardDeviceData(_, payload) {
       const refresh = Vue.prototype.$api({
         ...endpoints.refreshVguardDevice,

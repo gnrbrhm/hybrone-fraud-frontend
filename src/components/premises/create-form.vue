@@ -193,6 +193,7 @@ export default {
   name: 'CreateForm',
   data() {
     return {
+      counter: 0,
       formName: 'createPremise',
       cities: [],
       provinces: [],
@@ -297,9 +298,9 @@ export default {
         this.provinces = r.data.data.provinces
       })
     },
-    submitCreateForm(val) {
+    async submitCreateForm(val) {
       this.premiseForm.location.lat = this.getSelectedLocation.lat
-      this.premiseForm.location.long = this.getSelectedLocation.long
+      this.premiseForm.location.long = this.getSelectedLocation.lng
       if (val) {
         this.$refs[this.formName].validate((valid) => {
           if (valid) {
@@ -309,6 +310,12 @@ export default {
             } else {
               console.log(this.$route.params.premise_id)
               const res = this.createPremise(this.premiseForm)
+              //   console.log('Res', res)
+              //   console.log('Counter', this.counter++)
+              //   if (res.status == 201) {
+              //     this.$router.push('/premises')
+              //     this.setLocation({})
+              //   }
               res.then((r) => {
                 if (r.status == 201) {
                   this.$router.push('/premises')
@@ -341,6 +348,7 @@ export default {
   mounted() {
     bus.$on('onClickSave', (val) => this.submitCreateForm(val))
     if (this.$route.params.id) {
+      console.log('Current Premise', this.getCurrentPremise)
       this.is_update_request = true
       this.provinces = this.getProvince(
         this.getCurrentPremise.premise.location.city_id

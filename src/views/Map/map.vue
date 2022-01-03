@@ -23,14 +23,23 @@ export default {
   },
   mounted() {
     let L = leaflet
-    this.map = leaflet.map('map').setView([38.963745, 35.243322], 6)
-    // this.$map.addTo(this.map);
-    // console.log(this.map);
-    L.tileLayer(this.$map, {
-      maxZoom: 18,
+    // this.map = leaflet.map('map').setView([38.963745, 35.243322], 6)
+    // // this.$map.addTo(this.map);
+    // // console.log(this.map);
+    // L.tileLayer(this.$map, {
+    //   maxZoom: 6,
+    //   attribution:
+    //     'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+    //   id: 'base'
+    // }).addTo(this.map)
+    // this.map.invalidateSize()
+    L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
       attribution:
-        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-      id: 'base'
+        'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      zoomOffset: -1,
+      accessToken: 'your.mapbox.access.token'
     }).addTo(this.map)
   }
 }
@@ -39,7 +48,8 @@ export default {
 <style lang="scss">
 #map {
   width: 100%;
-  height: 100vh;
+  //   height: 180px;
+  height: 90vh;
   margin-left: 14px;
 }
 /*Lejant Scss */

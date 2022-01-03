@@ -49,6 +49,9 @@ export default {
     ...mapActions({
       getServices: 'service/getServices'
     }),
+    handleUpdate() {
+      this.getTicketsPagination()
+    },
     handleFilterParam(val) {
       this.is_filtered = Object.keys(val).length > 0
       this.filter_param = val
@@ -71,6 +74,7 @@ export default {
       this.data = []
       records.forEach((el) => {
         let ticket = {
+          id: el.id,
           premise_id: el.premise.custom_premise_id,
           location: el.premise.location
             ? el.premise.location.city.name +
@@ -84,7 +88,8 @@ export default {
           //     el.premise.devices[0].device_brand.name
           //   : "",
           fault_type: el.ticket_type,
-          service_state: el.status,
+          service_state: el.status_code == 1 ? 'Tamamlandı' : 'Açık',
+          status_code: el.status_code,
           started_at: moment(el.start_time).format('DD.MM.YYYY HH:mm'),
           created_at: moment(el.created_at).format('DD.MM.YYYY HH:mm'),
           ended_at: moment(el.finish_time).format('DD.MM.YYYY HH:mm')

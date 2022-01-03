@@ -68,6 +68,17 @@ export default {
       return services.then((r) => {
         return r.data
       })
+    },
+    async updateServiceStatus(_, payload) {
+      let services = Vue.prototype.$api({
+        ...endpoints.updateServiceStatus,
+        data: { ...payload }
+      })
+      let result = {}
+      await services.then((r) => {
+        result = r
+      })
+      return result
     }
   }
 }

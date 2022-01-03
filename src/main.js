@@ -1,5 +1,5 @@
-// import 'leaflet/dist/leaflet.css'
-// import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import Vue from 'vue'
 import App from './App.vue'
 import api from './middleware'

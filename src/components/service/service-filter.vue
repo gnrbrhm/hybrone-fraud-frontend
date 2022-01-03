@@ -58,6 +58,16 @@
     </el-button>
     <div class="actions">
       <div>
+        <span class="label">Tamamla</span>
+        <el-button
+          :disabled="this.getSelectedRows.length <= 0"
+          @click="handleAllDoneClick"
+          type="info"
+        >
+          <SvgIconServiceAllDone></SvgIconServiceAllDone>
+        </el-button>
+      </div>
+      <div>
         <span class="label">İçeri Aktar</span>
         <el-upload
           class="upload-demo"
@@ -134,6 +144,7 @@
 import axios from 'axios'
 import moment from 'moment'
 // import endpoints from "@/endpoints";
+import SvgIconServiceAllDone from '@/assets/icons/services/svg-icon-service-all-done.vue'
 import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
 import SvgIconSettingDownload from '@/assets/icons/settings/svg-icon-settings-download.vue'
 import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
@@ -146,10 +157,12 @@ export default {
     SvgIconListRaport,
     SvgIconServiceImport,
     SvgIconSettingDownload,
+    SvgIconServiceAllDone,
     SvgIconSearch
   },
   data() {
     return {
+      is_selected: false,
       import_result: {
         total_count: null,
         fail_count: null,
@@ -206,10 +219,32 @@ export default {
       ]
     }
   },
+  computed: {
+    getSelectedRows() {
+      return this.$store.state.dataTable.selectedRows
+    },
+    getServiceIds() {
+      let service_ids = []
+      this.getSelectedRows.forEach((item) => {
+        service_ids.push(item.id)
+        console.log(item)
+      })
+      return service_ids
+    }
+  },
   methods: {
     ...mapActions({
-      getTicketDownloadList: 'service/getTicketDownloadList'
+      getTicketDownloadList: 'service/getTicketDownloadList',
+      updateServiceStatus: 'service/updateServiceStatus'
     }),
+    async handleAllDoneClick() {
+      let done_service = await this.updateServiceStatus({
+        ids: this.getServiceIds,
+        status_code: 1
+      })
+      console.log('Done Service', done_service)
+      if (done_service.status == 200) this.$emit('onUpdateTable', true)
+    },
     closeDialogHandle() {
       this.fileList = []
       this.dialogTableVisible = false
@@ -334,6 +369,10 @@ export default {
       this.filter_data.search = this.$route.params.premise_id
       this.onFilteredDataClick(this.$route.params.premise_id)
     }
+  },
+  mounted() {
+    console.log('Seçili Satırlar', this.getSelectedRows)
+    this.is_selected = this.getSelectedRows.length > 0
   }
 }
 </script>
@@ -378,6 +417,12 @@ export default {
   justify-content: flex-end;
   margin-right: 10px;
   grid-column: 7;
+  div:nth-child(1) {
+    margin-right: 20px;
+  }
+  div:nth-child(2) {
+    margin-right: 10px;
+  }
   span {
     @extend .sentinel-label;
   }
@@ -387,7 +432,7 @@ export default {
     width: 50px;
     padding: 0px;
     &:nth-child(1) {
-      margin-right: 20px;
+      //   margin-right: 20px;
     }
     span {
       display: flex;

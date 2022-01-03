@@ -60,6 +60,10 @@ export default {
       area_id: 1
     }
   },
+  deletePremise: {
+    method: 'DELETE',
+    url: '/premises'
+  },
   getTrackedPremises: {
     url: '/prosec/devices',
     method: 'GET',
@@ -233,5 +237,10 @@ export default {
     url: '/tickets',
     responseType: 'blob',
     params: { response_type: 'excel' }
+  },
+  updateServiceStatus: {
+    method: 'POST',
+    url: '/tickets/statusupdate',
+    data: {}
   }
 }

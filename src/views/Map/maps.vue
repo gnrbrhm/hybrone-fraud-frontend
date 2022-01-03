@@ -6,28 +6,29 @@
       @onStateFilter="handleStateFilter"
     ></MapFilter> -->
     <div class="legand-map">
-      <spam class="legand-text">
+      <span class="legand-text">
         <i class="normal"></i>
         Normal
-      </spam>
-      <spam class="legand-text">
+      </span>
+      <span class="legand-text">
         <i class="non-device"></i>
         Cihaz Yok
-      </spam>
-      <spam class="legand-text"> <i class="fault"></i> Hatalı </spam>
+      </span>
+      <span class="legand-text"> <i class="fault"></i> Hatalı </span>
     </div>
     <div id="map"></div>
   </div>
 </template>
 
 <script>
-import endpoints from '@/endpoints'
+import endpoints from '@/endpoints/index.js'
 import leaflet from 'leaflet'
-// import ls from 'leaflet-search'
+import ls from 'leaflet-search'
 import * as L1 from 'leaflet.markercluster'
+import { mapActions } from 'vuex'
 // import MapFilter from '@/components/filter/map-filter'
 export default {
-  name: 'Mapss',
+  name: 'Maps',
   data() {
     return {
       map: null,
@@ -53,10 +54,11 @@ export default {
       }
     }
   },
-  components: {
-    // MapFilter
-  },
+  components: {},
   methods: {
+    ...mapActions({
+      getVguardDevicesForMap: 'device/getVguardDevicesForMap'
+    }),
     handleStateFilter(val) {
       console.log(val)
       this.map.removeLayer(this.markers)
@@ -112,30 +114,16 @@ export default {
       return popup
     },
     async getDeviceStatus(config) {
-      if (
-        config.statuses != null &&
-        !config.statuses.includes('network_error')
-      ) {
-        this.device_state.channels.first = config.config_struct.channels[1]
-          ? config.config_struct.last_status.channel_statuses
-            ? config.config_struct.last_status.channel_statuses[1].is_ok
-            : false
-          : null
-        this.device_state.channels.second = config.config_struct.channels[2]
-          ? config.config_struct.last_status.channel_statuses
-            ? config.config_struct.last_status.channel_statuses[2].is_ok
-            : false
-          : null
-        this.device_state.channels.thirdth = config.config_struct.channels[3]
-          ? config.config_struct.last_status.channel_statuses
-            ? config.config_struct.last_status.channel_statuses[3].is_ok
-            : false
-          : null
-        this.device_state.channels.forth = config.config_struct.channels[4]
-          ? config.config_struct.last_status.channel_statuses
-            ? config.config_struct.last_status.channel_statuses[4].is_ok
-            : false
-          : null
+      console.log('Config', config)
+      if (!config.network_error) {
+        this.device_state.channels.first =
+          config.is_active == true ? config.events[0].is_active : null
+        this.device_state.channels.second =
+          config.is_active == true ? config.events[1].is_active : null
+        this.device_state.channels.thirdth =
+          config.is_active == true ? config.events[2].is_active : null
+        this.device_state.channels.forth =
+          config.is_active == true ? config.events[3].is_active : null
       } else {
         this.device_state.channels.first = false
         this.device_state.channels.second = false
@@ -143,35 +131,14 @@ export default {
         this.device_state.channels.forth = false
       }
       this.device_state.state.is_connection =
-        config.config_struct.last_status.is_online
+        config.is_active == true ? config.network_error : null
       this.device_state.state.is_storage =
-        config.statuses != null &&
-        !config.statuses.includes('disk_error') &&
-        config.config_struct.last_status.is_online
-          ? true
-          : false
-      let is_recording_channels = true
-      if (config.config_struct.cctv_config.is_recording)
-        Object.keys(config.config_struct.cctv_config.is_recording).forEach(
-          (el) => {
-            is_recording_channels &=
-              config.config_struct.cctv_config.is_recording[el] == 'open'
-          }
-        )
-      else is_recording_channels = false
+        config.is_active == true ? config.disk_error : null
+
       this.device_state.state.is_record =
-        config.statuses != null &&
-        !config.statuses.includes('record_error') &&
-        config.config_struct.last_status.is_online &&
-        is_recording_channels
-          ? true
-          : false
+        config.is_active == true ? config.record_error : null
       this.device_state.state.is_last_signal =
-        config.statuses != null &&
-        !config.statuses.includes('datetime_error') &&
-        config.config_struct.last_status.is_online
-          ? true
-          : false
+        config.is_active == true ? config.datetime_error : null
 
       return this.device_state
     },
@@ -181,7 +148,7 @@ export default {
       // var markers = new L.MarkerClusterGroup()
       this.markers = new L.MarkerClusterGroup()
       addressPoints.forEach((item) => {
-        console.log(item[3])
+        console.log('İtem 3', item[3])
         if (item[3]) {
           device_status = this.getDeviceStatus(item[3])
         }
@@ -192,11 +159,9 @@ export default {
           // .statuses.includes('normal')
           this.device_id = item[3].id
           myIcon = L.divIcon({
-            className:
-              item[3].config_struct.last_status.is_online &&
-              item[3].statuses.includes('normal')
-                ? 'leaflet-custom-success-marker'
-                : 'leaflet-custom-fault-marker',
+            className: item[3].is_online
+              ? 'leaflet-custom-success-marker'
+              : 'leaflet-custom-fault-marker',
             html: `<span class="custom-marker-span">ID : ` + item[4] + `</span>`
           })
           marker = L.marker(new L.LatLng(item[0], item[1]), {
@@ -333,29 +298,29 @@ export default {
     },
     async mapingFunction(val) {
       this.premises = val
+      console.log('Premises', this.premises)
       this.premises.forEach((element) => {
         console.log('element')
         console.log(element)
-        this.location.push(element.location.lat)
-        this.location.push(element.location.long)
-        this.location.push(element.location.province)
-        this.location.push(element.devices[0])
-        this.location.push(element.custom_premise_id)
+        this.location.push(element.premise.location.lat)
+        this.location.push(element.premise.location.long)
+        this.location.push(element.premise.location.province)
+        this.location.push({ devices: element })
+        this.location.push(element.premise.custom_premise_id)
         this.locations.push(this.location)
         this.location = []
       })
       this.createMarker(this.locations)
     },
     async getPremiseLocation() {
-      await this.$api({
-        ...endpoints.getPremises
-      }).then((r) => {
-        this.mapingFunction(r.data.data.premises)
-      })
+      let devices = await this.getVguardDevicesForMap()
+      // this.mapingFunction(r.data.data.premises)
+      console.log(devices)
+      this.mapingFunction(devices)
     }
   },
   created() {
-    // this.getPremiseLocation()
+    this.getPremiseLocation()
   },
   mounted() {
     let L = leaflet
@@ -369,47 +334,17 @@ export default {
     })
 
     var addressPoints = new Array(this.locations)
-    // console.log(addressPoints[0].__ob__.value)
-    // this.map = L.map('map').setView([0, 0], 3)
 
-    L.tileLayer(
-      //   'http://192.168.3.202:8081/tile/{z}/{x}/{y}.png',
-      'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png',
-      //   'http://127.0.0.1:8081/tile/{z}/{x}/{y}.png',
-      //   'https://openstreetmap-hybrone-qa.apps.ocptest3.akbank.com/tile/{z}/{x}/{y}.png',
-      //   'https://openstreetmap-hybrone-prod.apps.ocp3.akbank.com/tile/{z}/{x}/{y}.png',
-      // 'http://localhost:8081/tile/{z}/{x}/{y}.png',
-      {
-        maxZoom: 6,
-        attribution:
-          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-        id: 'base'
-      }
-    )
+    L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution:
+        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+      id: 'base'
+    })
       .addTo(this.map)
       .on('mouseover,')
     console.log(this.locations)
     var markers = new L.MarkerClusterGroup()
-    // for (var i = 0; i < addressPoints.length; i++) {
-    //   var a = addressPoints[i]
-    //   var title = a[2]
-    //   var marker = L.marker(new L.LatLng(a[0], a[1]), {
-    //     title: title,
-    //     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    //     iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    //     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-    //   })
-    //   marker.bindPopup(title)
-    //   marker.on('mouseover', function(e) {
-    //     this.openPopup()
-    //   })
-    //   marker.on('mouseout', function(e) {
-    //     this.closePopup()
-    //   })
-    //   markers.addLayer(marker)
-    // }
-    // markers.refreshClusters(marker_icon);
-
     this.map.addLayer(markers)
   }
 }
@@ -423,7 +358,6 @@ export default {
 #map {
   width: 100%;
   height: 100vh;
-  margin-left: 14px;
 }
 .leaflet-zoom-animated {
   left: -5px !important;

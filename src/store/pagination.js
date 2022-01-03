@@ -43,19 +43,51 @@ export default {
   },
   actions: {
     setCurrentPage({ commit }, current_page) {
-      commit('SET_CURRENT_PAGE', current_page)
+      if (
+        !isNaN(current_page) &&
+        current_page != null &&
+        current_page != undefined
+      )
+        commit('SET_CURRENT_PAGE', current_page)
+      else commit('SET_CURRENT_PAGE', 1)
     },
     setCurrentLimit({ commit }, current_limit) {
-      commit('SET_CURRENT_LIMIT', current_limit)
+      if (
+        !isNaN(current_limit) &&
+        current_limit != null &&
+        current_limit != undefined &&
+        current_limit != 0
+      )
+        commit('SET_CURRENT_LIMIT', current_limit)
+      else commit('SET_CURRENT_LIMIT', 20)
     },
     setSelectedPage({ commit }, selected_page) {
-      commit('SET_SELECTED_PAGE', selected_page)
+      if (
+        !isNaN(selected_page) &&
+        selected_page != null &&
+        selected_page != undefined
+      )
+        commit('SET_SELECTED_PAGE', selected_page)
+      else commit('SET_SELECTED_PAGE', 1)
     },
     setSelectedLimit({ commit }, selected_limit) {
-      commit('SET_SELECTED_LIMIT', selected_limit)
+      if (
+        !isNaN(selected_limit) &&
+        selected_limit != null &&
+        selected_limit != undefined &&
+        selected_limit != 0
+      )
+        commit('SET_SELECTED_LIMIT', selected_limit)
+      else commit('SET_SELECTED_LIMIT', 20)
     },
     setTotalRecord({ commit }, total_record) {
-      commit('SET_TOTAL_RECORD', total_record)
+      if (
+        !isNaN(total_record) &&
+        total_record != null &&
+        total_record != undefined
+      )
+        commit('SET_TOTAL_RECORD', total_record)
+      // else commit('SET_SELECTED_LIMIT', 20)
     }
   }
 }

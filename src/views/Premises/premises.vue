@@ -21,6 +21,7 @@ import TabPage from '@/components/atomic/premises/tab-page.vue'
 import PremiseFilter from '@/components/premises/premise-filter.vue'
 import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
 import { mapActions, mapGetters } from 'vuex'
+import { bus } from '@/main.js'
 
 export default {
   name: 'Premises',
@@ -73,6 +74,9 @@ export default {
   },
   created() {
     this.fillDataTable()
+  },
+  mounted() {
+    bus.$on('onDeletePremise', this.handlePremiseFilteredData)
   }
 }
 </script>

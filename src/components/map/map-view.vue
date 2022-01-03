@@ -1,15 +1,15 @@
 <template>
   <div>
     <div v-if="this.$route.name === 'Map'" class="legand-map">
-      <spam class="legand-text">
+      <span class="legand-text">
         <i class="normal"></i>
         Normal
-      </spam>
-      <spam class="legand-text">
+      </span>
+      <span class="legand-text">
         <i class="non-device"></i>
         Cihaz Yok
-      </spam>
-      <spam class="legand-text"> <i class="fault"></i> Hatalı </spam>
+      </span>
+      <span class="legand-text"> <i class="fault"></i> Hatalı </span>
     </div>
     <div id="map" :style="this.$route.name !== 'Map' ? 'margin:0' : ''"></div>
   </div>
