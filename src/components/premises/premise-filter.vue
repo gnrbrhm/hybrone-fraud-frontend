@@ -2,7 +2,7 @@
   <div class="premise-filter">
     <div class="premise-search">
       <div class="component">
-        <span>MAĞAZA KODU</span>
+        <span>İSTASYON KODU</span>
         <el-input
           class="sentinel-input"
           v-model="custom_premise_id"

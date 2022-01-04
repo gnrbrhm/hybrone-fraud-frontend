@@ -22,7 +22,7 @@
     <el-table-column
       header-align="left"
       prop="premise.custom_premise_id"
-      label="MAĞAZA KODU"
+      label="İSTASYON KODU"
       width="180"
     >
     </el-table-column>
@@ -64,8 +64,10 @@
           <li class="device-channel-icon">
             <SvgIconFirstChannels
               :status="
-                scope.row.is_active == true
-                  ? scope.row.events[0].is_active
+                scope.row.is_active == true && scope.row.events.length > 0
+                  ? scope.row.events[0]
+                    ? scope.row.events[0].is_active
+                    : null
                   : null
               "
             ></SvgIconFirstChannels>
@@ -73,8 +75,10 @@
           <li class="device-channel-icon">
             <SvgIconSecondChannel
               :status="
-                scope.row.is_active == true
-                  ? scope.row.events[1].is_active
+                scope.row.is_active == true && scope.row.events.length > 0
+                  ? scope.row.events[1]
+                    ? scope.row.events[1].is_active
+                    : null
                   : null
               "
             ></SvgIconSecondChannel>
@@ -82,8 +86,10 @@
           <li class="device-channel-icon">
             <SvgIconThirdChannel
               :status="
-                scope.row.is_active == true
-                  ? scope.row.events[1].is_active
+                scope.row.is_active == true && scope.row.events.length > 0
+                  ? scope.row.events[2]
+                    ? scope.row.events[2].is_active
+                    : null
                   : null
               "
             ></SvgIconThirdChannel>
@@ -91,8 +97,10 @@
           <li class="device-channel-icon">
             <SvgIconFourthChannel
               :status="
-                scope.row.is_active == true
-                  ? scope.row.events[1].is_active
+                scope.row.is_active == true && scope.row.events.length > 0
+                  ? scope.row.events[3]
+                    ? scope.row.events[3].is_active
+                    : null
                   : null
               "
             ></SvgIconFourthChannel>
@@ -106,28 +114,28 @@
           <li class="device-state-icon">
             <SvgIconCommunication
               :status="
-                scope.row.is_active == true ? scope.row.network_error : null
+                scope.row.is_active == true ? !scope.row.network_error : null
               "
             ></SvgIconCommunication>
           </li>
           <li class="device-state-icon">
             <SvgIconDisk
               :status="
-                scope.row.is_active == true ? scope.row.disk_error : null
+                scope.row.is_active == true ? !scope.row.disk_error : null
               "
             ></SvgIconDisk>
           </li>
           <li class="device-state-icon">
             <SvgIconRecord
               :status="
-                scope.row.is_active == true ? scope.row.record_error : null
+                scope.row.is_active == true ? !scope.row.record_error : null
               "
             ></SvgIconRecord>
           </li>
           <li class="device-state-icon">
             <SvgIconDateTime
               :status="
-                scope.row.is_active == true ? scope.row.datetime_error : null
+                scope.row.is_active == true ? !scope.row.datetime_error : null
               "
             ></SvgIconDateTime>
           </li>
@@ -183,7 +191,7 @@
   >
     <el-table-column
       property="custom_premise_id"
-      label="MAĞAZA KODU"
+      label="İSTASYON KODU"
       min-width="50"
     ></el-table-column>
     <el-table-column
@@ -223,12 +231,16 @@
     height="100%"
   >
     <el-table-column type="selection" width="55"> </el-table-column>
-    <el-table-column property="premise_id" label="MAĞAZA KODU" min-width="55">
+    <el-table-column property="premise_id" label="İSTASYON KODU" min-width="55">
     </el-table-column>
     <el-table-column property="location" label="LOKASYON" min-width="80">
     </el-table-column>
 
-    <el-table-column property="premise_name" label="MEKAN ADI" min-width="80">
+    <el-table-column
+      property="premise_name"
+      label="İSTASYON ADI"
+      min-width="80"
+    >
       <!-- <template slot-scope="scope">
         {{ scope.custom_premise_id }}
       </template> -->

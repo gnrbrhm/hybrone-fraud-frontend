@@ -3,7 +3,7 @@
     <el-form :model="premiseForm" :rules="premiseRules" ref="createPremise">
       <div class="form-row">
         <div class="premise-form-content">
-          <span class="premise-form-content-label"> MAĞAZA KODU </span>
+          <span class="premise-form-content-label"> İSTASYON KODU </span>
           <el-form-item prop="custom_premise_id">
             <el-input
               style="width: 330px"
@@ -214,7 +214,7 @@ export default {
         custom_premise_id: [
           {
             required: true,
-            message: 'Lütfen mağaza kodu giriniz!',
+            message: 'Lütfen İSTASYON KODU giriniz!',
             trigger: 'blur'
           }
         ],
