@@ -75,6 +75,9 @@ export default {
   },
   mounted() {
     bus.$on('onDashboardDataRefresh', (val) => this.getDashboardData(val))
+  },
+  destroyed() {
+    bus.$on('onDashboardDataRefresh')
   }
 }
 </script>

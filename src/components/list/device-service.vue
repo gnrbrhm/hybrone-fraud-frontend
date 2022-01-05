@@ -156,6 +156,9 @@ export default {
     bus.$on('onSubmitService', (val) => {
       this.handleServiceSubmit(val)
     })
+  },
+  destroyed() {
+    bus.$off('onSubmitService')
   }
 }
 </script>

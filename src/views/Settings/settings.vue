@@ -471,9 +471,40 @@ export default {
   },
   methods: {
     ...mapActions({
-      changeUserPasswordVerify: 'auth/changeUserPasswordVerify'
+      changeUserPasswordVerify: 'auth/changeUserPasswordVerify',
+      createMultipleVguardDevice: 'device/createMultipleVguardDevice'
     }),
     handleImportDevicePopupApply() {
+      // let response = this.createMultipleVguardDevice()
+      //   console.log('handleImportPopupApply')
+      //   console.log()
+      //   console.log('handleImportPopupApply')
+
+      //   let token = store.state.auth.user.token
+      //   const config = {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`
+      //     }
+      //   }
+      //   const form = new FormData()
+      //   form.append('excel', this.fileList[0].raw, this.fileList[0].name)
+      //   axios
+      //     .post(
+      //       'http://10.81.102.124:3000/api/v1/vguard/devices/multiplecreate',
+      //       form,
+      //       config
+      //     )
+      //     .then((r) => {
+      //       this.import_result = { ...r.data.data }
+      //       this.import_result.total_count =
+      //         parseInt(this.import_result.fail_count) +
+      //         parseInt(this.import_result.success_count)
+      //       this.resultTable = r.data.data.failed_rows
+      //     })
+      //   setTimeout(() => {
+      // this.dialogImportDevicePopupVisible = false
+      // this.dialogImportDeviceConfirmPopupVisible = true
+      //   }, 1500)
       this.dialogImportDevicePopupVisible = false
       this.dialogImportDeviceConfirmPopupVisible = true
     },
@@ -559,6 +590,8 @@ export default {
       }
     },
     uploadFiles() {
+      this.dialogImportDeviceConfirmPopupVisible = false
+      this.dialogImportDeviceProgressPopupVisible = true
       let token = store.state.auth.user.token
       let perc = 0
       const config = {
@@ -568,26 +601,34 @@ export default {
           Authorization: `Bearer ${token}`
         },
         onUploadProgress: (progressEvent) => {
-          perc = Math.round((event.loaded * 100) / event.total)
+          perc = Math.round((progressEvent.loaded * 100) / progressEvent.total)
           console.log('onUploadProgress', perc)
         }
       }
+      console.log('RAW', this.fileList[0].raw)
+      console.log('NAME', this.fileList[0].name)
       const form = new FormData()
       form.append('excel', this.fileList[0].raw, this.fileList[0].name)
       axios
-        .post('http://34.79.135.127:3000/api/v1/premises/excel', form, config)
+        .post(
+          //   'http://3be30dfc4aee.ngrok.io/api/v1/vguard/devices/multiplecreate',
+          'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
+          form,
+          config
+        )
         .then((r) => {
           console.log(r)
           if (r.status == 200) {
             this.dialogImportDeviceConfirmPopupVisible = false
-            this.dialogImportDeviceProgressPopupVisible = true
             this.percentage = perc
-            this.import_result = { ...r.data.data }
-            this.import_result.total_count =
-              parseInt(this.import_result.fail_count) +
-              parseInt(this.import_result.success_count)
-            this.resultTable = r.data.data.failed_rows
-            this.dialogImportDeviceSuccessPopup = true
+            if (this.percentage == 100) {
+              this.import_result = { ...r.data.data }
+              this.import_result.total_count =
+                parseInt(this.import_result.fail_count) +
+                parseInt(this.import_result.success_count)
+              this.resultTable = r.data.data.failed_rows
+              this.dialogImportDeviceSuccessPopup = true
+            }
           } else {
             alert('else')
             this.dialogImportDeviceErrorPopup = true

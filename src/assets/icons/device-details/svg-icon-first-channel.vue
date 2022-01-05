@@ -1,6 +1,6 @@
 <template>
   <svg
-    v-if="device_id == '1'"
+    v-if="device_id == 1"
     width="22"
     height="23"
     viewBox="0 0 22 23"
@@ -13,7 +13,7 @@
     />
   </svg>
   <svg
-    v-else-if="device_id == '2'"
+    v-else-if="device_id == 2"
     width="23"
     height="23"
     viewBox="0 0 23 23"
@@ -26,7 +26,7 @@
     />
   </svg>
   <svg
-    v-else-if="device_id == '3'"
+    v-else-if="device_id == 3"
     width="23"
     height="23"
     viewBox="0 0 23 23"
@@ -40,7 +40,7 @@
   </svg>
 
   <svg
-    v-else-if="device_id == '4'"
+    v-else-if="device_id == 4"
     width="23"
     height="23"
     viewBox="0 0 23 23"
@@ -59,7 +59,7 @@ export default {
   name: 'SvgIconFirstChannel',
   props: {
     status: { type: Boolean, default: null },
-    device_id: { type: String, default: '1' }
+    device_id: { default: 1 }
   },
   computed: {
     changeColor() {
@@ -70,6 +70,9 @@ export default {
         else return '#EB5757'
       }
     }
+  },
+  mounted() {
+    console.log('Device ID', this.device_id)
   }
 }
 </script>

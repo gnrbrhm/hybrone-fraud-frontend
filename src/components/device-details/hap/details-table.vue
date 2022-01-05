@@ -17,11 +17,14 @@
       </template>
     </el-table-column>
     <el-table-column
-      property="is_active"
+      property="category"
       label="KATEGORİ"
       min-width="35"
       align="center"
-    ></el-table-column>
+      ><template slot-scope="scope">
+        {{ scope.row.category.toUpperCase() }}
+      </template>
+    </el-table-column>
     <el-table-column
       property="has_video_loss"
       label="VİDEO KAYBI"
@@ -30,7 +33,7 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="scope.row.has_video_loss"
+          :status="!scope.row.has_video_loss"
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -42,7 +45,7 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="scope.row.motion_detect"
+          :status="!scope.row.motion_detect"
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -54,7 +57,7 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="scope.row.has_sabotage"
+          :status="!scope.row.has_sabotage"
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -66,8 +69,7 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="scope.row.has_scene_change"
-          :device_id="scope.row.channel_id"
+          :status="!scope.row.has_scene_change"
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -131,6 +133,11 @@ export default {
   props: {
     data: { default: [] }
   },
+  watch: {
+    data: function (val) {
+      console.log('Gelen DAta', val)
+    }
+  },
   computed: {
     ...mapGetters({
       getDevice: 'device/getDevice'
@@ -141,6 +148,7 @@ export default {
       this.$emit('onDownloadRecordClick', val)
     },
     snapshotClick(val1) {
+      console.log(val1)
       this.$emit('onSnapshotClick', val1)
       this.selected_channel_id = val1
     }

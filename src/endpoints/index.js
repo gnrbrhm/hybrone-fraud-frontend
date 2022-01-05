@@ -109,6 +109,10 @@ export default {
     method: 'GET',
     params: { premise_id: null }
   },
+  createMultipleVguardDevice: {
+    method: 'POST',
+    url: '/vguard/devices/multiplecreate/'
+  },
   getDeviceModels: {
     url: '/device-models/',
     method: 'GET'
@@ -146,6 +150,18 @@ export default {
   getVguardDeviceById: {
     url: '/vguard/devices',
     method: 'GET'
+  },
+  getVguardDeviceChannelSnapshot: {
+    url: '/vguard/device-snapshot',
+    method: 'POST',
+    responseType: 'blob',
+    data: {}
+  },
+  getVguardDeviceChannelRecord: {
+    url: '/vguard/device/download/record',
+    method: 'POST',
+    responseType: 'blob',
+    data: {}
   },
   getProsecDeviceById: {
     url: '/prosec/devices',

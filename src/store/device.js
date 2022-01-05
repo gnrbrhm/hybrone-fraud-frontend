@@ -90,7 +90,7 @@ export default {
         params: { page: 1, limit: 10 }
       })
       return device.then((r) => {
-        commit('SET_DEVICE', r.data.data.prosec_device)
+        commit('SET_DEVICE', r.data.data.vguard_device)
         return r.data.data.vguard_device
       })
     },
@@ -190,6 +190,29 @@ export default {
       })
       return last_signals.then((r) => {
         if (r.status) return r.data
+      })
+    },
+    async getVguardDeviceChannelSnapshot(_, payload) {
+      let snapshot = Vue.prototype.$api({
+        ...endpoints.getVguardDeviceChannelSnapshot,
+        data: { ...payload }
+      })
+      return snapshot
+    },
+    async getVguardDeviceChannelRecord(_, payload) {
+      let record = Vue.prototype.$api({
+        ...endpoints.getVguardDeviceChannelRecord,
+        data: { ...payload }
+      })
+      return record
+    },
+    async createMultipleVguardDevice(_, payload) {
+      let multiple_create = Vue.prototype.$api({
+        ...endpoints.createMultipleVguardDevice,
+        data: { ...payload }
+      })
+      return multiple_create.then((r) => {
+        return r
       })
     },
     createDevice(_, payload) {

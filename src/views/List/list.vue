@@ -46,11 +46,11 @@ export default {
   computed: {
     ...mapGetters({
       getCurrentPage: 'pagination/getCurrentPage',
-      getCurrentLimit: 'pagination/getCurrentLimit',
-      getSelectedRows() {
-        return this.$store.state.dataTable.selectedRows
-      }
-    })
+      getCurrentLimit: 'pagination/getCurrentLimit'
+    }),
+    getSelectedRows() {
+      return this.$store.state.dataTable.selectedRows
+    }
   },
   methods: {
     ...mapActions({
@@ -91,15 +91,22 @@ export default {
       })
     },
     refreshVguardDeviceAndData() {
-      console.log('REFRESH TRİGERED')
-      let refresh = this.refreshVguardDeviceData({
-        device_id: [parseInt(this.$route.params.device_id)]
-      })
+      let refresh = null
       let selected_devices_integer = []
-      this.getSelectedRows.forEach((row) => {
-        console.log(row)
-        this.selected_devices_integer.push(parseInt(row))
-      })
+      if (this.$route.params.device_id) {
+        refresh = this.refreshVguardDeviceData({
+          device_id: [parseInt(this.$route.params.device_id)]
+        })
+      } else {
+        this.getSelectedRows.forEach((row) => {
+          console.log(row)
+          selected_devices_integer.push(row.id)
+          //   selected_devices_integer.push(parseInt(row.id))
+        })
+        refresh = this.refreshVguardDeviceData({
+          device_id: selected_devices_integer
+        })
+      }
       if (refresh.status == 200) {
         this.getDeviceDetails(this.$route.params.device_id)
       }
@@ -115,6 +122,9 @@ export default {
   },
   mounted() {
     bus.$on('onSelectedDevicesRefresh', this.refreshVguardDeviceAndData)
+  },
+  destroyed() {
+    bus.$on('onSelectedDevicesRefresh')
   }
 }
 </script>

@@ -52,7 +52,7 @@
             <div class="action-button-group">
               <el-button
                 class="canceled-button"
-                @click="handleCloseCreateUserDialog"
+                @click="() => (this.downloadRecordVisible = false)"
                 ><span> Vazgeç</span></el-button
               >
               <el-button
@@ -96,7 +96,7 @@ export default {
           {
             type: 'date',
             required: true,
-            message: 'Lütfen bitiş tarhini giriniz',
+            message: 'Lütfen bitiş tarihini giriniz',
             trigger: 'change'
           }
         ]
@@ -107,7 +107,7 @@ export default {
       modal_visible: false,
       snaphotDialogVisible: false,
       downloadRecordVisible: false,
-      selected_channel: ''
+      selected_channel: null
     }
   },
 
@@ -123,25 +123,88 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getProsecDevice: 'device/getDevice'
+      getDevice: 'device/getDevice'
     })
   },
   methods: {
     ...mapActions({
       getVguardDeviceById: 'device/getVguardDeviceById',
+      getVguardDeviceChannelSnapshot: 'device/getVguardDeviceChannelSnapshot',
+      getVguardDeviceChannelRecord: 'device/getVguardDeviceChannelRecord',
       refreshVguardDeviceData: 'device/refreshVguardDeviceData'
     }),
     recordDownload(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          // Download fonksiyonu gelicek buraya
+          let video = this.getVguardDeviceChannelRecord({
+            // channel_id: this.selected_channel,
+            // device_id: parseInt(this.$route.params.device_id),
+            // start_time: this.ruleForm.start_time,
+            // end_time: this.ruleForm.finish_time
+            channel_id: 1,
+            device_id: 36,
+            start_time: '2021-12-16T15:00:00.599Z',
+            end_time: '2021-12-16T15:10:00.599Z'
+          })
+          video.then((r) => {
+            if (r.status == 200) {
+              console.log(r)
+              let currentDate = new Date()
+              const url = window.URL.createObjectURL(new Blob([r.data]))
+              const link = document.createElement('a')
+              link.href = url
+              link.setAttribute(
+                'download',
+                this.getDevice.premise.custom_premise_id +
+                  '-CH-' +
+                  this.selected_channel +
+                  '-' +
+                  currentDate.getFullYear() +
+                  ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+                  ('0' + currentDate.getDate()).slice(-2) +
+                  ('0' + currentDate.getHours()).slice(-2) +
+                  ('0' + currentDate.getMinutes()).slice(-2) +
+                  ('0' + currentDate.getSeconds()).slice(-2) +
+                  '.avi'
+              )
+              document.body.appendChild(link)
+              link.click()
+            }
+          })
           console.log(valid)
         }
       })
     },
     handleOnSnapshotClick(val) {
-      // Anlık Görüntü fonksiyonu buraya gelicek
-      alert(val)
+      console.log('DEvice', this.getDevice.premise.custom_premise_id)
+      let image = this.getVguardDeviceChannelSnapshot({
+        // device_id: parseInt(this.$route.params.device_id),
+        // channel_id: val
+        device_id: 38,
+        channel_id: 1
+      })
+      image.then((r) => {
+        let currentDate = new Date()
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute(
+          'download',
+          this.getDevice.premise.custom_premise_id +
+            '-CH-' +
+            val +
+            '-' +
+            currentDate.getFullYear() +
+            ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+            ('0' + currentDate.getDate()).slice(-2) +
+            ('0' + currentDate.getHours()).slice(-2) +
+            ('0' + currentDate.getMinutes()).slice(-2) +
+            ('0' + currentDate.getSeconds()).slice(-2) +
+            '.jpeg'
+        )
+        document.body.appendChild(link)
+        link.click()
+      })
     },
     handleOnDownloadClick(val) {
       this.selected_channel = val
@@ -151,7 +214,23 @@ export default {
       return await this.getVguardDeviceById(device_id)
     },
     getPartionsZones(vguard_device) {
-      this.device_channels = vguard_device.events
+      console.log('GETPartionsZones')
+      let channels = []
+      vguard_device.channels.forEach((channel) => {
+        vguard_device.events.forEach((event) => {
+          if (channel.channel_id == event.channel_id) {
+            channels.push({
+              channel_id: channel.channel_id,
+              category: channel.category,
+              ...event
+            })
+          }
+        })
+      })
+      this.device_channels = channels
+      console.log('Channels', channels)
+      //   this.device_channels = vguard_device.events
+
       //   console.log('ProsecDevice', vguard_device)
       //   vguard_device.events.forEach((channel) => {
       //     console.log('Partion', channel)
@@ -189,6 +268,9 @@ export default {
     vguard_device.then((r) => {
       this.getPartionsZones(r)
     })
+  },
+  destroyed() {
+    bus.$off('onRefreshDeviceData')
   }
 }
 </script>
