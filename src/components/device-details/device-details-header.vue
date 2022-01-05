@@ -6,9 +6,9 @@
           <BackArrow></BackArrow>
         </div>
       </div>
+      <!-- @onDownloadSignalsHistory="handleDownloadSignalsHistory" -->
       <div class="header-element">
         <DeviceDetailsTitle
-          @onDownloadSignalsHistory="handleDownloadSignalsHistory"
           @onServiceModal="openServiceModal"
         ></DeviceDetailsTitle>
         <!-- <DashboardNav></DashboardNav> -->

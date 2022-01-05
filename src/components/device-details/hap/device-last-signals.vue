@@ -50,6 +50,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import DataTable from '@/components/atomic/data-table.vue'
 import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
+import moment from 'moment'
+
 // import DeviceDetailsLastSignalsFilter from '@/components/device-details/hap/details-last-signals-filter.vue'
 
 export default {
@@ -77,14 +79,52 @@ export default {
   methods: {
     ...mapActions({
       getProsecDeviceLastSignals: 'device/getProsecDeviceLastSignals',
-      getVguardDeviceChannelsEvents: 'device/getVguardDeviceChannelsEvents'
+      getVguardDeviceChannelsEvents: 'device/getVguardDeviceChannelsEvents',
+      getVguardDeviceChannelRecord: 'device/getVguardDeviceChannelRecord'
     }),
     handleDownloadEventRecord(val) {
       this.selected_events = val
-      alert(val)
+      console.log(val)
       this.downloadEventRecordConfirmDialog = true
     },
     downloadEventRecord() {
+      let start_time = moment(this.selected_events.created_at)
+        .add(-30, 'seconds')
+        ._d.toISOString()
+      let finish_time = moment(this.selected_events.created_at)
+        .add(3, 'seconds')
+        ._d.toISOString()
+      let video = this.getVguardDeviceChannelRecord({
+        channel_id: this.selected_events.channel_id,
+        device_id: parseInt(this.$route.params.device_id),
+        start_time: start_time,
+        end_time: finish_time
+      })
+      video.then((r) => {
+        if (r.status == 200) {
+          let currentDate = new Date()
+          const url = window.URL.createObjectURL(new Blob([r]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute(
+            'download',
+            this.getDevice.premise.custom_premise_id +
+              '-CH-' +
+              this.selected_channel +
+              '-' +
+              currentDate.getFullYear() +
+              ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+              ('0' + currentDate.getDate()).slice(-2) +
+              ('0' + currentDate.getHours()).slice(-2) +
+              ('0' + currentDate.getMinutes()).slice(-2) +
+              ('0' + currentDate.getSeconds()).slice(-2) +
+              '.avi'
+          )
+          document.body.appendChild(link)
+          link.click()
+        }
+      })
+
       // Buraya cihazda gerçekleşen olayın kaydının indirileceği kod gelicek
     },
     handleChangePagination() {

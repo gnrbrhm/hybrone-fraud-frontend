@@ -48,6 +48,9 @@ export default {
     handleServiceModal() {
       this.$emit('onServiceModal', true)
     }
+  },
+  mounted() {
+    console.log('DEVICE', this.getDevice)
   }
 }
 </script>

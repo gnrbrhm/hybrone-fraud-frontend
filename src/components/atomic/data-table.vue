@@ -256,6 +256,9 @@
       min-width="100"
       show-overflow-tooltip
     >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.started_at) }}
+      </template>
     </el-table-column>
     <el-table-column
       property="ended_at"
@@ -263,14 +266,29 @@
       min-width="100"
       show-overflow-tooltip
     >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.ended_at) }}
+      </template>
     </el-table-column>
+
     <el-table-column
       align="right"
       property="created_at"
       label="OLUŞTURULMA TARİHİ"
       min-width="100"
       show-overflow-tooltip
+      ><template slot-scope="scope">
+        {{ formattedDatetime(scope.row.created_at) }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="ticket_finished_time"
+      label="TAMAMLANMA ZAMANI"
     >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.ticket_finished_time) }}
+      </template>
     </el-table-column>
   </el-table>
   <!--Logs Kullanıcı İşlemleri-->
@@ -337,17 +355,12 @@
     <el-table-column header-align="left" prop="channel_id" label="OLAY KAYDI">
       <template slot-scope="scope">
         <SvgIconDownload
-          @click.native.prevent="downloadEventRecord(scope.row.event_id)"
+          @click.native.prevent="downloadEventRecord(scope.row)"
           :status="scope.row.is_active"
         ></SvgIconDownload>
       </template>
     </el-table-column>
-    <!-- <el-table-column
-      header-align="left"
-      prop="signal_type.description"
-      label="OLAY AÇIKLAMASI"
-    >
-    </el-table-column> -->
+
     <el-table-column
       prop="channel_id"
       header-align="right"
@@ -506,7 +519,7 @@ export default {
       })
     },
     formattedDatetime(val) {
-      //   console.log(val)
+      console.log(val)
       return dateTimeChange(val)
     },
     handleDBClick(val) {
