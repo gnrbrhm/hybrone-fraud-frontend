@@ -11,7 +11,7 @@
     <el-table-column property="id" label="KANAL" min-width="35" align="center">
       <template slot-scope="scope"
         ><SvgIconFirstChannel
-          :status="scope.row.is_active"
+          :status="scope.row.status ? scope.row.is_active : null"
           :device_id="scope.row.channel_id"
         ></SvgIconFirstChannel>
       </template>
@@ -33,7 +33,11 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="!scope.row.has_video_loss"
+          :status="
+            scope.row.status && scope.row.is_active
+              ? !scope.row.has_video_loss
+              : null
+          "
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -45,7 +49,11 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="!scope.row.motion_detect"
+          :status="
+            scope.row.status && scope.row.is_active
+              ? !scope.row.motion_detect
+              : null
+          "
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -57,7 +65,11 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="!scope.row.has_sabotage"
+          :status="
+            scope.row.status && scope.row.is_active
+              ? !scope.row.has_sabotage
+              : null
+          "
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -69,7 +81,11 @@
     >
       <template slot-scope="scope"
         ><SvgIconChannelStatus
-          :status="!scope.row.has_scene_change"
+          :status="
+            scope.row.status && scope.row.is_active
+              ? !scope.row.has_scene_change
+              : null
+          "
         ></SvgIconChannelStatus>
       </template>
     </el-table-column>
@@ -80,12 +96,12 @@
       align="center"
     >
       <template slot-scope="scope">
-        <!-- <el-button @click.native.prevent="snapshotClick(scope.$index, data)"> -->
-        <SvgIconSnapshot
-          @click.native.prevent="snapshotClick(scope.row.channel_id)"
-          :status="scope.row.is_active"
-        ></SvgIconSnapshot>
-        <!-- </el-button> -->
+        <el-button class="button" :disabled="!scope.row.status">
+          <SvgIconSnapshot
+            @click.native.prevent="snapshotClick(scope.row.channel_id)"
+            :status="scope.row.is_active"
+          ></SvgIconSnapshot>
+        </el-button>
       </template>
     </el-table-column>
     <el-table-column
@@ -95,10 +111,12 @@
       align="center"
     >
       <template slot-scope="scope">
-        <SvgIconDownload
-          @click.native.prevent="downloadRecord(scope.row.channel_id)"
-          :status="scope.row.is_active"
-        ></SvgIconDownload>
+        <el-button class="button" :disabled="!scope.row.status">
+          <SvgIconDownload
+            @click="downloadRecord(scope.row.channel_id)"
+            :status="scope.row.is_active"
+          ></SvgIconDownload>
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -156,4 +174,14 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.button {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  background: none;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+</style>

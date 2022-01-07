@@ -364,6 +364,7 @@ import axios from 'axios'
 import endpoints from '@/endpoints'
 import SvgIconFileUpload from '@/assets/icons/settings/svg-icon-file-upload.vue'
 import store from '../../store'
+import Vue from 'vue'
 import { mapActions } from 'vuex'
 export default {
   name: 'Settings',
@@ -683,26 +684,30 @@ export default {
       this.dialogTableVisible = false
     },
     updateQueryPeriod() {
-      this.$api({
-        ...endpoints.updateSettings,
-        data: { setting: { ...this.setting } }
-      }).then((r) => {
-        console.log(r)
-        if (r.status == 200) {
-          this.$message({
-            type: 'success',
-            message: 'Periyot güncelleme başarılı'
-          })
-        }
-      })
+      Vue.prototype
+        .$api({
+          ...endpoints.updateSettings,
+          data: { setting: { ...this.setting } }
+        })
+        .then((r) => {
+          console.log(r)
+          if (r.status == 200) {
+            this.$message({
+              type: 'success',
+              message: 'Periyot güncelleme başarılı'
+            })
+          }
+        })
     },
     getSettings() {
-      this.$api({
-        ...endpoints.getSettings
-      }).then((r) => {
-        console.log(r)
-        this.query_result = r.data.data.settings[0].value
-      })
+      Vue.prototype
+        .$api({
+          ...endpoints.getSettings
+        })
+        .then((r) => {
+          console.log(r)
+          this.query_result = r.data.data.settings[0].value
+        })
     }
   },
   created() {

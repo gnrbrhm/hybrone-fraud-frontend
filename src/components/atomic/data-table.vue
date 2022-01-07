@@ -25,6 +25,10 @@
       label="İSTASYON KODU"
       width="180"
     >
+      <template slot-scope="scope">
+        <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning>
+        {{ scope.row.premise.custom_premise_id }}
+      </template>
     </el-table-column>
     <el-table-column
       header-align="left"
@@ -54,6 +58,17 @@
       width="180"
     >
     </el-table-column>
+    <!-- <el-table-column
+      header-align="left"
+      prop="is_warning"
+      label="CİHAZ"
+      width="180"
+    >
+      <template slot-scope="scope">
+        {{ scope.row.show_warning }}
+       
+      </template>
+    </el-table-column> -->
     <el-table-column
       header-align="left"
       prop="device_state"
@@ -343,12 +358,7 @@
         ></SvgIconFirstChannel>
       </template>
     </el-table-column>
-    <el-table-column
-      header-align="left"
-      prop="channel_id"
-      label="DURUM"
-      width="450"
-    >
+    <el-table-column header-align="left" prop="state" label="DURUM" width="450">
     </el-table-column>
     <!-- <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
     </el-table-column> -->
@@ -368,7 +378,7 @@
       label="OLAY ZAMANI"
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.updated_at) }}
+        {{ formattedDatetime(scope.row.event_date) }}
       </template>
     </el-table-column>
   </el-table>
@@ -442,7 +452,7 @@ import SvgIconEnergy from '@/components/atomic/device/hap/svg-icon-energy.vue'
 // import SvgIconServiceRequest from "@/components/atomic/device/hap/svg-icon-is-service-request.vue";
 import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
 // import SvgIconQuery from "@/components/atomic/device/hap/svg-icon-query.vue";
-
+import SvgIconWarning from '@/assets/icons/list/svg-icon-warning.vue'
 import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
 import { dateTimeChange } from '@/utils.js'
@@ -458,7 +468,7 @@ export default {
   },
   components: {
     SvgIconDownload,
-    // SvgIconArmed,
+    SvgIconWarning,
     SvgIconFirstChannel,
     SvgIconFirstChannels,
     // SvgIconAlarm,

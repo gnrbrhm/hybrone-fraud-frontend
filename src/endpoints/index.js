@@ -258,5 +258,14 @@ export default {
     method: 'POST',
     url: '/tickets/statusupdate',
     data: {}
+  },
+  getSettings: {
+    method: 'GET',
+    url: '/settings'
+  },
+  updateSettings: {
+    method: 'PUT',
+    url: '/settings',
+    data: {}
   }
 }

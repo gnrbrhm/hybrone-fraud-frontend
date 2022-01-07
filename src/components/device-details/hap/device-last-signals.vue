@@ -51,7 +51,7 @@ import { mapActions, mapGetters } from 'vuex'
 import DataTable from '@/components/atomic/data-table.vue'
 import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
 import moment from 'moment'
-
+import { bus } from '@/main'
 // import DeviceDetailsLastSignalsFilter from '@/components/device-details/hap/details-last-signals-filter.vue'
 
 export default {
@@ -67,13 +67,22 @@ export default {
       device_id: this.$route.params.device_id,
       filtered_data: {},
       selected_events: '',
-      downloadEventRecordConfirmDialog: false
+      downloadEventRecordConfirmDialog: false,
+      channels_normal_status: {
+        has_sabotage: false,
+        has_scene_change: false,
+        has_video_loss: false,
+        motion_detect: false,
+        is_active: true,
+        is_record: true
+      }
     }
   },
   computed: {
     ...mapGetters({
       getCurrentPage: 'pagination/getCurrentPage',
-      getCurrentLimit: 'pagination/getCurrentLimit'
+      getCurrentLimit: 'pagination/getCurrentLimit',
+      getDevice: 'device/getDevice'
     })
   },
   methods: {
@@ -88,51 +97,62 @@ export default {
       this.downloadEventRecordConfirmDialog = true
     },
     downloadEventRecord() {
-      let start_time = moment(this.selected_events.created_at)
+      /**
+       * Buraya cihazda gerçekleşen olayın
+       * kaydının indirileceği kod gelicek
+       */
+      let start_time = moment(this.selected_events.event_date)
         .add(-30, 'seconds')
         ._d.toISOString()
-      let finish_time = moment(this.selected_events.created_at)
-        .add(3, 'seconds')
+      let finish_time = moment(this.selected_events.event_date)
+        .add(30, 'seconds')
         ._d.toISOString()
+      console.log('FinishTime', finish_time)
+      console.log('StartTime', start_time)
       let video = this.getVguardDeviceChannelRecord({
         channel_id: this.selected_events.channel_id,
         device_id: parseInt(this.$route.params.device_id),
+        // channel_id: 1,
+        // device_id: 36,
         start_time: start_time,
         end_time: finish_time
       })
-      video.then((r) => {
-        if (r.status == 200) {
-          let currentDate = new Date()
-          const url = window.URL.createObjectURL(new Blob([r]))
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute(
-            'download',
-            this.getDevice.premise.custom_premise_id +
-              '-CH-' +
-              this.selected_channel +
-              '-' +
-              currentDate.getFullYear() +
-              ('0' + (currentDate.getMonth() + 1)).slice(-2) +
-              ('0' + currentDate.getDate()).slice(-2) +
-              ('0' + currentDate.getHours()).slice(-2) +
-              ('0' + currentDate.getMinutes()).slice(-2) +
-              ('0' + currentDate.getSeconds()).slice(-2) +
-              '.avi'
-          )
-          document.body.appendChild(link)
-          link.click()
-        }
-      })
-
-      // Buraya cihazda gerçekleşen olayın kaydının indirileceği kod gelicek
+      video
+        .then((r) => {
+          if (r.status == 200) {
+            this.downloadEventRecordConfirmDialog = false
+            let currentDate = new Date()
+            const url = window.URL.createObjectURL(new Blob([r.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute(
+              'download',
+              this.getDevice.premise.custom_premise_id +
+                '-CH-' +
+                this.selected_channel +
+                '-' +
+                currentDate.getFullYear() +
+                ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+                ('0' + currentDate.getDate()).slice(-2) +
+                ('0' + currentDate.getHours()).slice(-2) +
+                ('0' + currentDate.getMinutes()).slice(-2) +
+                ('0' + currentDate.getSeconds()).slice(-2) +
+                '.avi'
+            )
+            document.body.appendChild(link)
+            link.click()
+          }
+        })
+        .catch
+        //Kayıt indirme gerçekleşmezse oluşacak durumlar
+        ()
     },
     handleChangePagination() {
       this.data = []
       this.filtered_data.page = this.getCurrentPage
       this.filtered_data.limit = this.getCurrentLimit
       console.log('FilterData', this.filtered_data)
-      this.getProsecDeviceSignalsHistory({
+      this.getVguardDeviceChannelsEventsHistory({
         ...this.filtered_data
       })
     },
@@ -153,15 +173,71 @@ export default {
         this.data = r
       })
     },
+
     getVguardDeviceChannelsEventsHistory(payload) {
       let device_signals = this.getVguardDeviceChannelsEvents({
         device_id: this.device_id,
         ...payload
       })
+      let events_data = []
       device_signals.then((r) => {
-        console.log('Last Signals', r)
-        this.data = r
+        r.forEach((item, index) => {
+          if (r.length - 1 > index) {
+            events_data.push({
+              ...item,
+              state: this.getDifferenceObject(item, r[index + 1])
+            })
+          }
+        })
+        console.log('Events', events_data)
+        this.data = events_data
       })
+    },
+    getDifferenceObject(obj1, obj2) {
+      let result = ''
+      Object.keys(obj1).forEach((item1) => {
+        if (
+          item1 != 'channel_id' &&
+          item1 != 'created_at' &&
+          item1 != 'updated_at' &&
+          item1 != 'event_id' &&
+          item1 != 'device_id' &&
+          item1 != 'event_date' &&
+          item1 != 'id' &&
+          item1 != 'is_active' &&
+          item1 != 'is_record' &&
+          item1 != 'vguard_device'
+        ) {
+          if (obj1[item1] != obj2[item1]) {
+            switch (item1) {
+              case 'has_sabotage':
+                result = obj1[item1]
+                  ? 'Video Sabotaj Algılandı'
+                  : 'Video Sabotaj Düzeldi'
+                break
+              case 'has_scene_change':
+                result = obj1[item1]
+                  ? 'Video Sahne Değişimi Algılandı'
+                  : 'Video Sahne Değişimi Düzeldi'
+                break
+              case 'has_video_loss':
+                result = obj1[item1]
+                  ? 'Video Kaybı Algılandı'
+                  : 'Video Kaybı Düzeldi'
+                break
+              case 'motion_detect':
+                result = obj1[item1]
+                  ? 'Hareket Algılama Algılandı'
+                  : 'Hareket Algılama Düzeldi'
+                break
+
+              default:
+                break
+            }
+          }
+        }
+      })
+      return result
     }
   },
   created() {
@@ -169,7 +245,13 @@ export default {
   },
   mounted() {
     // console.log("mounted last signals");
+    bus.$on('onFilteredEventsData', (val) =>
+      this.getVguardDeviceChannelsEventsHistory(val)
+    )
     this.getVguardDeviceChannelsEventsHistory()
+  },
+  destroyed() {
+    bus.$off('onFilteredEventsData')
   }
 }
 </script>
