@@ -52,9 +52,10 @@
 </template>
 
 <script>
-import { SIGNALS_TYPES } from '@/constant'
+import { DEVICE_STATUS } from '@/constant'
 import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
 import Vue from 'vue'
+import { bus } from '@/main.js'
 
 export default {
   name: 'DeviceDetailsLastSignalsFilter',
@@ -82,13 +83,13 @@ export default {
       }
     },
     onFilteredDataClick() {
-      this.filtered_data.signal_code = this.signals_code.join()
+      this.filtered_data.state = this.signals_code.join()
       // 	Object.keys(this.filtered_data).forEach((item) => {
       // 		if(Array.isArray(this.filtered_data[item])){
       // 			this.filtered_data.signal_code = this.filtered_data[item].join();
       // 		}
       //   });
-      this.$emit('onFilteredData', this.filtered_data)
+      bus.$emit('onFilteredEventsData', this.filtered_data)
     },
     handleClearFilterData() {
       Object.keys(this.filtered_data).forEach((item) => {
@@ -99,7 +100,7 @@ export default {
     }
   },
   created() {
-    this.status_options = [...SIGNALS_TYPES]
+    this.status_options = [...DEVICE_STATUS]
   }
 }
 </script>

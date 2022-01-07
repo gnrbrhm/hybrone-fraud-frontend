@@ -57,7 +57,7 @@
               >
               <el-button
                 class="apply-button"
-                @click="recordDownload('ruleForm')"
+                @click="handleRecordDownload('ruleForm')"
                 ><span>İndir</span></el-button
               >
             </div>
@@ -133,18 +133,18 @@ export default {
       getVguardDeviceChannelRecord: 'device/getVguardDeviceChannelRecord',
       refreshVguardDeviceData: 'device/refreshVguardDeviceData'
     }),
-    recordDownload(form) {
+    handleRecordDownload(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
           let video = this.getVguardDeviceChannelRecord({
-            // channel_id: this.selected_channel,
-            // device_id: parseInt(this.$route.params.device_id),
-            // start_time: this.ruleForm.start_time,
-            // end_time: this.ruleForm.finish_time
-            channel_id: 1,
-            device_id: 36,
-            start_time: '2021-12-16T15:00:00.599Z',
-            end_time: '2021-12-16T15:10:00.599Z'
+            channel_id: this.selected_channel,
+            device_id: parseInt(this.$route.params.device_id),
+            start_time: this.ruleForm.start_time,
+            end_time: this.ruleForm.finish_time
+            // channel_id: 1,
+            // device_id: 36,
+            // end_time: '2022-01-04T19:27:05.000Z',
+            // start_time: '2022-01-04T19:26:32.000Z'
           })
           video.then((r) => {
             if (r.status == 200) {
@@ -178,10 +178,10 @@ export default {
     handleOnSnapshotClick(val) {
       console.log('DEvice', this.getDevice.premise.custom_premise_id)
       let image = this.getVguardDeviceChannelSnapshot({
-        // device_id: parseInt(this.$route.params.device_id),
-        // channel_id: val
-        device_id: 38,
-        channel_id: 1
+        device_id: parseInt(this.$route.params.device_id),
+        channel_id: val
+        // device_id: 38,
+        // channel_id: 1
       })
       image.then((r) => {
         let currentDate = new Date()
@@ -216,17 +216,38 @@ export default {
     getPartionsZones(vguard_device) {
       console.log('GETPartionsZones')
       let channels = []
+      //   vguard_device.channels.forEach((channel) => {
+      //     vguard_device.events.forEach((event) => {
+      //       if (channel.channel_id == event.channel_id) {
+      //         channels.push({
+      //           channel_id: channel.channel_id,
+      //           category: channel.category,
+      //           ...event
+      //         })
+      //       }
+      //     })
+      //   })
       vguard_device.channels.forEach((channel) => {
-        vguard_device.events.forEach((event) => {
-          if (channel.channel_id == event.channel_id) {
-            channels.push({
-              channel_id: channel.channel_id,
-              category: channel.category,
-              ...event
-            })
-          }
+        let channels_events = vguard_device.events.filter((event) => {
+          return event.channel_id == channel.channel_id
         })
+        if (channels_events.length > 0) {
+          channels.push({
+            channel_id: channel.channel_id,
+            category: channel.category,
+            status: channel.status,
+            ...channels_events[0]
+          })
+        } else {
+          channels.push({
+            channel_id: channel.channel_id,
+            category: channel.category,
+            status: channel.status
+            // is_active: false
+          })
+        }
       })
+
       this.device_channels = channels
       console.log('Channels', channels)
       //   this.device_channels = vguard_device.events
