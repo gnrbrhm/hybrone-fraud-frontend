@@ -1,6 +1,6 @@
 <template>
   <div class="location-content">
-    <div class="map-view" v-if="false">
+    <div class="map-view">
       <MapView class="view" v-if="isRendered"></MapView>
     </div>
     <div class="information">
@@ -45,7 +45,6 @@ export default {
     }),
     deleteClick() {
       let delete_premise = this.deletePremise(this.getSelectedRow)
-      console.log(delete_premise)
       bus.$emit('onDeletePremise', true)
     },
     handleUpdate() {
@@ -67,8 +66,8 @@ export default {
 .location-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 668px;
+  //   justify-content: space-between;
+  min-height: 100%;
   border: 1px solid black;
   border-top: 1px solid transparent;
   border-radius: 0px 0px 0px 10px;
@@ -110,7 +109,7 @@ export default {
     overflow: hidden;
     display: flex !important;
     width: 425px !important;
-    height: 325px !important;
+    max-height: 325px !important;
   }
 }
 </style>

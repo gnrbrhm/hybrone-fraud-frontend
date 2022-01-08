@@ -28,14 +28,14 @@ export default {
     setCurrentPremise({ commit }, premise) {
       commit('SET_CURRENT_PREMISE', premise)
     },
-    getPremiseById({ commit }, premise_id) {
+    async getPremiseById({ commit }, premise_id) {
       const premise = Vue.prototype.$api({
         ...endpoints.getPremiseById,
         url: '/premises/' + premise_id
       })
-      return premise.then((r) => {
+      return await premise.then((r) => {
         if (r.status == 200) {
-          commit('SET_CURRENT_PREMISE', r.data.data)
+          commit('SET_CURRENT_PREMISE', r.data.data.premise)
           if (r.status == 200) {
             return r.data.data.premise
           }

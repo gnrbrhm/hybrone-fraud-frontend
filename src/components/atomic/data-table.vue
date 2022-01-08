@@ -498,7 +498,6 @@ export default {
   },
   watch: {
     data: function (val) {
-      console.log(' Wacher val', val)
       if (val) {
         this.loading = false
       } else {
@@ -520,7 +519,8 @@ export default {
   methods: {
     ...mapActions({
       setSelectedRows: 'dataTable/setSelectedRows',
-      setSelectedRow: 'dataTable/setSelectedRow'
+      setSelectedRow: 'dataTable/setSelectedRow',
+      setCurrentPremise: 'premise/setCurrentPremise'
       // setLocation: "map/setLocation",
     }),
     getTitle(val) {
@@ -529,7 +529,6 @@ export default {
       })
     },
     formattedDatetime(val) {
-      console.log(val)
       return dateTimeChange(val)
     },
     handleDBClick(val) {
@@ -559,7 +558,9 @@ export default {
       this.setSelectedRow(row)
     },
     handleCurrentChange(row) {
+      this.setSelectedRow({})
       if (this.$route.name === 'Premises') {
+        this.setCurrentPremise(row)
         this.setSelectedRow(row)
         let location = {
           lat: row.location.lat,
@@ -570,7 +571,6 @@ export default {
         })
         bus.$emit('onCurrentChangeRowPremise', row)
       } else {
-        console.log('Else', row)
         this.setSelectedRow(row)
         bus.$emit('onCurrentChangeRowPremise', row)
       }
@@ -580,9 +580,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    console.log('Mounted Data TAble', this.getTitle(this.data[0].type.label))
-  }
+  mounted() {}
 }
 </script>
 

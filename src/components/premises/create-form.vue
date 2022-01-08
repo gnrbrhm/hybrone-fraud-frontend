@@ -262,23 +262,25 @@ export default {
   computed: {
     ...mapGetters({
       getSelectedLocation: 'getSelectedLocation',
-      getCurrentPremise: 'premise/getCurrentPremise'
+      getCurrentPremise: 'premise/getCurrentPremise',
+      getSelectedRow: 'dataTable/getSelectedRow'
     })
   },
   methods: {
     ...mapActions({
+      setSelectedRow: 'dataTable/setSelectedRow',
       getPremise: 'premise/getPremise',
       getPremises: 'premise/getPremises',
       createPremise: 'premise/createPremise',
       updatePremise: 'premise/updatePremise',
-      setLocation: 'map/setLocation'
+      setLocation: 'map/setLocation',
+      getPremiseById: 'premise/getPremiseById'
     }),
     getCities() {
       const cities = this.$api({
         ...endpoints.getCities
       })
       return cities.then((r) => {
-        console.log(r.data.data.cities)
         this.cities = r.data.data.cities
       })
     },
@@ -300,18 +302,14 @@ export default {
     },
     async submitCreateForm(val) {
       this.premiseForm.location.lat = this.getSelectedLocation.lat
-      this.premiseForm.location.long = this.getSelectedLocation.lng
+      this.premiseForm.location.long = this.getSelectedLocation.long
       if (val) {
         this.$refs[this.formName].validate((valid) => {
           if (valid) {
             if (this.is_update_request) {
-              console.log(this.premiseForm)
               this.updateCreateForm(this.premiseForm)
             } else {
-              console.log(this.$route.params.premise_id)
               const res = this.createPremise(this.premiseForm)
-              //   console.log('Res', res)
-              //   console.log('Counter', this.counter++)
               //   if (res.status == 201) {
               //     this.$router.push('/premises')
               //     this.setLocation({})
@@ -324,7 +322,6 @@ export default {
               })
             }
           } else {
-            console.log('error submit!!')
             return false
           }
         })
@@ -334,42 +331,74 @@ export default {
       let payload = { premise: { ...val }, premise_id: this.$route.params.id }
       if (val) {
         const updatePremise = this.updatePremise(payload)
-        console.log('UpdatePremise', updatePremise)
 
         updatePremise.then((r) => {
-          console.log('r', r)
           if (r.status == 200) {
             this.$router.push({ name: 'Premises' })
+            this.clearPremiseForm()
           }
         })
       }
-    }
-  },
-  mounted() {
-    bus.$on('onClickSave', (val) => this.submitCreateForm(val))
-    if (this.$route.params.id) {
-      console.log('Current Premise', this.getCurrentPremise)
-      this.is_update_request = true
-      this.provinces = this.getProvince(
-        this.getCurrentPremise.premise.location.city_id
-      )
-      this.premiseForm.custom_premise_id =
-        this.getCurrentPremise.premise.custom_premise_id
-      this.premiseForm.custom_premise_name =
-        this.getCurrentPremise.premise.custom_premise_name
-      this.premiseForm.description = this.getCurrentPremise.premise.description
-      this.premiseForm.location.city_id =
-        this.getCurrentPremise.premise.location.city_id
-      this.premiseForm.location.province_id =
-        this.getCurrentPremise.premise.location.province_id
-      this.premiseForm.location.address =
-        this.getCurrentPremise.premise.location.address
-      this.premiseForm.location.lat =
-        this.getCurrentPremise.premise.location.lat
+    },
+    clearPremiseForm(val) {
+      val.forEach((item) => {
+        switch (typeof val[item]) {
+          case 'string':
+            val[item] = ''
+            break
+          case 'number':
+            val[item] = 0
+
+            break
+          case 'object':
+            this.clearPremiseForm(val[item])
+
+            break
+
+          default:
+            break
+        }
+      })
+    },
+    async fillPremiseForm() {
+      if (this.$route.params.id) {
+        this.is_update_request = true
+        this.provinces = this.getProvince(
+          this.getCurrentPremise.location.city_id
+        )
+        this.provinces = this.getProvince(
+          this.getCurrentPremise.location.city_id
+        )
+        this.premiseForm.custom_premise_id =
+          this.getCurrentPremise.custom_premise_id
+        this.premiseForm.custom_premise_name =
+          this.getCurrentPremise.custom_premise_name
+        this.premiseForm.description = this.getCurrentPremise.description
+        this.premiseForm.location.city_id =
+          this.getCurrentPremise.location.city_id
+        this.premiseForm.location.province_id =
+          this.getCurrentPremise.location.province_id
+        this.premiseForm.location.address =
+          this.getCurrentPremise.location.address
+        this.premiseForm.location.lat = this.getCurrentPremise.location.lat
+        this.premiseForm.location.long = this.getCurrentPremise.location.long
+      }
     }
   },
   created() {
+    if ((this.getCurrentPremise = {} && this.$route.params.id)) {
+      this.getPremiseById(this.$route.params.id)
+      this.fillPremiseForm()
+    }
     this.cities = this.getCities()
+  },
+  mounted() {
+    bus.$on('onClickSave', (val) => this.submitCreateForm(val))
+    this.fillPremiseForm()
+  },
+  destroyed() {
+    this.setSelectedRow({})
+    this.clearPremiseForm()
   }
 }
 </script>
