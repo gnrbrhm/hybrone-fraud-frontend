@@ -89,9 +89,10 @@
         <span>RAPOR</span>
         <el-button
           :disabled="
-            isSelected && this.getPermissions[device_list_status_report_create]
-              ? false
-              : true
+            isSelected &&
+            this.getPermissions['device_list_status_report_create']
+              ? true
+              : false
           "
           @click="handleActionsClick('report')"
         >
@@ -180,6 +181,7 @@ export default {
     this.hardware_type = this.$route.path.split('/')[2].toUpperCase()
   },
   mounted() {
+    console.log('Permissiion', this.getPermissions)
     this.hardware_options = [...DEVICE_TYPES].filter((item) => {
       return item.valid == true
     })
