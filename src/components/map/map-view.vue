@@ -24,6 +24,7 @@ export default {
   name: 'MapView',
   data() {
     return {
+      L: null,
       maps: null,
       marker: null,
       isRender: true,
@@ -46,12 +47,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSelectedLocation: 'setSelectedLocation'
+      setSelectedLocation: 'setSelectedLocation',
+      setLocation: 'maps/setLocation'
     }),
     async addMarkerAndFlyTo(val) {
-      console.log('Val', val)
-      leaflet.marker([val.lat, val.long]).addTo(this.maps)
-      this.maps.flyTo([val.lat, val.long], 14)
+      this.L.marker([val.lat, val.long]).addTo(this.$maps)
+      this.$maps.flyTo([val.lat, val.long], 14)
       this.$forceUpdate()
     },
     handleCurrentChangeRowPremise() {
@@ -59,26 +60,35 @@ export default {
     }
   },
   mounted() {
-    let L = leaflet
-    this.maps = leaflet.map('map').setView([38.963745, 35.243322], 6)
-    L.tileLayer(this.$map, {
+    this.L = leaflet
+    this.$maps = this.L.map('map').setView([38.963745, 35.243322], 6)
+    this.L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+    })
+    this.L.tileLayer(this.$map, {
       maxZoom: 18,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       id: 'base'
-    }).addTo(this.maps)
+    }).addTo(this.$maps)
     if (this.$route.name == 'Premises') {
-      console.log('GetCurrentLocation Premise', this.getCurrentLocation)
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
     }
     // if (this.$route.name == "CreatePremise") {
     if (['CreatePremise', 'UpdatePremise'].includes(this.$route.name)) {
-      this.maps.on('click', (e) => {
-        if (this.marker) this.maps.removeLayer(this.marker)
-        this.marker = L.marker(e.latlng).addTo(this.maps)
+      console.log('UpdatePremise Location', this.getCurrentLocation.location)
+      this.addMarkerAndFlyTo(this.getCurrentLocation.location)
+      this.$maps.on('click', (e) => {
+        console.log(this.marker)
+        if (this.marker) this.$maps.removeLayer(this.marker)
+        this.marker = this.L.marker(e.latlng).addTo(this.$maps)
         this.$store.dispatch('setSelectedLocation', {
-          ...this.marker.getLatLng()
+          long: this.marker.getLatLng().lng,
+          lat: this.marker.getLatLng().lat
         })
+
         this.selected_location = true
       })
     }
@@ -86,6 +96,10 @@ export default {
     bus.$on('onCurrentChangeRowPremise', () =>
       this.handleCurrentChangeRowPremise()
     )
+  },
+  destroyed() {
+    bus.$off('onCurrentChangeRowPremise')
+    this.setLocation(null)
   }
 }
 </script>
