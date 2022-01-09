@@ -90,9 +90,10 @@ export default {
           fault_type: el.ticket_type,
           service_state: el.status_code == 1 ? 'Tamamlandı' : 'Açık',
           status_code: el.status_code,
-          started_at: moment(el.start_time).format('DD.MM.YYYY HH:mm'),
-          created_at: moment(el.created_at).format('DD.MM.YYYY HH:mm'),
-          ended_at: moment(el.finish_time).format('DD.MM.YYYY HH:mm')
+          start_time: el.start_time,
+          created_at: el.created_at,
+          finish_time: el.finish_time,
+          ticket_finished_time: el.ticket_finished_time
         }
         this.data.push(ticket)
       })
