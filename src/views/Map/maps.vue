@@ -80,9 +80,10 @@ export default {
       this.createMarker(this.locations)
     },
     routeDeviceDetail() {
+      console.log('Device_id', this.device_id)
       this.$router.push({
         name: 'DeviceDetail',
-        params: { id: this.device_id }
+        params: { device_id: this.device_id }
       })
     },
     onSubmitFilter(val) {
@@ -157,7 +158,8 @@ export default {
         var marker
         if (item[3]) {
           // .statuses.includes('normal')
-          this.device_id = item[3].id
+          console.log('İtem 3', item[3].devices.id)
+          this.device_id = item[3].devices.id
           myIcon = L.divIcon({
             className: item[3].is_online
               ? 'leaflet-custom-success-marker'
@@ -261,7 +263,7 @@ export default {
           gotoDetail: () => {
             this.$router.push({
               name: 'DeviceDetail',
-              params: { id: item[3].id }
+              params: { device_id: item[3].devices.id }
             })
           }
         }
