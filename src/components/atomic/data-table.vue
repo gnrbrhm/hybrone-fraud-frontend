@@ -266,23 +266,23 @@
     </el-table-column>
     <!---->
     <el-table-column
-      property="started_at"
-      label="BAŞLANGIÇ TARİHİ"
+      property="start_time"
+      label="PLANLANAN BAŞLANGIÇ TARİHİ"
       min-width="100"
       show-overflow-tooltip
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.started_at) }}
+        {{ formattedDatetime(scope.row.start_time) }}
       </template>
     </el-table-column>
     <el-table-column
-      property="ended_at"
-      label="BİTİŞ TARİHİ"
+      property="finish_time"
+      label="PLANLANAN BİTİŞ TARİHİ"
       min-width="100"
       show-overflow-tooltip
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.ended_at) }}
+        {{ formattedDatetime(scope.row.finish_time) }}
       </template>
     </el-table-column>
 
@@ -300,6 +300,7 @@
       header-align="left"
       prop="ticket_finished_time"
       label="TAMAMLANMA ZAMANI"
+      min-width="100"
     >
       <template slot-scope="scope">
         {{ formattedDatetime(scope.row.ticket_finished_time) }}
@@ -529,8 +530,13 @@ export default {
       })
     },
     formattedDatetime(val) {
-      return dateTimeChange(val)
+      let result = val.toString().split('-')[0] != '0001'
+      if (result) return dateTimeChange(val)
+      else if (['Services'].includes(this.$route.name))
+        return 'Henüz Tamanlanmadı'
+      else return 'Bilgi Alınamadı'
     },
+
     handleDBClick(val) {
       if (
         ['List', 'Dashboard'].includes(this.$route.name)
