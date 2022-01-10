@@ -19,7 +19,7 @@ export default {
   actions: {
     getDevices({ commit }, params) {
       const device = Vue.prototype.$api({
-        ...endpoints.getProsecDevices,
+        ...endpoints.getVguardDevices,
         params: { page: 1, limit: 10, ...params }
       })
       return device.then((r) => {
@@ -38,6 +38,15 @@ export default {
           r.data.data.paginated.total_record
         )
         return r.data.data.paginated.records
+      })
+    },
+    getDevicesExcelExport({ commit }, params) {
+      const device = Vue.prototype.$api({
+        ...endpoints.getProsecDevices,
+        params: { page: 1, limit: 20, response_type: 'excel' }
+      })
+      return device.then((r) => {
+        return r.data.data.paginated.devices
       })
     },
     getVguardDevices({ commit }, params) {
@@ -61,6 +70,15 @@ export default {
           r.data.data.paginated.total_record
         )
         return r.data.data.paginated.records
+      })
+    },
+    getVguardDevicesExcelExport({ commit }, params) {
+      const device = Vue.prototype.$api({
+        ...endpoints.getVguardDevicesForExcel,
+        params: { page: 1, limit: 10, ...params }
+      })
+      return device.then((r) => {
+        return r
       })
     },
     getProsecDevicesByFilter(_, custom_premise_id) {

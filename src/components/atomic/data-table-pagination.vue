@@ -1,5 +1,17 @@
 <template>
-  <div class="pagination_block">
+  <div
+    :class="
+      ['Service', 'List'].includes(this.$route.name) == true
+        ? 'pagination_block'
+        : 'pagination_block-self'
+    "
+  >
+    <span
+      v-if="['Service', 'List'].includes(this.$route.name)"
+      class="total_count"
+    >
+      {{ getSelectedRowsLength }} Seçili</span
+    >
     <el-pagination
       class="paginate"
       background
@@ -48,7 +60,9 @@ export default {
       getCurrentPage: 'pagination/getCurrentPage',
       getTotalRecord: 'pagination/getTotalRecord'
     }),
-
+    getSelectedRowsLength() {
+      return this.$store.state.dataTable.selectedRows.length
+    },
     current_page() {
       return parseInt(this.paginate.to / this.paginate.per_page)
     }
@@ -91,8 +105,15 @@ export default {
   max-width: 100%;
   .paginate {
     align-items: center;
+    // margin-left: 25%;
   }
   padding: 27px 38px 12px 32px;
+}
+.pagination_block-self {
+  @extend .pagination_block;
+  display: flex;
+  margin-top: 16px;
+  justify-content: flex-end;
 }
 .el-pagination__sizes .el-select {
   position: absolute;
@@ -122,6 +143,17 @@ export default {
     border: 1px solid $hybrone_light_blue;
     color: $hybrone_light_blue !important;
   }
+}
+.total_count {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  justify-content: flex-start;
+  //   margin-right: 50%;
+  color: $hybrone_light_blue;
 }
 // .el-pager .number {
 //   background: $hybrone_background_color;

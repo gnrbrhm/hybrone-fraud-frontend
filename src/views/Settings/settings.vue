@@ -473,7 +473,8 @@ export default {
   methods: {
     ...mapActions({
       changeUserPasswordVerify: 'auth/changeUserPasswordVerify',
-      createMultipleVguardDevice: 'device/createMultipleVguardDevice'
+      createMultipleVguardDevice: 'device/createMultipleVguardDevice',
+      getVguardDevicesExcelExport: 'device/getVguardDevicesExcelExport'
     }),
     handleImportDevicePopupApply() {
       // let response = this.createMultipleVguardDevice()
@@ -536,13 +537,26 @@ export default {
       this.dialogImportDevicePopupVisible = true
     },
     getBackupFile() {
-      this.$api({
-        ...endpoints.getBackupFiles
-      }).then((r) => {
+      let currentDate = new Date()
+
+      let devices = this.getVguardDevicesExcelExport({ response_type: 'excel' })
+      console.log(devices)
+      devices.then((r) => {
+        console.log(r.data)
         const url = window.URL.createObjectURL(new Blob([r.data]))
         const link = document.createElement('a')
         link.href = url
-        // link.setAttribute('download', 'file.xlsx')
+        link.setAttribute(
+          'download',
+          'Cihaz-Listesi-' +
+            currentDate.getFullYear() +
+            ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+            ('0' + currentDate.getDate()).slice(-2) +
+            ('0' + currentDate.getHours()).slice(-2) +
+            ('0' + currentDate.getMinutes()).slice(-2) +
+            ('0' + currentDate.getSeconds()).slice(-2) +
+            '.xlsx'
+        )
         document.body.appendChild(link)
         link.click()
       })

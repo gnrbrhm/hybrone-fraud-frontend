@@ -30,7 +30,7 @@ export default {
       this.indicators = { ...DASHBOARD_VARIABLES['CAMERA'] }
       let dashboard_data = this.$api({
         ...endpoints.getVguardDashboardData,
-        params: { refresh: val != undefined ? val : '' }
+        params: { refresh: val != undefined ? val : true }
       }).then((r) => {
         this.indicators[0].state.series.total.value =
           r.data.data.report.total_device_count
