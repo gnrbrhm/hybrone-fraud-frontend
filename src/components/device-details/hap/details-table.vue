@@ -111,11 +111,8 @@
       align="center"
     >
       <template slot-scope="scope">
-        <el-button class="button" :disabled="!scope.row.status">
-          <SvgIconDownload
-            @click="downloadRecord(scope.row.channel_id)"
-            :status="scope.row.is_active"
-          ></SvgIconDownload>
+        <el-button class="button" @click="downloadRecord(scope.row.channel_id)">
+          <SvgIconDownload :status="scope.row.is_active"></SvgIconDownload>
         </el-button>
       </template>
     </el-table-column>
@@ -163,6 +160,7 @@ export default {
   },
   methods: {
     downloadRecord(val) {
+      console.log('Emit ÜStü', val)
       this.$emit('onDownloadRecordClick', val)
     },
     snapshotClick(val1) {

@@ -72,7 +72,7 @@
 import DetailsTable from '@/components/device-details/hap/details-table.vue'
 import { mapGetters, mapActions } from 'vuex'
 import { bus } from '@/main.js'
-
+import moment from 'moment'
 export default {
   name: 'DetailsCameraChannels',
   components: { DetailsTable },
@@ -134,13 +134,19 @@ export default {
       refreshVguardDeviceData: 'device/refreshVguardDeviceData'
     }),
     handleRecordDownload(form) {
+      let start_time = moment(this.ruleForm.start_time)
+        .add(3, 'hours')
+        ._d.toISOString()
+      let finish_time = moment(this.ruleForm.finish_time)
+        .add(3, 'hours')
+        ._d.toISOString()
       this.$refs[form].validate((valid) => {
         if (valid) {
           let video = this.getVguardDeviceChannelRecord({
             channel_id: this.selected_channel,
             device_id: parseInt(this.$route.params.device_id),
-            start_time: this.ruleForm.start_time,
-            end_time: this.ruleForm.finish_time
+            start_time: start_time,
+            end_time: finish_time
             // channel_id: 1,
             // device_id: 36,
             // end_time: '2022-01-04T19:27:05.000Z',
