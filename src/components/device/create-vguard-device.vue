@@ -317,7 +317,9 @@ export default {
       let isValid = false
 
       const isChannelsValid = this.form.channels.every((c) => {
-        return c.status !== null && c.category && c.channel_id && c.channel_name
+        return c.status !== null && c.status !== false
+          ? c.category && c.channel_id && c.channel_name
+          : true
       })
 
       if (!isChannelsValid) {
