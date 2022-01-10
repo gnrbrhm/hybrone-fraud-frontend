@@ -133,6 +133,11 @@ export default {
     url: '/vguard/devices',
     method: 'GET'
   },
+  getVguardDevicesForExcel: {
+    url: '/vguard/devices',
+    method: 'GET',
+    responseType: 'blob'
+  },
   updateTrackedVguardDevice: {
     url: '/vguard/device/tracked/update',
     method: 'POST',
