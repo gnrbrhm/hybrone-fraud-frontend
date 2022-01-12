@@ -23,13 +23,17 @@
       >
         <h3>Genel Bilgiler</h3>
         <div class="form-section">
-          <el-form-item prop="name" class="device-form-item" label="CİHAZ ADI">
+          <el-form-item
+            prop="name"
+            class="sentinel-input device-form-item"
+            label="CİHAZ ADI"
+          >
             <el-input v-model="form.name"></el-input>
           </el-form-item>
 
           <el-form-item
             prop="hardware_type_id"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="CİHAZ TİPİ"
           >
             <el-select v-model="form.hardware_type_id">
@@ -45,7 +49,7 @@
 
           <el-form-item
             prop="device_brand_id"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="MARKA"
           >
             <el-select v-model="form.device_brand_id">
@@ -61,7 +65,7 @@
 
           <el-form-item
             prop="device_model_id"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="MODEL"
           >
             <el-select v-model="form.device_model_id">
@@ -77,7 +81,7 @@
 
           <el-form-item
             prop="serial_number"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="SERI NUMARASI"
           >
             <el-input v-model="form.serial_number"></el-input>
@@ -85,7 +89,7 @@
 
           <el-form-item
             prop="inventory_number"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="ENVANTER NUMARASI"
           >
             <el-input v-model="form.inventory_number"></el-input>
@@ -96,21 +100,33 @@
         <div class="form-section full-width">
           <el-form-item
             prop="username"
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             label="KULLANICI ADI"
           >
             <el-input v-model="form.username"></el-input>
           </el-form-item>
 
-          <el-form-item prop="password" class="device-form-item" label="ŞİFRE">
+          <el-form-item
+            prop="password"
+            class="sentinel-input device-form-item"
+            label="ŞİFRE"
+          >
             <el-input v-model="form.password"></el-input>
           </el-form-item>
 
-          <el-form-item prop="host" class="device-form-item" label="IP ADRESI">
+          <el-form-item
+            prop="host"
+            class="sentinel-input device-form-item"
+            label="IP ADRESI"
+          >
             <el-input v-model="form.host"></el-input>
           </el-form-item>
 
-          <el-form-item prop="port" class="device-form-item" label="PORT">
+          <el-form-item
+            prop="port"
+            class="sentinel-input device-form-item"
+            label="PORT"
+          >
             <el-input type="number" v-model="form.port"></el-input>
           </el-form-item>
         </div>
@@ -123,14 +139,14 @@
           :key="index"
         >
           <el-form-item
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             :label="index === 0 ? 'KANAL ADI' : null"
           >
             <el-input disabled v-model="channel.channel_name"></el-input>
           </el-form-item>
 
           <el-form-item
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             :label="index === 0 ? 'DURUM' : null"
           >
             <el-select v-model="channel.status">
@@ -145,7 +161,7 @@
           </el-form-item>
 
           <el-form-item
-            class="device-form-item"
+            class="sentinel-input device-form-item"
             :label="index === 0 ? 'ÖZELLİKLER' : null"
           >
             <el-select v-model="channel.category">

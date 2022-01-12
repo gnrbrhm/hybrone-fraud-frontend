@@ -36,6 +36,7 @@
           multiple
           collapse-tags
           placeholder="Seçiniz"
+          class="sentinel-input"
         >
           <el-option
             v-for="item in status_options"

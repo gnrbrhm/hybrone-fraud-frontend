@@ -3,17 +3,21 @@
     <span class="tracked-device-title">Takip Edilen Cihazlar</span>
     <div class="__action">
       <el-autocomplete
-        class="input-filter"
+        class="sentinel-input input-filter"
         v-model="search_key"
         :fetch-suggestions="querySearch"
         placeholder="ID Giriniz"
         :trigger-on-focus="false"
         @select="handleSelect"
       ></el-autocomplete>
-      <el-button @click="onSubmit">
-        <img src="@/assets/icons/dashboard/svg-icon-add.svg" alt="Ekle" />
+      <el-button class="sentinel-button" @click="onSubmit">
+        <SvgIconAdd></SvgIconAdd>
       </el-button>
-      <el-button :disabled="isSelected" @click="deleteButton">
+      <el-button
+        class="sentinel-button"
+        :disabled="isSelected"
+        @click="deleteButton"
+      >
         <SvgIconDelete :status="isSelected"></SvgIconDelete>
       </el-button>
     </div>
@@ -22,10 +26,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import SvgIconAdd from '@/assets/icons/dashboard/svg-icon-add.vue'
 import SvgIconDelete from '@/assets/icons/dashboard/svg-icon-delete.vue'
 export default {
   name: 'TrackedDeviceFilter',
-  components: { SvgIconDelete },
+  components: { SvgIconDelete, SvgIconAdd },
   data() {
     return {
       search_key: '',

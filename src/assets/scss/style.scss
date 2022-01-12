@@ -6,12 +6,12 @@ $bp-xlarge: 120em; // 1920px
 $bp-xxlarge: 160em; // 2560px
 
 // Media Queries
-$mq-small: "(min-width: #{$bp-small})";
-$mq-medium: "(min-width: #{$bp-medium})";
-$mq-large: "(min-width: #{$bp-large})";
-$mq-xlarge: "(min-width: #{$bp-xlarge})";
-$mq-xxlarge: "(min-width: #{$bp-xxlarge})";
-$mq-retina: "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
+$mq-small: '(min-width: #{$bp-small})';
+$mq-medium: '(min-width: #{$bp-medium})';
+$mq-large: '(min-width: #{$bp-large})';
+$mq-xlarge: '(min-width: #{$bp-xlarge})';
+$mq-xxlarge: '(min-width: #{$bp-xxlarge})';
+$mq-retina: '(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)';
 
 $hybrone_blue: #2c3357;
 $hybrone_light_blue: #007db7;
@@ -29,7 +29,16 @@ $hybrone_disabled_color: #a0a0a0;
 $hybrone_header_background_color: #f5f5f5;
 .sentinel-input {
   background: $hybrone_background_color;
+  input {
+    height: 50px !important;
+  }
+}
+.sentinel-date-time-input {
+  background: $hybrone_background_color;
   height: 50px !important;
+  input {
+    height: 48px !important;
+  }
 }
 .sentinel-label {
   font-family: Roboto, sans-serif;
@@ -37,7 +46,7 @@ $hybrone_header_background_color: #f5f5f5;
   font-weight: 300;
   font-size: 12px;
   line-height: 14px;
-  font-feature-settings: "zero" on;
+  font-feature-settings: 'zero' on;
   display: flex;
   align-self: flex-start;
   margin-bottom: 4px;
@@ -53,6 +62,32 @@ $hybrone_header_background_color: #f5f5f5;
   border: 1px solid $hybrone_border_color;
   box-sizing: border-box;
   border-radius: 4px;
+  &:hover {
+    background-color: $hybrone_light_blue;
+    svg {
+      path {
+        fill: $hybrone_background_color;
+      }
+    }
+  }
+  &:focus {
+    background-color: $hybrone_light_blue;
+    border-color: $hybrone_avatar_background;
+    svg {
+      path {
+        fill: $hybrone_background_color;
+      }
+    }
+  }
+  &:disabled {
+    background-color: #fff;
+
+    svg {
+      path {
+        fill: $hybrone_disabled_color;
+      }
+    }
+  }
   &__settings {
     /* Auto Layout */
     display: flex;

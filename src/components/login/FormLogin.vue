@@ -15,11 +15,17 @@
       >
         <span class="label">KULLANICI ADI</span>
         <el-form-item prop="email">
-          <el-input id="email" type="email" v-model="ruleForm.email"></el-input>
+          <el-input
+            class="sentinel-input"
+            id="email"
+            type="email"
+            v-model="ruleForm.email"
+          ></el-input>
         </el-form-item>
         <span class="label">ŞİFRE</span>
         <el-form-item prop="password">
           <el-input
+            class="sentinel-input"
             id="password"
             height="50px"
             type="password"
@@ -158,6 +164,20 @@ export default {
 }
 .forgot-password {
   margin-top: 130px;
+  text-decoration: none;
+  span {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+  }
 }
 .login-form img {
   margin-bottom: 50px;
@@ -187,6 +207,7 @@ export default {
   order: 0;
   flex-grow: 1;
   margin: 0px 10px;
+
   span {
     display: flex;
     flex-wrap: nowrap;

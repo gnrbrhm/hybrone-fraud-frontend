@@ -7,7 +7,7 @@
           <el-form-item prop="custom_premise_id">
             <el-input
               style="width: 330px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
@@ -18,7 +18,7 @@
           <el-form-item prop="custom_premise_name">
             <el-input
               style="width: 330px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_name"
             ></el-input>
@@ -31,7 +31,7 @@
           <el-form-item prop="location.city_id">
             <el-select
               style="width: 330px"
-              class="sentinel_select"
+              class="sentinel-input"
               type="text"
               filterable
               v-model="premiseForm.location.city_id"
@@ -52,7 +52,7 @@
           <el-form-item prop="location.province_id">
             <el-select
               style="width: 330px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               filterable
               placeholder="Seçiniz"
@@ -74,7 +74,7 @@
         <el-form-item prop="location.address">
           <el-input
             type="textarea"
-            class="sentinel_input"
+            class="sentinel-input"
             style="width: 100%"
             :autosize="{ minRows: 2, maxRows: 5 }"
             v-model="premiseForm.location.address"
@@ -87,7 +87,7 @@
           <el-input
             type="textarea"
             style="width: 100%"
-            class="sentinel_input"
+            class="sentinel-input"
             :autosize="{ minRows: 2, maxRows: 5 }"
             v-model="premiseForm.description"
           ></el-input>
@@ -101,25 +101,25 @@
             <span>YÖNLENDİRME ADI</span>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
@@ -128,25 +128,25 @@
             <span>YÖNLENDİRME NUMARASI</span>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
@@ -155,25 +155,25 @@
             <span>BUTON RENGİ</span>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
             <el-input
               style="width: 207px; margin-bottom: 15px"
-              class="sentinel_input"
+              class="sentinel-input"
               type="text"
               v-model="premiseForm.custom_premise_id"
             ></el-input>
