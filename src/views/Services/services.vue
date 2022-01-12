@@ -75,18 +75,13 @@ export default {
       records.forEach((el) => {
         let ticket = {
           id: el.id,
-          premise_id: el.premise.custom_premise_id,
-          location: el.premise.location
-            ? el.premise.location.city.name +
+          premise_id: el.device.premise.custom_premise_id,
+          location: el.device.premise.location
+            ? el.device.premise.location.city.name +
               '/' +
-              el.premise.location.province.name
+              el.device.premise.location.province.name
             : '',
-          premise_name: el.premise.custom_premise_name,
-          // device: el.premise.devices[0]
-          //   ? el.premise.devices[0].device_model.name +
-          //     "/" +
-          //     el.premise.devices[0].device_brand.name
-          //   : "",
+          premise_name: el.device.premise.custom_premise_name,
           fault_type: el.ticket_type,
           service_state: el.status_code == 1 ? 'Tamamlandı' : 'Açık',
           status_code: el.status_code,
@@ -97,6 +92,7 @@ export default {
         }
         this.data.push(ticket)
       })
+      console.log(this.data)
     },
     getTicketsPaginationFilter(limit, page, premise_id) {
       this.data = []

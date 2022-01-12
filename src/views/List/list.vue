@@ -124,7 +124,7 @@ export default {
     bus.$on('onSelectedDevicesRefresh', this.refreshVguardDeviceAndData)
   },
   destroyed() {
-    bus.$on('onSelectedDevicesRefresh')
+    bus.$off('onSelectedDevicesRefresh')
   }
 }
 </script>

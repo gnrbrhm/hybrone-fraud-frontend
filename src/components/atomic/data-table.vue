@@ -530,7 +530,7 @@ export default {
       })
     },
     formattedDatetime(val) {
-      let result = val.toString().split('-')[0] != '0001'
+      let result = val ? val.toString().split('-')[0] != '0001' : false
       if (result) return dateTimeChange(val)
       else if (['Services'].includes(this.$route.name))
         return 'Henüz Tamanlanmadı'

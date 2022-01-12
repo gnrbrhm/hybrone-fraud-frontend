@@ -1,13 +1,13 @@
 <template>
   <div
     :class="
-      ['Service', 'List'].includes(this.$route.name) == true
+      ['Services', 'List'].includes(this.$route.name) == true
         ? 'pagination_block'
         : 'pagination_block-self'
     "
   >
     <span
-      v-if="['Service', 'List'].includes(this.$route.name)"
+      v-if="['Services', 'List'].includes(this.$route.name)"
       class="total_count"
     >
       {{ getSelectedRowsLength }} Seçili</span
@@ -101,19 +101,27 @@ export default {
 
 .pagination_block {
   display: flex;
-  justify-content: center;
+  //   justify-content: center;
   max-width: 100%;
   .paginate {
+    max-width: 50%;
     align-items: center;
     // margin-left: 25%;
   }
-  padding: 27px 38px 12px 32px;
+  padding: 27px 38px 12px 32px !important;
 }
 .pagination_block-self {
   @extend .pagination_block;
   display: flex;
   margin-top: 16px;
-  justify-content: flex-end;
+  justify-content: center;
+  .paginate {
+    // max-width: 60%;
+    display: flex;
+    // justify-content: flex-end;
+    align-items: center;
+    // margin-left: 25%;
+  }
 }
 .el-pagination__sizes .el-select {
   position: absolute;
@@ -145,6 +153,7 @@ export default {
   }
 }
 .total_count {
+  min-width: 43%;
   font-family: Roboto;
   font-style: normal;
   font-weight: 500;

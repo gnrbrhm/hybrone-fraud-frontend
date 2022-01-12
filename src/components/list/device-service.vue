@@ -107,12 +107,12 @@ export default {
     }
   },
   computed: {
-    getSelectedRowsPremiseId() {
-      let selected_premise_ids = []
+    getSelectedRowsDeviceIds() {
+      let selected_device_ids = []
       this.$store.state.dataTable.selectedRows.forEach((item) => {
-        selected_premise_ids.push(parseInt(item.premise_id))
+        selected_device_ids.push(parseInt(item.id))
       })
-      return selected_premise_ids
+      return selected_device_ids
     },
     getSelectedRowPremiseId() {
       return this.$store.state.dataTable.selectedRow.premise_id
@@ -130,15 +130,15 @@ export default {
     handleServiceSubmit(val) {
       console.log('RuleForm', this.ruleForm)
       console.log('premiseId', this.getSelectedRowPremiseId)
-      let premise_id = []
+      let device_id = []
       this.$route.params.device_id
-        ? premise_id.push(this.getSelectedRowPremiseId)
-        : (premise_id = this.getSelectedRowsPremiseId)
+        ? device_id.push(this.getSelectedRowPremiseId)
+        : (device_id = this.getSelectedRowsDeviceIds)
 
       let service = this.createService({
         ...this.ruleForm,
-        // premise_id: this.getSelectedRowsPremiseId.join(),
-        premise_id: premise_id,
+        // device_id: this.getSelectedRowsDeviceIds.join(),
+        device_id: device_id,
         status_code: 3
       })
       console.log('SERVİCE STAUS', service)
