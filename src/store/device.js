@@ -177,7 +177,8 @@ export default {
     },
     async getVguardDevicesForMap(_, payload) {
       const device = Vue.prototype.$api({
-        ...endpoints.getVguardDevicesForMap
+        ...endpoints.getVguardDevicesForMap,
+        params: { ...payload }
       })
       let result = []
       await device.then((r) => {

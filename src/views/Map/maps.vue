@@ -1,10 +1,11 @@
 <template>
   <div>
-    <!-- <MapFilter
-      @onSubmitFilter="onSubmitFilter"
-      @onSubmitLocationFilter="onLocationFilter"
-      @onStateFilter="handleStateFilter"
-    ></MapFilter> -->
+    <ListFilter
+      class="top"
+      @onActionClick="handleActionClick"
+      @onFilteredData="handleFilteredData"
+    ></ListFilter>
+
     <div class="legand-map">
       <span class="legand-text">
         <i class="normal"></i>
@@ -22,6 +23,7 @@
 
 <script>
 import endpoints from '@/endpoints/index.js'
+import ListFilter from '@/components/list/list-filter'
 import leaflet from 'leaflet'
 import ls from 'leaflet-search'
 import * as L1 from 'leaflet.markercluster'
@@ -54,20 +56,24 @@ export default {
       }
     }
   },
-  components: {},
+  components: {
+    ListFilter
+  },
   methods: {
     ...mapActions({
       getVguardDevicesForMap: 'device/getVguardDevicesForMap'
     }),
-    handleStateFilter(val) {
-      console.log(val)
+    async handleFilteredData(val) {
       this.map.removeLayer(this.markers)
-      console.log('handleStateFilter')
+      this.locations = []
+      console.log('Maps Filter Data', val)
+      await this.getPremiseLocation(val)
+    },
+    handleStateFilter(val) {
+      this.map.removeLayer(this.markers)
       this.locations = []
       this.premises = val.data.devices
       this.premises.forEach((element) => {
-        console.log('element')
-        console.log(element)
         this.location.push(element.premise.location.lat)
         this.location.push(element.premise.location.long)
         this.location.push(element.premise.location.province)
@@ -75,12 +81,10 @@ export default {
         this.location.push(element.premise.custom_premise_id)
         this.locations.push(this.location)
         this.location = []
-        console.log(this.locations)
       })
       this.createMarker(this.locations)
     },
     routeDeviceDetail() {
-      console.log('Device_id', this.device_id)
       this.$router.push({
         name: 'DeviceDetail',
         params: { device_id: this.device_id }
@@ -90,9 +94,6 @@ export default {
       this.map.flyTo([val.data.lat, val.data.long], 14)
     },
     onLocationFilter(val) {
-      console.log(val)
-      console.log('val')
-
       if (val) this.map.flyTo([val.data.lat, val.data.long], 10)
       else
         this.$notify({
@@ -101,8 +102,6 @@ export default {
         })
     },
     async createPopup(status) {
-      console.log('içeride')
-      console.log(status)
       let popup = {
         popupContent:
           "<div><span>ATM ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
@@ -111,36 +110,78 @@ export default {
           className: 'another-popup' // classname for another popup
         }
       }
-      console.log(popup)
       return popup
     },
     async getDeviceStatus(config) {
-      console.log('Config', config)
-      if (!config.network_error) {
-        this.device_state.channels.first =
-          config.is_active == true ? config.events[0].is_active : null
-        this.device_state.channels.second =
-          config.is_active == true ? config.events[1].is_active : null
-        this.device_state.channels.thirdth =
-          config.is_active == true ? config.events[2].is_active : null
-        this.device_state.channels.forth =
-          config.is_active == true ? config.events[3].is_active : null
+      if (config.hardware_type_id == 3) {
+        let channels = []
+
+        config.channels.forEach((channel) => {
+          let channels_events = config.events.filter((event) => {
+            return event.channel_id == channel.channel_id
+          })
+          if (channels_events.length > 0) {
+            channels.push({
+              channel_id: channel.channel_id,
+              category: channel.category,
+              status: channel.status,
+              ...channels_events[0]
+            })
+          } else {
+            channels.push({
+              channel_id: channel.channel_id,
+              category: channel.category,
+              status: channel.status
+              // is_active: false
+            })
+          }
+        })
+        this.device_state.state.is_connection =
+          config.is_active == true ? !config.network_error : null
+        this.device_state.state.is_storage =
+          config.is_active == true ? !config.disk_error : null
+        this.device_state.state.is_record =
+          config.is_active == true ? !config.record_error : null
+        this.device_state.state.is_last_signal =
+          config.is_active == true ? !config.datetime_error : null
+        this.device_state.channels.first = channels[0].status
+          ? channels[0].is_active
+          : null
+        this.device_state.channels.second = channels[1].status
+          ? channels[1].is_active
+          : null
+        this.device_state.channels.thirdth = channels[2].status
+          ? channels[2].is_active
+          : null
+        this.device_state.channels.forth = channels[3].status
+          ? channels[3].is_active
+          : null
       } else {
-        this.device_state.channels.first = false
-        this.device_state.channels.second = false
-        this.device_state.channels.thirdth = false
-        this.device_state.channels.forth = false
+        if (!config.network_error) {
+          this.device_state.channels.first =
+            config.is_active == true ? config.events[0].is_active : null
+          this.device_state.channels.second =
+            config.is_active == true ? config.events[1].is_active : null
+          this.device_state.channels.thirdth =
+            config.is_active == true ? config.events[2].is_active : null
+          this.device_state.channels.forth =
+            config.is_active == true ? config.events[3].is_active : null
+        } else {
+          this.device_state.channels.first = false
+          this.device_state.channels.second = false
+          this.device_state.channels.thirdth = false
+          this.device_state.channels.forth = false
+        }
+        this.device_state.state.is_connection =
+          config.is_active == true ? config.network_error : null
+        this.device_state.state.is_storage =
+          config.is_active == true ? config.disk_error : null
+
+        this.device_state.state.is_record =
+          config.is_active == true ? config.record_error : null
+        this.device_state.state.is_last_signal =
+          config.is_active == true ? config.datetime_error : null
       }
-      this.device_state.state.is_connection =
-        config.is_active == true ? config.network_error : null
-      this.device_state.state.is_storage =
-        config.is_active == true ? config.disk_error : null
-
-      this.device_state.state.is_record =
-        config.is_active == true ? config.record_error : null
-      this.device_state.state.is_last_signal =
-        config.is_active == true ? config.datetime_error : null
-
       return this.device_state
     },
     createMarker(addressPoints) {
@@ -149,16 +190,14 @@ export default {
       // var markers = new L.MarkerClusterGroup()
       this.markers = new L.MarkerClusterGroup()
       addressPoints.forEach((item) => {
-        console.log('İtem 3', item[3])
         if (item[3]) {
-          device_status = this.getDeviceStatus(item[3])
+          device_status = this.getDeviceStatus(item[3].devices)
         }
         var title = item[2].name
         var myIcon
         var marker
         if (item[3]) {
           // .statuses.includes('normal')
-          console.log('İtem 3', item[3].devices.id)
           this.device_id = item[3].devices.id
           myIcon = L.divIcon({
             className: item[3].is_online
@@ -283,7 +322,6 @@ export default {
         })
         marker.bindPopup(title)
         marker.on('click', function (e) {
-          console.log(e)
           this.routeDeviceDetail()
         })
         marker.on('mouseover', function (e) {
@@ -300,10 +338,7 @@ export default {
     },
     async mapingFunction(val) {
       this.premises = val
-      console.log('Premises', this.premises)
       this.premises.forEach((element) => {
-        console.log('element')
-        console.log(element)
         this.location.push(element.premise.location.lat)
         this.location.push(element.premise.location.long)
         this.location.push(element.premise.location.province)
@@ -314,10 +349,9 @@ export default {
       })
       this.createMarker(this.locations)
     },
-    async getPremiseLocation() {
-      let devices = await this.getVguardDevicesForMap()
+    async getPremiseLocation(payload) {
+      let devices = await this.getVguardDevicesForMap({ ...payload })
       // this.mapingFunction(r.data.data.premises)
-      console.log(devices)
       this.mapingFunction(devices)
     }
   },
@@ -339,13 +373,13 @@ export default {
 
     L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
       maxZoom: 18,
+      zoomControl: false,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       id: 'base'
     })
       .addTo(this.map)
       .on('mouseover,')
-    console.log(this.locations)
     var markers = new L.MarkerClusterGroup()
     this.map.addLayer(markers)
   }

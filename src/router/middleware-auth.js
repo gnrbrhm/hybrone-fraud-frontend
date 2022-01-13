@@ -3,6 +3,9 @@ import store from '../store/index.js'
 export default function (to, from, next) {
   console.log(to)
   const auth = store.state.auth
+  //Route Değiştikçe 0 lanacak olan Store değişkenleri
+  store.state.dataTable.selectedRows = []
+  store.state.dataTable.selectedRow = {}
   console.log(auth)
   const isLoggedIn = store.getters['auth/isLoggedIn']
   let isUndefined = typeof to.name === 'undefined'

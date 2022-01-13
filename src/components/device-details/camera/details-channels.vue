@@ -221,7 +221,6 @@ export default {
     },
     getPartionsZones(vguard_device) {
       console.log('GETPartionsZones')
-      let channels = []
       //   vguard_device.channels.forEach((channel) => {
       //     vguard_device.events.forEach((event) => {
       //       if (channel.channel_id == event.channel_id) {
@@ -233,6 +232,7 @@ export default {
       //       }
       //     })
       //   })
+      let channels = []
       vguard_device.channels.forEach((channel) => {
         let channels_events = vguard_device.events.filter((event) => {
           return event.channel_id == channel.channel_id

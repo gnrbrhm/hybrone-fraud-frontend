@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="currentRouteName === 'Map' ? 'map-filter-device' : 'list-device'"
+    :class="currentRouteName === 'Maps' ? 'map-filter-device' : 'list-device'"
   >
     <div class="filter">
       <div class="component">
@@ -56,12 +56,15 @@
         <el-button @click="handleClearFilterData">Temizle</el-button>
       </div>
       <div class="component">
-        <span v-if="is_total_count_visible" class="total_count">
+        <span
+          v-if="is_total_count_visible && currentRouteName !== 'Maps'"
+          class="total_count"
+        >
           {{ getTotalRecord }} Sonuç Bulundu</span
         >
       </div>
     </div>
-    <div class="actions">
+    <div v-if="currentRouteName !== 'Maps'" class="actions">
       <div class="component">
         <span>YENİLE</span>
         <el-button
@@ -162,6 +165,7 @@ export default {
         this.filtered_data[item] = ''
       })
       this.$emit('onFilteredData', {})
+      this.is_total_count_visible = false
     },
     handleActionsClick(val) {
       this.$emit('onActionClick', val)
@@ -335,12 +339,20 @@ export default {
 }
 .map-filter-device {
   position: absolute;
-  left: 150px;
-  background: rgba(255, 255, 255, 0);
+  min-width: 93%;
+  height: 85px;
+  display: flex;
+  flex-direction: row;
+  align-content: left;
+  justify-content: space-between;
+
+  //   left: 150px;
+  background: rgba(255, 255, 255, 0.75) !important;
   z-index: 9999;
-  max-width: 1600px !important;
+  //   max-width: 1600px !important;
   padding: 0px;
-  margin-left: 18px;
+  padding-left: 23px;
+  margin-left: 14px;
   @extend .list-device;
   .filter {
     margin-right: 450px;
