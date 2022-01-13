@@ -101,12 +101,30 @@ export default {
        * Buraya cihazda gerçekleşen olayın
        * kaydının indirileceği kod gelicek
        */
-      let start_time = moment(this.selected_events.event_date)
-        .add(-30, 'seconds')
-        ._d.toISOString()
-      let finish_time = moment(this.selected_events.event_date)
-        .add(30, 'seconds')
-        ._d.toISOString()
+      let start_time = ''
+      let finish_time = ''
+      if (this.selected_events.state == 'Video Kaybı Algılandı') {
+        start_time = moment(this.selected_events.event_date)
+          .add(3, 'hours')
+          .add(-30, 'seconds')
+          ._d.toISOString()
+        finish_time = moment(this.selected_events.event_date).add(3, 'hours')
+      } else if (this.selected_events.state == 'Video Kaybı Düzeldi') {
+        start_time = moment(this.selected_events.event_date).add(3, 'hours')
+        finish_time = moment(this.selected_events.event_date)
+          .add(3, 'hours')
+          .add(30, 'seconds')
+          ._d.toISOString()
+      } else {
+        start_time = moment(this.selected_events.event_date)
+          .add(3, 'hours')
+          .add(-30, 'seconds')
+          ._d.toISOString()
+        finish_time = moment(this.selected_events.event_date)
+          .add(3, 'hours')
+          .add(30, 'seconds')
+          ._d.toISOString()
+      }
       console.log('FinishTime', finish_time)
       console.log('StartTime', start_time)
       let video = this.getVguardDeviceChannelRecord({

@@ -224,7 +224,15 @@ export default {
         service_delete: false,
         service_status_finished: false,
         service_report_create_and_download: false,
-        service_data_import: false
+        service_data_import: false,
+        query_period_edit: false,
+        data_export: false,
+        data_import: false,
+        user_show_event: false,
+        user_list_show: false,
+        user_event_export: false,
+        user_create: false,
+        user_delete: false
       },
       current_user: {}
     }
