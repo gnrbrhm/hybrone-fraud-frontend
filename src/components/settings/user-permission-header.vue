@@ -18,7 +18,7 @@
     <div class="component" @click="createUserClick">
       <span>YENİ</span>
 
-      <el-button>
+      <el-button :disabled="!this.getPermissions['user_create']">
         <SvgIconAdd></SvgIconAdd>
       </el-button>
     </div>
@@ -29,7 +29,7 @@
 import SvgIconAdd from '@/assets/icons/premises/svg-icon-add'
 import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
 import { bus } from '@/main.js'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'UserPermissionHeader',
   components: {
@@ -40,6 +40,11 @@ export default {
     return {
       search: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     handleSearch() {

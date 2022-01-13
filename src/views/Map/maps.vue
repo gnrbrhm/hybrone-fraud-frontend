@@ -394,6 +394,7 @@ export default {
 #map {
   width: 100%;
   height: 100vh;
+  margin-left: 12px !important;
 }
 .leaflet-zoom-animated {
   left: -5px !important;

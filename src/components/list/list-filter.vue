@@ -83,7 +83,7 @@
       <div class="component">
         <span>SERVİS</span>
         <el-button
-          :disabled="isSelected"
+          :disabled="isSelected && this.getPermissions['service_create']"
           @click="handleActionsClick('service')"
         >
           <SvgIconService></SvgIconService>
@@ -299,6 +299,7 @@ export default {
     justify-content: flex-start;
     span {
       @extend .sentinel-label;
+      margin: 0px;
     }
     button {
       height: 50px;

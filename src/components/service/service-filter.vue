@@ -63,7 +63,10 @@
       <div>
         <span class="label">Tamamla</span>
         <el-button
-          :disabled="this.getSelectedRows.length <= 0"
+          :disabled="
+            this.getSelectedRows.length <= 0 &&
+            this.getPermissions['service_status_finished']
+          "
           @click="handleAllDoneClick"
           type="info"
         >
@@ -79,7 +82,10 @@
           :file-list="fileList"
           :on-change="handleChange"
         >
-          <el-button type="info">
+          <el-button
+            :disabled="this.getPermissions['service_data_import']"
+            type="info"
+          >
             <SvgIconServiceImport></SvgIconServiceImport>
           </el-button>
         </el-upload>
@@ -87,7 +93,11 @@
 
       <div>
         <span class="label">Rapor</span>
-        <el-button type="info" @click="onDownloadTicketList">
+        <el-button
+          :disabled="this.getPermissions['service_report_create_and_download']"
+          type="info"
+          @click="onDownloadTicketList"
+        >
           <SvgIconListRaport class="svg-icon"></SvgIconListRaport>
         </el-button>
       </div>
@@ -153,7 +163,7 @@ import SvgIconSettingDownload from '@/assets/icons/settings/svg-icon-settings-do
 import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
 import SvgIconServiceImport from '@/assets/icons/services/svg-icon-service-import.vue'
 import store from '../../store'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ServiceFilter',
   components: {
@@ -223,6 +233,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    }),
     getSelectedRows() {
       return this.$store.state.dataTable.selectedRows
     },

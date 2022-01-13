@@ -13,6 +13,7 @@
         >
         <div class="chart-actions">
           <el-select
+            :disabled="!this.getPermissions['query_period_edit']"
             class="sentinel-input"
             v-model="query_result"
             @change="onhandleChangePeriod"
@@ -26,7 +27,11 @@
             >
             </el-option>
           </el-select>
-          <el-button class="save-button" type="primary" @click="onhandleSave"
+          <el-button
+            :disabled="!this.getPermissions['query_period_edit']"
+            class="save-button"
+            type="primary"
+            @click="onhandleSave"
             >Kaydet</el-button
           >
         </div>
@@ -89,6 +94,7 @@
         >
         <div class="chart-actions">
           <el-button
+            :disabled="!this.getPermissions['user_show_event']"
             class="save-button logs"
             type="primary"
             @click="onClicksLogs"
@@ -105,6 +111,7 @@
         >
         <div class="chart-actions">
           <el-button
+            :disabled="!this.getPermissions['user_list_show']"
             class="save-button logs"
             type="primary"
             @click="onClicksUsers"
@@ -372,7 +379,7 @@ import endpoints from '@/endpoints'
 import SvgIconFileUpload from '@/assets/icons/settings/svg-icon-file-upload.vue'
 import store from '../../store'
 import Vue from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Settings',
   components: {
@@ -476,6 +483,11 @@ export default {
       ],
       resultTable: []
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     ...mapActions({

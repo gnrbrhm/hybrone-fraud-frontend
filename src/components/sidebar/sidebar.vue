@@ -200,10 +200,15 @@ $high: 1920px;
     // }
 
     &:hover {
-      svg {
+      background-color: $hybrone_light_blue;
+      a svg {
         path {
-          color: $hybrone_background_color !important;
+          fill: $hybrone_background_color !important;
         }
+      }
+      span {
+        background-color: rgba(0, 0, 0, 0);
+        color: $hybrone_background_color !important;
       }
     }
 
@@ -256,19 +261,12 @@ $high: 1920px;
   opacity: 0.4;
 }
 
-// .router-link-active {
-//   svg {
-//     path {
-//       fill: $hybrone_background_color;
-//     }
-//   }
-// }
 .nav-active {
   background-color: #007db7 !important;
 
   svg {
     path {
-      fill: $hybrone_background_color !important;
+      fill: #ffffff !important;
     }
   }
 
@@ -277,23 +275,4 @@ $high: 1920px;
     color: $hybrone_background_color !important;
   }
 }
-// .nav-active .router-link-active {
-//   svg {
-//     path {
-//       fill: $hybrone_background_color;
-//     }
-//   }
-// }
-// .link-box .nav-active .router-link-active {
-//   background-color: #007db7 !important;
-//   svg {
-//     path {
-//       fill: $hybrone_background_color;
-//     }
-//   }
-//   span {
-//     background-color: rgba(0, 0, 0, 0);
-//     color: $hybrone_background_color !important;
-//   }
-// }
 </style>

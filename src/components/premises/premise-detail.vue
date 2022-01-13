@@ -7,8 +7,16 @@
       <PremiseInformation :premise="getSelectedRow"></PremiseInformation>
     </div>
     <div class="location-bottom">
-      <el-button @click="deleteClick">SİL</el-button>
-      <el-button @click="handleUpdate">DÜZENLE</el-button>
+      <el-button
+        :disabled="getPermissions['location_delete']"
+        @click="deleteClick"
+        >SİL</el-button
+      >
+      <el-button
+        :disabled="getPermissions['location_edit']"
+        @click="handleUpdate"
+        >DÜZENLE</el-button
+      >
     </div>
   </div>
 </template>
@@ -32,7 +40,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getSelectedRow: 'dataTable/getSelectedRow'
+      getSelectedRow: 'dataTable/getSelectedRow',
+      getPermissions: 'auth/getPermissions'
     })
     // getSelectedRow: function () {
     //   let premise = this.$store.state.dataTable.selectedRow;
