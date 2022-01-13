@@ -3,6 +3,7 @@
     <div class="component">
       <span>SİNYAL TİPİ</span>
       <el-select
+        class="sentinel-input"
         style="width: 100%"
         v-model="signals_code"
         multiple
@@ -21,6 +22,7 @@
     <div class="component">
       <span>BAŞLANGIÇ </span>
       <el-date-picker
+        class="sentinel-input"
         style="width: 100%"
         v-model="filtered_data.start_time"
         type="date"
@@ -32,6 +34,7 @@
     <div class="component">
       <span>BİTİŞ </span>
       <el-date-picker
+        class="sentinel-input"
         style="width: 100%"
         v-model="filtered_data.finish_time"
         type="date"

@@ -13,6 +13,7 @@
         >
         <div class="chart-actions">
           <el-select
+            class="sentinel-input"
             v-model="query_result"
             @change="onhandleChangePeriod"
             placeholder="Seçiniz"
@@ -146,7 +147,10 @@
           :on-success="handleSuccess"
         >
           <span class="label">DOSYA SEÇ</span>
-          <el-input v-if="isEmpyt" type="primary" class="select-file-input"
+          <el-input
+            v-if="isEmpyt"
+            type="primary"
+            class="sentinel-input select-file-input"
             ><el-button slot="append" width="44px" height="39px"
               ><SvgIconFileUpload></SvgIconFileUpload></el-button
           ></el-input>
@@ -308,6 +312,7 @@
           <span class="label">MEVCUT ŞİFRE</span>
           <el-form-item prop="name">
             <el-input
+              class="sentinel-input"
               id="current_password"
               type="password"
               v-model="ruleForm.current_password"
@@ -316,6 +321,7 @@
           <span class="label">YENİ ŞİFRE</span>
           <el-form-item prop="new_password">
             <el-input
+              class="sentinel-input"
               id="new_password"
               type="password"
               height="50px"
@@ -325,6 +331,7 @@
           <span class="label">YENİ ŞİFRE TEKRAR</span>
           <el-form-item prop="confirm_new_password">
             <el-input
+              class="sentinel-input"
               id="confirm_new_password"
               type="password"
               height="50px"
@@ -799,10 +806,19 @@ export default {
 
   color: #444444;
 }
+.sentinel-input {
+  input {
+    max-height: 50px !important;
+  }
+}
 .chart-actions {
   display: flex;
   justify-content: space-between;
   margin-top: auto;
+  input {
+    @extend .sentinel-input;
+    height: 50px !important;
+  }
 }
 .save-button {
   @extend .sentinel-button__settings;

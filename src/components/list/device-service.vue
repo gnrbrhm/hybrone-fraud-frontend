@@ -139,7 +139,7 @@ export default {
         ...this.ruleForm,
         // device_id: this.getSelectedRowsDeviceIds.join(),
         device_id: device_id,
-        status_code: 3
+        status_code: 2
       })
       console.log('SERVİCE STAUS', service)
       //   if (service.status == 201) {

@@ -35,7 +35,7 @@
           <span v-if="nav.label != 'Çıkış'">{{ nav.label }}</span></router-link
         >
       </div>
-      <div class="oto-query">
+      <div v-if="false" class="oto-query">
         <span
           >Otomatik <br />
           Sorgu</span

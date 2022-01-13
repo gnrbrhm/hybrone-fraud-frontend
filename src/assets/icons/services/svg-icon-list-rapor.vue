@@ -11,7 +11,6 @@
       clip-rule="evenodd"
       d="M6 2H14L20 8V20C20 21.1 19.1 22 18 22H5.99C4.89 22 4 21.1 4 20L4.01 4C4.01 2.9 4.9 2 6 2ZM6 4V20H18V9H13V4H6Z"
       fill="black"
-      fill-opacity="0.54"
     />
   </svg>
 </template>

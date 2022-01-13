@@ -10,6 +10,7 @@
           <el-date-picker
             @change="handleChangeDate"
             v-model="date_value"
+            class="sentinel-date-time-input"
             type="datetimerange"
             range-separator="-"
             start-placeholder="Başlangıç Tarihi"
@@ -21,7 +22,10 @@
         </div>
         <div class="export-report">
           <span class="label">Rapor</span>
-          <el-button class="report-button" @click="onDownloadLogsList">
+          <el-button
+            class="sentinel-button report-button"
+            @click="onDownloadLogsList"
+          >
             <SvgIconListRapor></SvgIconListRapor>
           </el-button>
         </div>

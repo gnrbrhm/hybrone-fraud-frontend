@@ -2,38 +2,42 @@
   <div class="details-actions">
     <div v-if="isLastSignals" class="component">
       <span>OLAYLAR</span>
-      <el-button @click="openSignalsHistory">
+      <el-button
+        class="sentinel-button"
+        @click="openSignalsHistory"
+        :disabled="!getDevice.is_active"
+      >
         <SvgIconHistory></SvgIconHistory>
       </el-button>
     </div>
     <div class="component">
       <span>Servis</span>
-      <el-button @click="openServiceModal"
+      <el-button class="sentinel-button" @click="openServiceModal"
         ><SvgIconService></SvgIconService
       ></el-button>
     </div>
     <div class="component">
       <span>Arayüz</span>
-      <el-button @click="openSignalsHistory">
+      <el-button class="sentinel-button" @click="clickHandleInterface">
         <SvgIconInterface></SvgIconInterface>
       </el-button>
     </div>
     <div v-if="false" class="component">
       <span>Özet</span>
-      <el-button @click="openDeviceDetails">
+      <el-button class="sentinel-button" @click="openDeviceDetails">
         <SvgIconSummary></SvgIconSummary>
       </el-button>
     </div>
     <div v-if="!isLastSignals" class="component">
       <span>Rapor</span>
-      <el-button @click="downloadSignalsHistory"
+      <el-button class="sentinel-button" @click="downloadSignalsHistory"
         ><SvgIconListRaport></SvgIconListRaport
       ></el-button>
     </div>
 
     <div class="component">
       <span>Yenile</span>
-      <el-button @click="refreshDeviceData"
+      <el-button class="sentinel-button" @click="refreshDeviceData"
         ><SvgIconRefresh></SvgIconRefresh
       ></el-button>
     </div>
@@ -47,6 +51,7 @@ import SvgIconSummary from '@/assets/icons/list/svg-icon-summary.vue'
 import SvgIconInterface from '@/assets/icons/device-details/hap/svg-icon-interface'
 import SvgIconHistory from '@/assets/icons/device-details/hap/svg-icon-history'
 import SvgIconListRaport from '@/assets/icons/services/svg-icon-list-rapor'
+import { mapGetters } from 'vuex'
 import { bus } from '@/main'
 export default {
   name: 'DetailsActions',
@@ -59,6 +64,9 @@ export default {
     SvgIconSummary
   },
   computed: {
+    ...mapGetters({
+      getDevice: 'device/getDevice'
+    }),
     isLastSignals() {
       return !this.$route.path.split('/').includes('last-signals')
     }
@@ -71,6 +79,20 @@ export default {
       // let route = this.$route.path;
       // this.$router.push({ path: route + "/last-signals" });
       this.$router.push({ name: 'DeviceLastSignals' })
+    },
+    clickHandleInterface() {
+      console.log(
+        'https://' +
+          this.$store.state.device.host +
+          ':' +
+          this.$store.state.device.port
+      )
+      require('electron').shell.openExternal(
+        'https://' +
+          this.$store.state.device.host +
+          ':' +
+          this.$store.state.device.port
+      )
     },
     openDeviceDetails() {
       this.$router.go(-1)
@@ -87,6 +109,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/style.scss';
+
 .details-actions {
   display: flex;
   flex-direction: row;
@@ -117,6 +141,16 @@ export default {
       height: 51px;
       display: flex;
       justify-content: center;
+      &:disabled {
+        background-color: $hybrone_background_color;
+        span {
+          svg {
+            path {
+              fill: $hybrone_disabled_color !important;
+            }
+          }
+        }
+      }
     }
   }
 }

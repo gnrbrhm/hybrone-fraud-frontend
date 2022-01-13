@@ -10,7 +10,7 @@
         ></el-input>
       </div>
       <div class="component">
-        <el-button type="default" @click="handleSearch">
+        <el-button class="sentinel-button" type="default" @click="handleSearch">
           <SvgIconSearch></SvgIconSearch>
         </el-button>
       </div>
@@ -18,7 +18,7 @@
     <div class="component">
       <span>YENİ</span>
       <router-link :to="{ name: 'CreatePremise' }">
-        <el-button>
+        <el-button class="sentinel-button">
           <SvgIconAdd></SvgIconAdd>
         </el-button>
       </router-link>
@@ -92,7 +92,6 @@ export default {
       display: flex;
       max-width: 50px;
       justify-content: center;
-      @extend .sentinel-input;
 
       span {
         font-family: Inter, sans-serif;

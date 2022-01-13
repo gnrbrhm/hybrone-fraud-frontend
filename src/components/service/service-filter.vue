@@ -3,6 +3,7 @@
     <div class="location">
       <span class="label">LOKASYON ID</span>
       <el-input
+        class="sentinel-input"
         type="search"
         v-model="filter_data.custom_premise_id"
       ></el-input>
@@ -10,6 +11,7 @@
     <div v-if="false" class="status">
       <span class="label">Durum</span>
       <el-select
+        class="sentinel-input"
         style="width: 100%"
         v-model="filter_data.status_code"
         placeholder="Seçiniz"
@@ -44,6 +46,7 @@
     <div class="date-range">
       <span class="label">TARİH ARALIĞI</span>
       <el-date-picker
+        class="sentinel-date-time-input"
         @change="handleChangeDate"
         v-model="date_val"
         type="daterange"
