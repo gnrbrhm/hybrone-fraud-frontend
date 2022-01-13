@@ -161,10 +161,8 @@ export default {
             secret: this.reset_password_form.current_password,
             password: this.reset_password_form.new_password
           })
-          console.log(result)
           //   if (result.status == 200) {
           this.$router.push({ name: 'Login' })
-          console.log(result)
           this.is_send_email = true
           this.reset_password_form.current_password = ''
           this.reset_password_form.new_password = ''

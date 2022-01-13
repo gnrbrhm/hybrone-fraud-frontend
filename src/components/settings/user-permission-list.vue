@@ -28,6 +28,7 @@
             <!-- <span class="span-text">{{ index }}</span> -->
             <el-switch
               v-if="index.key == 'is_admin'"
+              :disabled="getIsAdmin"
               :key="key"
               :value="value"
               active-color="#007DB7"
@@ -232,6 +233,9 @@ export default {
     ...mapGetters({
       getPermissions: 'auth/getPermissions'
     }),
+    getIsAdmin() {
+      return this.$store.state.auth.user.is_admin
+    },
     getSelectedRows() {
       return this.$store.state.dataTable.selectedRow
     }
@@ -324,8 +328,7 @@ export default {
           if (this.permission_value[item] != undefined)
             this.permission_value[item] = this.current_user.permission[item]
         })
-        // console.log(this.current_user)
-        // this.permission_value['is_admin'] = this.current_user.is_admin
+        this.permission_value['is_admin'] = this.current_user.is_admin
       }
     }
   },

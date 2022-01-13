@@ -260,9 +260,9 @@
         {{ scope.custom_premise_id }}
       </template> -->
     </el-table-column>
-    <el-table-column property="fault_type" label="Arıza Tipi" min-width="150">
+    <el-table-column property="fault_type" label="ARIZA TİPİ" min-width="150">
     </el-table-column>
-    <el-table-column property="service_state" label="Durum" min-width="80">
+    <el-table-column property="service_state" label="DURUM" min-width="80">
     </el-table-column>
     <!---->
     <el-table-column
