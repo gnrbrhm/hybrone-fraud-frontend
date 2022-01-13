@@ -22,16 +22,16 @@
       <div class="show-data">
         <div class="svg">
           <SvgIconRecords
-            :status="!getDevice.communication ? 0 : getDevice.energy"
+            :status="!getDevice.is_active ? 0 : !getDevice.record_error"
           ></SvgIconRecords>
         </div>
         <div class="value">
           {{
-            !getDevice.communication || getDevice.energy == 0
+            !getDevice.is_active || getDevice.record_error == null
               ? 'Bilgi Alınamadı'
-              : getDevice.energy == 1
-              ? 'Var'
-              : 'Yok'
+              : !getDevice.record_error
+              ? 'Normal'
+              : 'Hatalı'
           }}
         </div>
       </div>
@@ -43,18 +43,16 @@
       <div class="show-data">
         <div class="svg">
           <SvgIconTime
-            :status="!getDevice.communication ? 0 : getDevice.battery"
+            :status="!getDevice.is_active ? 0 : getDevice.datetime_error"
           ></SvgIconTime>
         </div>
         <div class="value">
           {{
-            !getDevice.communication || getDevice.battery === 0
+            !getDevice.is_active || getDevice.datetime_error === 0
               ? 'Bilgi Alınamadı'
-              : getDevice.battery == 1
-              ? 'Var'
-              : getDevice.battery == 2
-              ? 'Yok'
-              : 'Zayıf'
+              : !getDevice.datetime_error
+              ? 'Normal'
+              : 'Hatalı'
           }}
         </div>
       </div>
@@ -99,8 +97,7 @@ import SvgIconTime from '@/assets/icons/device-details/hap/svg-icon-time'
 import SvgIconRecords from '@/assets/icons/device-details/svg-icon-records'
 
 import { dateTimeChange } from '@/utils.js'
-
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Indicator',
   components: {
@@ -122,17 +119,26 @@ export default {
   computed: {
     ...mapGetters({
       getDevice: 'device/getDevice'
-    })
+    }),
+    getSelectedDevice() {
+      return this.$store.state.dataTable.selectedRow
+    }
   },
   methods: {
+    ...mapActions({
+      getVguardDeviceById: 'device/getVguardDeviceById'
+    }),
     formattedDatetime(val) {
       return dateTimeChange(val)
     }
   },
   mounted() {
-    console.log('ındicatorrs label', this.getDevice)
     this.formattedData = this.data[Object.keys(this.data)[0]]
-    console.log('Formatted Data', this.formattedData)
+  },
+  created() {
+    if (Object.keys(this.getDevice).length == 0) {
+      this.getVguardDeviceById(this.$route.params.device_id)
+    }
   }
 }
 </script>
