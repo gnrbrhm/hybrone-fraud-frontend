@@ -50,7 +50,7 @@ export default {
   width: 100%;
   //   height: 180px;
   height: 90vh;
-  margin-left: 14px;
+  margin-left: 12px;
 }
 /*Lejant Scss */
 .legand-map {

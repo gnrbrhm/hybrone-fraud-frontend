@@ -5,20 +5,29 @@
       <el-button
         class="sentinel-button"
         @click="openSignalsHistory"
-        :disabled="!getDevice.is_active"
+        :disabled="
+          !getDevice.is_active && !this.getPermissions['device_show_event']
+        "
       >
         <SvgIconHistory></SvgIconHistory>
       </el-button>
     </div>
     <div class="component">
       <span>Servis</span>
-      <el-button class="sentinel-button" @click="openServiceModal"
+      <el-button
+        :disabled="!this.getPermissions['service_create']"
+        class="sentinel-button"
+        @click="openServiceModal"
         ><SvgIconService></SvgIconService
       ></el-button>
     </div>
     <div class="component">
       <span>Arayüz</span>
-      <el-button class="sentinel-button" @click="clickHandleInterface">
+      <el-button
+        :disabled="getPermission['device_access_web_ui']"
+        class="sentinel-button"
+        @click="clickHandleInterface"
+      >
         <SvgIconInterface></SvgIconInterface>
       </el-button>
     </div>
@@ -30,7 +39,10 @@
     </div>
     <div v-if="!isLastSignals" class="component">
       <span>Rapor</span>
-      <el-button class="sentinel-button" @click="downloadSignalsHistory"
+      <el-button
+        class="sentinel-button"
+        :disabled="!this.getPermissions['device_show_event']"
+        @click="downloadSignalsHistory"
         ><SvgIconListRaport></SvgIconListRaport
       ></el-button>
     </div>
@@ -65,7 +77,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDevice: 'device/getDevice'
+      getDevice: 'device/getDevice',
+      getPermissions: 'auth/getPermissions'
     }),
     isLastSignals() {
       return !this.$route.path.split('/').includes('last-signals')

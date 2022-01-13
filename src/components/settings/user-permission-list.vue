@@ -3,7 +3,10 @@
     <div class="permission-list-container">
       <div class="permission-header">
         <div class="title">YETKİLER</div>
-        <el-button @click="() => (userPasswordAsk = true)" type="danger"
+        <el-button
+          :disabled="!this.getPermissions['user_delete']"
+          @click="() => (userPasswordAsk = true)"
+          type="danger"
           >Kullanıcıyı Sil</el-button
         >
       </div>
@@ -226,6 +229,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    }),
     getSelectedRows() {
       return this.$store.state.dataTable.selectedRow
     }

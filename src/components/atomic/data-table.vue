@@ -539,7 +539,8 @@ export default {
 
     handleDBClick(val) {
       if (
-        ['List', 'Dashboard'].includes(this.$route.name)
+        ['List', 'Dashboard'].includes(this.$route.name) &&
+        this.getPermissions['device_show_in_dashboard']
         // && this.getPermissions['device_show_in_dashboard']
       ) {
         this.$router.push({

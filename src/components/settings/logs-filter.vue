@@ -23,6 +23,7 @@
         <div class="export-report">
           <span class="label">Rapor</span>
           <el-button
+            :disabled="!getPermissions['user_event_export']"
             class="sentinel-button report-button"
             @click="onDownloadLogsList"
           >
@@ -41,7 +42,7 @@ import Vue from 'vue'
 import moment from 'moment'
 import BackArrow from '@/components/atomic/back-arrow.vue'
 import SvgIconListRapor from '@/assets/icons/services/svg-icon-list-rapor.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'LogsFilter',
   components: {
@@ -56,6 +57,11 @@ export default {
       finish_time: '',
       selected_date: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     ...mapActions({

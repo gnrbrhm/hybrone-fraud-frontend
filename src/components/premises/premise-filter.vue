@@ -18,7 +18,10 @@
     <div class="component">
       <span>YENİ</span>
       <router-link :to="{ name: 'CreatePremise' }">
-        <el-button class="sentinel-button">
+        <el-button
+          :disabled="getPermissions['location_create']"
+          class="sentinel-button"
+        >
           <SvgIconAdd></SvgIconAdd>
         </el-button>
       </router-link>
@@ -40,6 +43,9 @@ export default {
     return {
       custom_premise_id: ''
     }
+  },
+  computed: {
+    getPermissions: 'auth/getPermissions'
   },
   methods: {
     handleSearch() {

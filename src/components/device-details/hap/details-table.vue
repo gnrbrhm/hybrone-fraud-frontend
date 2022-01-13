@@ -96,7 +96,10 @@
       align="center"
     >
       <template slot-scope="scope">
-        <el-button class="button" :disabled="!scope.row.status">
+        <el-button
+          class="button"
+          :disabled="!scope.row.status && getPermissions['take_snapshot']"
+        >
           <SvgIconSnapshot
             @click.native.prevent="snapshotClick(scope.row.channel_id)"
             :status="scope.row.is_active"
@@ -111,7 +114,11 @@
       align="center"
     >
       <template slot-scope="scope">
-        <el-button class="button" @click="downloadRecord(scope.row.channel_id)">
+        <el-button
+          :disabled="!scope.row.status && getPermissions['download_record']"
+          class="button"
+          @click="downloadRecord(scope.row.channel_id)"
+        >
           <SvgIconDownload :status="scope.row.is_active"></SvgIconDownload>
         </el-button>
       </template>
@@ -155,7 +162,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDevice: 'device/getDevice'
+      getDevice: 'device/getDevice',
+      getPermissions: 'auth/getPermissions'
     })
   },
   methods: {
