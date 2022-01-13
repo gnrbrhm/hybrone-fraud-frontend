@@ -1,6 +1,6 @@
 <template>
   <div class="location-bottom">
-    <el-button @click="deleteClick">SİL</el-button>
+    <el-button @click="deleteClick">SİLE</el-button>
     <el-button @click="handleUpdate()">DÜZENLE</el-button>
   </div>
 </template>

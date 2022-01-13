@@ -19,7 +19,7 @@
       <span>YENİ</span>
       <router-link :to="{ name: 'CreatePremise' }">
         <el-button
-          :disabled="getPermissions['location_create']"
+          :disabled="!this.getPermissions['location_create']"
           class="sentinel-button"
         >
           <SvgIconAdd></SvgIconAdd>
@@ -32,7 +32,7 @@
 <script>
 import SvgIconAdd from '@/assets/icons/premises/svg-icon-add'
 import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'PremiseFilter',
   components: {
@@ -45,7 +45,9 @@ export default {
     }
   },
   computed: {
-    getPermissions: 'auth/getPermissions'
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     handleSearch() {

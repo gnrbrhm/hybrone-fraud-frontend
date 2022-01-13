@@ -62,6 +62,9 @@ $hybrone_header_background_color: #f5f5f5;
   border: 1px solid $hybrone_border_color;
   box-sizing: border-box;
   border-radius: 4px;
+  &__form {
+    // Form Butonları için yapılandırma yapılacak
+  }
   &:hover {
     background-color: $hybrone_light_blue;
     svg {

@@ -130,7 +130,7 @@ export default {
     })
   },
   mounted() {
-    console.log('Sidebar', this.getPermissions['device_show_in_map'])
+    console.log('Sidebar', this.getPermissions)
   }
 }
 </script>

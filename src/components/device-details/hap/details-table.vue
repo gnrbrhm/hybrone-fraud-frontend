@@ -98,7 +98,7 @@
       <template slot-scope="scope">
         <el-button
           class="button"
-          :disabled="!scope.row.status && getPermissions['take_snapshot']"
+          :disabled="!scope.row.status && !this.getPermissions['take_snapshot']"
         >
           <SvgIconSnapshot
             @click.native.prevent="snapshotClick(scope.row.channel_id)"
@@ -115,7 +115,9 @@
     >
       <template slot-scope="scope">
         <el-button
-          :disabled="!scope.row.status && getPermissions['download_record']"
+          :disabled="
+            !scope.row.status && !this.getPermissions['download_record']
+          "
           class="button"
           @click="downloadRecord(scope.row.channel_id)"
         >

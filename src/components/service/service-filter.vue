@@ -63,9 +63,10 @@
       <div>
         <span class="label">Tamamla</span>
         <el-button
+          class="sentinel-button"
           :disabled="
-            this.getSelectedRows.length <= 0 &&
-            this.getPermissions['service_status_finished']
+            this.getSelectedRows.length <= 0 ||
+            !this.getPermissions['service_status_finished']
           "
           @click="handleAllDoneClick"
           type="info"
@@ -83,7 +84,8 @@
           :on-change="handleChange"
         >
           <el-button
-            :disabled="this.getPermissions['service_data_import']"
+            class="sentinel-button"
+            :disabled="!this.getPermissions['service_data_import']"
             type="info"
           >
             <SvgIconServiceImport></SvgIconServiceImport>
@@ -94,7 +96,8 @@
       <div>
         <span class="label">Rapor</span>
         <el-button
-          :disabled="this.getPermissions['service_report_create_and_download']"
+          class="sentinel-button"
+          :disabled="!this.getPermissions['service_report_create_and_download']"
           type="info"
           @click="onDownloadTicketList"
         >
