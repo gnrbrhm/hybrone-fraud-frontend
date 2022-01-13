@@ -555,17 +555,57 @@ export const USER_PERMISSIONS = {
       key: 'service_data_import',
       label: 'Servis verisini içeri aktarma',
       value: false
-    },
+    }
+  ],
+  AYARLAR: [
     {
-      title: 'Servis',
+      title: 'Ayarlar',
       key: 'query_period_edit',
-      label: 'Servis verisini içeri aktarma',
+      label: 'Sorgu periyodunu düzenleme ',
       value: false
     },
     {
-      title: 'Servis',
-      key: 'service_data_import',
-      label: 'Servis verisini içeri aktarma',
+      title: 'Ayarlar',
+      key: 'data_export',
+      label: 'Veriyi dışarıya aktarma ',
+      value: false
+    },
+    {
+      title: 'Ayarlar',
+      key: 'data_import',
+      label: 'Veriyi içeriye aktarma',
+      value: false
+    }
+  ],
+  KULLANICILAR: [
+    {
+      title: 'Kullanıcılar',
+      key: 'user_show_event',
+      label: 'Kullanıcı olaylarını görüntüleme',
+      value: false
+    },
+    {
+      title: 'Kullanıcı',
+      key: 'user_event_export',
+      label: 'Kullanıcı olaylarını dışarı aktarma',
+      value: false
+    },
+    {
+      title: 'Kullanıcı',
+      key: 'user_list_show',
+      label: 'Kullanıcı listesini görüntüleme',
+      value: false
+    },
+    {
+      title: 'Kullanıcı',
+      key: 'user_create',
+      label: 'Kullanıcı oluşturma',
+      value: false
+    },
+    {
+      title: 'Kullanıcı',
+      key: 'user_delete',
+      label: 'Kullanıcı silme',
       value: false
     }
   ]
