@@ -50,12 +50,14 @@
           <el-input
             id="new_password"
             height="50px"
+            type="password"
             v-model="reset_password_form.new_password"
           ></el-input>
         </el-form-item>
         <span class="label">YENİ ŞİFRE TEKRAR</span>
         <el-form-item prop="confirm_new_password">
           <el-input
+            type="password"
             id="confirm_new_password"
             height="50px"
             v-model="reset_password_form.confirm_new_password"
@@ -93,6 +95,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import axios from 'axios'
 export default {
   name: 'ForgotPassword',
   data() {
@@ -147,18 +150,27 @@ export default {
       console.log(this.$refs[form])
       this.$refs[form].validate((valid) => {
         if (valid) {
+          //   let result = axios.post(
+          //     'http://34.79.135.127:3000/api/v1/user/forgot/password/reset',
+          //     {
+          //       secret: this.reset_password_form.current_password,
+          //       password: this.reset_password_form.new_password
+          //     }
+          //   )
           let result = this.resetUserPassword({
             secret: this.reset_password_form.current_password,
             password: this.reset_password_form.new_password
           })
           console.log(result)
-          if (result.status == 200) {
-            this.is_send_email = true
-            this.reset_password_form.current_password = ''
-            this.reset_password_form.new_password = ''
-            this.reset_password_form.confirm_new_password = ''
-          }
+          //   if (result.status == 200) {
+          this.$router.push({ name: 'Login' })
+          console.log(result)
+          this.is_send_email = true
+          this.reset_password_form.current_password = ''
+          this.reset_password_form.new_password = ''
+          this.reset_password_form.confirm_new_password = ''
         }
+        // }
       })
     },
     submitForm(form) {

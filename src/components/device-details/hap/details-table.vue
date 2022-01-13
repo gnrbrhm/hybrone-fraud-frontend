@@ -96,10 +96,8 @@
       align="center"
     >
       <template slot-scope="scope">
-        <el-button
-          class="button"
-          :disabled="!scope.row.status && !this.getPermissions['take_snapshot']"
-        >
+        <el-button :disabled="!scope.row.status" class="button">
+          <!-- :disabled="!scope.row.status && !this.getPermissions['take_snapshot']" -->
           <SvgIconSnapshot
             @click.native.prevent="snapshotClick(scope.row.channel_id)"
             :status="scope.row.is_active"
@@ -113,11 +111,11 @@
       min-width="35"
       align="center"
     >
+      <!-- :disabled="!scope.row.status && !this.getPermissions['download_records']" -->
+
       <template slot-scope="scope">
         <el-button
-          :disabled="
-            !scope.row.status && !this.getPermissions['download_record']
-          "
+          :disabled="!scope.row.status"
           class="button"
           @click="downloadRecord(scope.row.channel_id)"
         >
@@ -166,7 +164,13 @@ export default {
     ...mapGetters({
       getDevice: 'device/getDevice',
       getPermissions: 'auth/getPermissions'
-    })
+    }),
+    statusCheckRecordDownload() {
+      return this.getPermissions['download_record']
+    },
+    statusCheckSnapshotDownload() {
+      return this.getPermissions['take_snapshot']
+    }
   },
   methods: {
     downloadRecord(val) {
@@ -178,6 +182,9 @@ export default {
       this.$emit('onSnapshotClick', val1)
       this.selected_channel_id = val1
     }
+  },
+  mounted() {
+    console.log('Permission Channel', this.getPermissions)
   }
 }
 </script>

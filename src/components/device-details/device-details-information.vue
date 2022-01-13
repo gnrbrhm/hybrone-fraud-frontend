@@ -1,7 +1,7 @@
 <template>
   <div class="information">
     <span class="id">MAĞAZA ID</span>
-    <span class="number">{{ data.premise.id }}</span>
+    <span class="number">{{ data.premise.custom_premise_id }}</span>
     <hr />
     <span class="province">{{ data.premise.location.province.name }}</span>
     <span class="country">{{ data.premise.location.city.name }}</span>

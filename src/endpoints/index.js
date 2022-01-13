@@ -32,7 +32,7 @@ export default {
     data: {}
   },
   forgotUserPasswordReset: {
-    url: '/forgot/password/reset',
+    url: 'user/forgot/password/reset',
     method: 'POST',
     data: {}
   },

@@ -177,11 +177,11 @@
     >
       <template slot-scope="scope">
         {{
-          scope.row.last_signal == null ||
-          scope.row.last_signal == '0001-01-01T00:00:00Z' ||
-          scope.row.last_signal == '0001-01-01T01:55:52+01:55'
+          scope.row.created_at == null ||
+          scope.row.created_at == '0001-01-01T00:00:00Z' ||
+          scope.row.created_at == '0001-01-01T01:55:52+01:55'
             ? 'Bilgi Alınamadı'
-            : formattedDatetime(scope.row.last_signal)
+            : formattedDatetime(scope.row.created_at)
         }}
       </template>
     </el-table-column>

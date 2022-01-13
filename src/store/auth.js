@@ -98,12 +98,13 @@ export default {
         ...endpoints.forgotUserPasswordReset,
         data: payload
       })
-      return result.then((r) => {
-        console.log('R', r)
-        if (r.status) {
-          return r
-        }
-      })
+      return result
+      //   .then((r) => {
+      //     console.log('R', r)
+      //     if (r.status) {
+      //       return r
+      //     }
+      //   })
     },
     changeUserPasswordVerify(_, payload) {
       console.log('STORE')
