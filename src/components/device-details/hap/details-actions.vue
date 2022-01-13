@@ -24,7 +24,7 @@
     <div class="component">
       <span>Arayüz</span>
       <el-button
-        :disabled="getPermission['device_access_web_ui']"
+        :disabled="!this.getPermissions['device_access_web_ui']"
         class="sentinel-button"
         @click="clickHandleInterface"
       >

@@ -8,12 +8,12 @@
     </div>
     <div class="location-bottom">
       <el-button
-        :disabled="getPermissions['location_delete']"
+        :disabled="!this.getPermissions['location_delete']"
         @click="deleteClick"
         >SİL</el-button
       >
       <el-button
-        :disabled="getPermissions['location_edit']"
+        :disabled="!this.getPermissions['location_edit']"
         @click="handleUpdate"
         >DÜZENLE</el-button
       >

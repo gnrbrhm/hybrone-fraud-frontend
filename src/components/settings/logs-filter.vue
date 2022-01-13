@@ -23,7 +23,7 @@
         <div class="export-report">
           <span class="label">Rapor</span>
           <el-button
-            :disabled="!getPermissions['user_event_export']"
+            :disabled="!this.getPermissions['user_event_export']"
             class="sentinel-button report-button"
             @click="onDownloadLogsList"
           >

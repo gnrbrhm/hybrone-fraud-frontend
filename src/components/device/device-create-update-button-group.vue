@@ -6,6 +6,7 @@
     <div :class="is_update ? 'footer-bottom-update' : 'footer-bottom-create'">
       <el-button
         v-if="is_update"
+        :disabled="!this.getPermissions['device_edit']"
         class="footer-bottom-update__dangerous"
         @click="onDelete"
         >SİL</el-button
@@ -30,12 +31,18 @@
 
 <script>
 import { bus } from '@/main.js'
+import { mapGetters } from 'vuex'
 export default {
   name: 'DeviceCreateUpdateButtonGroup',
   data() {
     return {
       is_update: !!this.$route.params.device_id
     }
+  },
+  computed: {
+    ...mapGetters({
+      getPermissions: 'auth/getPermissions'
+    })
   },
   methods: {
     onSubmit() {

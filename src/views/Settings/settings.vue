@@ -60,6 +60,7 @@
             <div width="50px" slot="tip" class="el-upload__tip"></div>
           </el-upload> -->
           <el-button
+            :disabled="!this.getPermissions['data_import']"
             class="save-button logs"
             type="primary"
             @click="handleImportDevice"
@@ -78,6 +79,7 @@
         >
         <div class="chart-actions">
           <el-button
+            :disabled="!this.getPermissions['data_export']"
             class="save-button logs"
             type="primary"
             @click="getBackupFile"

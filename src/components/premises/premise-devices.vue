@@ -12,10 +12,14 @@
     <span v-else>İlgili mekanda herhangi bir cihaz kaydı bulunmamaktadır.</span>
     <!-- <div class="sentinel-location-bottom"> -->
     <div class="devices-bottom">
-      <el-button :disabled="!selectedDevice" @click="handleUpdate()"
+      <el-button
+        :disabled="!selectedDevice && !this.getPermissions['device_edit']"
+        @click="handleUpdate()"
         >DÜZENLE</el-button
       >
-      <el-button :disabled="!!selectedDevice" @click="handleCreateDevice()"
+      <el-button
+        :disabled="!!selectedDevice && !this.getPermissions['device_create']"
+        @click="handleCreateDevice()"
         >YENİ EKLE</el-button
       >
     </div>
@@ -42,7 +46,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getSelectedRow: 'dataTable/getSelectedRow'
+      getSelectedRow: 'dataTable/getSelectedRow',
+      getPermissions: 'auth/getPermissions'
     }),
     IsOwnDevice() {
       return this.devices || this.devices != null ? true : false
