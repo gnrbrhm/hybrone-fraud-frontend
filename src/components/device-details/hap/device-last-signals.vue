@@ -20,7 +20,7 @@
       <!-- @close="handleCloseCreateUserDialog" -->
       <div class="create-user-dialog-content">
         <div class="span-title">
-          Seçtiğiniz olay zamanının 30 saniye öncesi ve 30 saniye sonrası
+          Seçtiğiniz olay zamanının 60 saniye öncesi ve 30 saniye sonrası
           indirilecektir. <br />Onaylıyor musunuz?
         </div>
         <el-form class="form">
@@ -118,11 +118,11 @@ export default {
       } else {
         start_time = moment(this.selected_events.event_date)
           .add(3, 'hours')
-          .add(-30, 'seconds')
+          .add(-61, 'seconds')
           ._d.toISOString()
         finish_time = moment(this.selected_events.event_date)
           .add(3, 'hours')
-          .add(30, 'seconds')
+          .add(29, 'seconds')
           ._d.toISOString()
       }
       console.log('FinishTime', finish_time)

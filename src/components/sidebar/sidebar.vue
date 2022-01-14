@@ -198,10 +198,9 @@ $high: 1920px;
     // @media screen and (min-width: $high) {
     //   width: $high * 10/100;
     // }
-
     &:hover {
       background-color: $hybrone_light_blue;
-      a svg {
+      svg {
         path {
           fill: $hybrone_background_color !important;
         }
@@ -275,4 +274,16 @@ $high: 1920px;
     color: $hybrone_background_color !important;
   }
 }
+// #nav > div.navigation > a:hover {
+//   background-color: $hybrone_light_blue;
+//   svg {
+//     path {
+//       fill: $hybrone_background_color !important;
+//     }
+//   }
+//   span {
+//     background-color: rgba(0, 0, 0, 0);
+//     color: $hybrone_background_color !important;
+//   }
+// }
 </style>

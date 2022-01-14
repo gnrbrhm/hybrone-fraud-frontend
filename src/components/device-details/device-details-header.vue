@@ -81,6 +81,7 @@ export default {
   .first-component {
     display: flex;
     flex-direction: column;
+    column-gap: 100%;
     width: 100%;
     margin-right: 24px;
     .header-element {
