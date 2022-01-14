@@ -37,7 +37,8 @@
         <SvgIconSummary></SvgIconSummary>
       </el-button>
     </div>
-    <div v-if="!isLastSignals" class="component">
+    <div v-if="false" class="component">
+      <!-- <div v-if="!isLastSignals" class="component"> -->
       <span>Rapor</span>
       <el-button
         class="sentinel-button"

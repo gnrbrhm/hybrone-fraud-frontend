@@ -177,11 +177,11 @@
     >
       <template slot-scope="scope">
         {{
-          scope.row.created_at == null ||
-          scope.row.created_at == '0001-01-01T00:00:00Z' ||
-          scope.row.created_at == '0001-01-01T01:55:52+01:55'
+          scope.row.last_signal.event_date == null ||
+          scope.row.last_signal.event_date == '0001-01-01T00:00:00Z' ||
+          scope.row.last_signal.event_date == '0001-01-01T01:55:52+01:55'
             ? 'Bilgi Alınamadı'
-            : formattedDatetime(scope.row.created_at)
+            : formattedDatetime(scope.row.last_signal.event_date)
         }}
       </template>
     </el-table-column>
@@ -379,7 +379,7 @@
       label="OLAY ZAMANI"
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.last_signal.event_date) }}
+        {{ formattedDatetime(scope.row.event_date) }}
       </template>
     </el-table-column>
   </el-table>
