@@ -379,7 +379,7 @@
       label="OLAY ZAMANI"
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.event_date) }}
+        {{ formattedDatetime(scope.row.last_signal.event_date) }}
       </template>
     </el-table-column>
   </el-table>
