@@ -2,7 +2,7 @@
   <div class="report-content">
     <el-form
       :model="ruleForm"
-      :rules="ruleForm"
+      :rules="rules"
       ref="ruleForm"
       label-width="auto"
       class="demo-ruleForm"
@@ -96,6 +96,13 @@ export default {
             message: 'Bitiş tarihi giriniz.',
             trigger: 'change'
           }
+        ],
+        description: [
+          {
+            required: true,
+            message: 'Lütfen açıklama giriniz.',
+            trigger: 'blur'
+          }
         ]
       },
       ruleForm: {
@@ -128,24 +135,28 @@ export default {
       })
     },
     handleServiceSubmit(val) {
-      console.log('RuleForm', this.ruleForm)
-      console.log('premiseId', this.getSelectedRowPremiseId)
-      let device_id = []
-      this.$route.params.device_id
-        ? device_id.push(this.getSelectedRowPremiseId)
-        : (device_id = this.getSelectedRowsDeviceIds)
+      this.$refs['ruleForm'].validate((valid) => {
+        if (valid) {
+          console.log('Valid', valid)
+          console.log('premiseId', this.getSelectedRowPremiseId)
+          let device_id = []
+          this.$route.params.device_id
+            ? device_id.push(this.getSelectedRowPremiseId)
+            : (device_id = this.getSelectedRowsDeviceIds)
 
-      let service = this.createService({
-        ...this.ruleForm,
-        // device_id: this.getSelectedRowsDeviceIds.join(),
-        device_id: device_id,
-        status_code: 2
+          let service = this.createService({
+            ...this.ruleForm,
+            // device_id: this.getSelectedRowsDeviceIds.join(),
+            device_id: device_id,
+            status_code: 2
+          })
+          console.log('SERVİCE STAUS', service)
+          //   if (service.status == 201) {
+          this.formClean()
+          this.$emit('onClose')
+          //   }
+        }
       })
-      console.log('SERVİCE STAUS', service)
-      //   if (service.status == 201) {
-      this.formClean()
-      this.$emit('onClose')
-      //   }
     }
   },
   created() {
