@@ -29,7 +29,7 @@
 </template>
 
 <script>
-// import VueApexCharts from 'vue-apexcharts'
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   name: 'DetailsDiskState',
@@ -45,9 +45,9 @@ export default {
     },
     hash_data: Object
   },
-  //   components: {
-  //     VueApexCharts
-  //   },
+  components: {
+    VueApexCharts
+  },
   computed: {
     chartOptions() {
       return {

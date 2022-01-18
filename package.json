@@ -1,14 +1,38 @@
 {
   "name": "Hybrone-Sentinel-Petronet",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "author": {
+    "name": "Biges Güvenli Hayat Teknolojileri",
+    "email": "arge@biges.com",
+    "url": "http://arge.biges.com/"
+  },
+  "publish": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biges/hybrone-sentinel"
+  },
+  "description": "Petronet Camera System",
+  "homepage": "https://github.com/biges/hybrone-sentinel",
+  "metadata": {
+    "name": "Hybrone Sentinel - Akbank",
+    "description": "Petronet Camera System",
+    "homepage": "https://github.com/biges/hybrone-sentinel",
+    "licence": "licence",
+    "author": {
+      "name": "Biges Güvenli Hayat Teknolojileri",
+      "email": "arge@biges.com",
+      "url": "http://arge.biges.com/"
+    }
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+	"electron:build": "npm version minor && vue-cli-service electron:build",
+    "electron:build win": "npm version minor && vue-cli-service electron:build -- --win nsis",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"

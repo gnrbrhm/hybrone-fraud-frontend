@@ -18,12 +18,19 @@ async function createWindow() {
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      //   nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      //   contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      icon: __dirname + '/hybrone_logo.png',
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      devTools: true,
+      deleteAppDataOnUninstall: false
     }
   })
-  const ses = win.webContents.session
-  console.log('Session', ses.getUserAgent())
+  win.maximize()
+  win.setFullScreen(false)
+  win.setMenuBarVisibility(false)
+  //   const ses = win.webContents.session
+  //   console.log('Session', ses.getUserAgent())
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
