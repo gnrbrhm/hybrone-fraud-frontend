@@ -1,7 +1,7 @@
-/* eslint-disable no-console */
-
 import { register } from 'register-service-worker'
-
+console.log(process.env.NODE_ENV)
+console.log(process.env.IS_ELECTRON)
+console.log(process.env.BASE_URL)
 if (process.env.NODE_ENV === 'production' && process.env.IS_ELECTRON) {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {

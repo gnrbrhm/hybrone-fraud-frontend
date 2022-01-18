@@ -7,7 +7,17 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  {
+    scheme: 'app',
+    privileges: {
+      standard: true,
+      secure: true,
+      // Bu kısım sonradan eklendi
+      supportFetchAPI: true,
+      corsEnabled: true,
+      bypassCSP: true
+    }
+  }
 ])
 
 async function createWindow() {
@@ -15,11 +25,8 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: 'Hybrone-Sentinel',
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      //   nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      //   contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
       icon: __dirname + '/hybrone_logo.png',
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       devTools: true,
@@ -29,9 +36,6 @@ async function createWindow() {
   win.maximize()
   win.setFullScreen(false)
   win.setMenuBarVisibility(false)
-  //   const ses = win.webContents.session
-  //   console.log('Session', ses.getUserAgent())
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
