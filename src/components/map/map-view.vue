@@ -77,7 +77,9 @@ export default {
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
     }
     // if (this.$route.name == "CreatePremise") {
-    if (['CreatePremise', 'UpdatePremise'].includes(this.$route.name)) {
+    if (
+      ['CreatePremise', 'UpdatePremise', 'Premises'].includes(this.$route.name)
+    ) {
       console.log('UpdatePremise Location', this.getCurrentLocation.location)
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
       this.$maps.on('click', (e) => {

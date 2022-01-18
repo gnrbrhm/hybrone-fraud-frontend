@@ -77,6 +77,9 @@ export default {
   },
   mounted() {
     bus.$on('onDeletePremise', this.handlePremiseFilteredData)
+  },
+  destroyed() {
+    bus.$off('onDeletePremise')
   }
 }
 </script>

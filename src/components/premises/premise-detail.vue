@@ -53,8 +53,14 @@ export default {
       deletePremise: 'premise/deletePremise'
     }),
     deleteClick() {
-      let delete_premise = this.deletePremise(this.getSelectedRow)
-      bus.$emit('onDeletePremise', true)
+      this.$confirm('Mekanı silmek istediğinize emin misiniz?', {
+        confirmButtonText: 'Sil',
+        cancelButtonText: 'Vazgeç',
+        type: 'error'
+      }).then(() => {
+        let delete_premise = this.deletePremise(this.getSelectedRow)
+        bus.$emit('onDeletePremise', true)
+      })
     },
     handleUpdate() {
       this.$router.push({

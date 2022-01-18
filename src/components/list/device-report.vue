@@ -120,7 +120,7 @@ export default {
         devicesPremiseID = this.getSelectedRowsPremiseId
       else devicesPremiseID = []
       this.$api({
-        ...endpoints.getDeviceReport,
+        ...endpoints.getDeviceVguardReport,
         params: {
           response_type: this.response_type,
           report_type: this.type,

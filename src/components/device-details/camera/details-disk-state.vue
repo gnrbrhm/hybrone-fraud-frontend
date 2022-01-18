@@ -2,12 +2,12 @@
   <div class="dashboard-content">
     <span class="title">Disk Durumu</span>
     <div class="dashboard-indicator">
-      <!-- <VueApexCharts
+      <VueApexCharts
         class="dashboard-card-circle"
         type="donut"
         :options="chartOptions"
         :series="chartOptions.series"
-      ></VueApexCharts> -->
+      ></VueApexCharts>
     </div>
     <div class="dashboard-legand">
       <div class="item">

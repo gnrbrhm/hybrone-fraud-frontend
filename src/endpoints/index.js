@@ -239,6 +239,12 @@ export default {
     responseType: 'blob',
     params: {}
   },
+  getDeviceVguardReport: {
+    method: 'GET',
+    url: 'vguard/devices',
+    responseType: 'blob',
+    params: {}
+  },
   /**
    * SERVICE ENDPOINTS
    */
