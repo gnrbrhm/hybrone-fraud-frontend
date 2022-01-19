@@ -248,7 +248,7 @@ export default {
       model_options: [
         {
           label: 'VG-4C1A-LRU',
-          value: 1
+          value: 3
         }
       ],
       channel_statuses: [

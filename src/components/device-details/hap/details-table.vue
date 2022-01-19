@@ -101,6 +101,7 @@
     >
       <template slot-scope="scope">
         <el-button
+          @click="snapshotClick(scope.row.channel_id)"
           :disabled="
             !scope.row.status ||
             !scope.row.is_active ||
@@ -108,11 +109,7 @@
           "
           class="button"
         >
-          <!-- :disabled="!scope.row.status && !this.getPermissions['take_snapshot']" -->
-          <!-- scope.row.status &&
-              getPermissions['download_records'] && -->
           <SvgIconSnapshot
-            @click="snapshotClick(scope.row.channel_id)"
             :status="scope.row.status && scope.row.is_active"
           ></SvgIconSnapshot>
         </el-button>
@@ -199,7 +196,7 @@ export default {
       this.$emit('onDownloadRecordClick', val)
     },
     snapshotClick(val1) {
-      console.log(val1)
+      console.log('ChannelID,', val1)
       this.$emit('onSnapshotClick', val1)
       this.selected_channel_id = val1
     }

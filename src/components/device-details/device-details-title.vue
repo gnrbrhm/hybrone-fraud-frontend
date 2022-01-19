@@ -3,7 +3,7 @@
     <span
       v-if="!['DeviceLastSignals'].includes(this.$route.name)"
       class="device-name"
-      >{{ getDevice.name }}</span
+      >{{ getDevice.premise.custom_premise_name }}</span
     >
     <DeviceDetailsLastSignalsFilter
       v-else

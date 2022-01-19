@@ -27,7 +27,7 @@
         <p>{{ premise.description }}</p></span
       >
     </div>
-    <div class="premise-information-content">
+    <div v-if="false" class="premise-information-content">
       <span>Bölge Bilgileri</span>
 
       <span
