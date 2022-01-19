@@ -93,12 +93,12 @@ export default {
         }
       })
     },
-    resetUserPassword(_, payload) {
+    async resetUserPassword(_, payload) {
       let result = Vue.prototype.$api({
         ...endpoints.forgotUserPasswordReset,
         data: payload
       })
-      return result.then((r) => {
+      return await result.then((r) => {
         console.log('R', r)
         if (r.status) {
           return r
@@ -117,13 +117,13 @@ export default {
         }
       })
     },
-    forgotUserPassword(_, payload) {
+    async forgotUserPassword(_, payload) {
       let request = Vue.prototype.$api({
         ...endpoints.forgotUserPassword,
         data: { ...payload }
       })
-      return request.then((r) => {
-        return r.status == 200
+      return await request.then((r) => {
+        return r
       })
     },
     logout({ commit }) {

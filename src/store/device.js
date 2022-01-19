@@ -197,6 +197,16 @@ export default {
         if (r.status) return r
       })
     },
+    async resetVguardDeviceSceneChange(_, payload) {
+      const refresh = Vue.prototype.$api({
+        ...endpoints.resetVguardDeviceSceneChange,
+        data: { ...payload }
+      })
+      return await refresh.then((r) => {
+        console.log('resetVguardDeviceSceneChange', r)
+        if (r.status) return r
+      })
+    },
     async downloadProsecDeviceLastSignals(_, payload) {
       Object.keys(payload).forEach((item) => {
         if (payload[item] == '') delete payload[item]

@@ -407,7 +407,7 @@ export default {
         current_password: [
           {
             required: true,
-            message: 'Lütfen adı giriniz !',
+            message: 'Lütfen eski şifrenizi giriniz !',
             trigger: 'blur'
           },
           {
@@ -420,14 +420,14 @@ export default {
         new_password: [
           {
             required: true,
-            message: 'Lütfen soyadı giriniz.',
+            message: 'Lütfen yeni şifrenizi giriniz.',
             trigger: 'blur'
           }
         ],
         confirm_new_password: [
           {
             required: true,
-            message: 'Lütfen email giriniz.',
+            message: 'Lütfen yeni şifrenizi tekrar giriniz.',
             trigger: 'blur'
           }
         ]
@@ -533,19 +533,20 @@ export default {
     },
     changeUserPasswordSubmitForm(form) {
       this.$refs[form].validate((valid) => {
-        if (valid) {
-          let result = this.changeUserPasswordVerify({
-            old_password: this.ruleForm.current_password,
-            new_password: this.ruleForm.new_password
-          })
-          console.log(result)
-          if (result.status == 200) {
-            this.passwordResetDialogVisible = false
-            this.ruleForm.current_password = ''
-            this.ruleForm.new_password = ''
-            this.ruleForm.confirm_new_password = ''
+        if (this.confirm_new_password == this.new_password)
+          if (valid) {
+            let result = this.changeUserPasswordVerify({
+              old_password: this.ruleForm.current_password,
+              new_password: this.ruleForm.new_password
+            })
+            console.log(result)
+            if (result.status == 200) {
+              this.passwordResetDialogVisible = false
+              this.ruleForm.current_password = ''
+              this.ruleForm.new_password = ''
+              this.ruleForm.confirm_new_password = ''
+            }
           }
-        }
       })
     },
     changeUserPassword() {

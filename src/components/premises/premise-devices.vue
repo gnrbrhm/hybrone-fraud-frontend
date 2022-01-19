@@ -9,7 +9,9 @@
         :selected_device_id="selectedDevice"
       ></DeviceCard>
     </div>
-    <span v-else>İlgili mekanda herhangi bir cihaz kaydı bulunmamaktadır.</span>
+    <span v-else
+      >İlgili İstasyonda herhangi bir cihaz kaydı bulunmamaktadır.</span
+    >
     <!-- <div class="sentinel-location-bottom"> -->
     <div class="devices-bottom">
       <el-button

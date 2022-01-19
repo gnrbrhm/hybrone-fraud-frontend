@@ -43,7 +43,10 @@ export default {
   computed: {
     chartOptions() {
       return {
-        colors: [...this.hash_data.colors],
+        // colors: [...this.hash_data.colors],
+        colors: this.hash_data.colors.filter((item) => {
+          return item != '#6FCF97'
+        }),
         legend: {
           show: false
         },
@@ -51,7 +54,8 @@ export default {
           enabled: false,
           dropShadow: false
         },
-        labels: [...Object.keys(this.hash_data.series)],
+        // labels: [...Object.keys(this.hash_data.series)],
+        labels: this.changeLabelName(this.hash_data.series),
 
         plotOptions: {
           pie: {
@@ -77,6 +81,7 @@ export default {
                     let total = null
                     w.globals.seriesTotals.forEach((el) => {
                       total += el
+                      console.log('Indicators', el)
                     })
                     return ((100 / total) * val).toFixed(2) + '%'
                   }
@@ -92,12 +97,15 @@ export default {
                     ) {
                       let total = null
                       w.globals.seriesTotals.forEach((el) => {
+                        console.log('Total', el)
+
                         total += el
                       })
-                      return (
-                        ((100 / total) * w.globals.seriesTotals[0]).toFixed(2) +
-                        '%'
-                      )
+                      //   return (
+                      //     ((100 / total) * w.globals.seriesTotals[0]).toFixed(2) +
+                      //     '%'
+                      //   )
+                      return ((100 / total) * total).toFixed(2) + '%'
                     }
                     // return 100 + '%'
                     // return w.globals.seriesTotals.reduce((a, b) => {
@@ -119,6 +127,63 @@ export default {
       Object.keys(val).forEach((item) => {
         if (val[item].label != 'Toplam' && item != 'total')
           array.push(val[item].value)
+      })
+      return array
+    },
+    changeLabelName(label) {
+      let array = []
+      Object.keys(label).forEach((item) => {
+        if (item != 'total')
+          switch (item) {
+            case 'total':
+              array.push('Toplam')
+              break
+            case 'online':
+              array.push('Online')
+              break
+            case 'offline':
+              array.push('Offline')
+              break
+            case 'normal_record':
+              array.push('Kayıt Yapılıyor')
+              break
+            case 'alarm':
+              array.push('Kayıt Yapılmıyor')
+              break
+            case 'normal_disk':
+              array.push('Normal')
+              break
+            case 'fault':
+              array.push('Hatalı')
+              break
+            case 'active':
+              array.push('Aktif')
+              break
+            case 'pasif':
+              array.push('Pasif')
+              break
+            case 'normal_analysis':
+              array.push('Normal')
+              break
+            case 'video_loss':
+              array.push('Video Kaybı')
+              break
+            case 'other_state':
+              array.push('Diğer Durumlar')
+              break
+            case 'motion_detect':
+              array.push('Hareket Algılama')
+              break
+            case 'sabotage':
+              array.push('Sabotaj Algılama')
+              break
+            case 'scene_change':
+              array.push('Sahne Değişimi')
+              break
+
+            default:
+              break
+          }
       })
       return array
     }

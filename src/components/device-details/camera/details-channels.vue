@@ -17,7 +17,11 @@
         >
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="downloadRecordVisible" width="500px">
+    <el-dialog
+      :visible.sync="downloadRecordVisible"
+      :before-close="handleClose"
+      width="500px"
+    >
       <div class="create-user-dialog-content">
         <div class="span-title">
           İndirmek istediğiniz kayıt için zaman aralığı seçiniz.
@@ -73,12 +77,15 @@ import DetailsTable from '@/components/device-details/hap/details-table.vue'
 import { mapGetters, mapActions } from 'vuex'
 import { bus } from '@/main.js'
 import moment from 'moment'
+import Vue from 'vue'
 export default {
   name: 'DetailsCameraChannels',
   components: { DetailsTable },
   data() {
     return {
       data: [],
+      record_download_request: false,
+      again_request: true,
       ruleForm: {
         start_time: '',
         finish_time: ''
@@ -133,53 +140,87 @@ export default {
       getVguardDeviceChannelRecord: 'device/getVguardDeviceChannelRecord',
       refreshVguardDeviceData: 'device/refreshVguardDeviceData'
     }),
+    handleClose() {
+      if (this.record_download_request) {
+        this.downloadRecordVisible = false
+        this.record_download_request = false
+      }
+    },
     handleRecordDownload(form) {
-      let start_time = moment(this.ruleForm.start_time)
-        .add(3, 'hours')
-        ._d.toISOString()
-      let finish_time = moment(this.ruleForm.finish_time)
-        .add(3, 'hours')
-        ._d.toISOString()
-      this.$refs[form].validate((valid) => {
-        if (valid) {
-          let video = this.getVguardDeviceChannelRecord({
-            channel_id: this.selected_channel,
-            device_id: parseInt(this.$route.params.device_id),
-            start_time: start_time,
-            end_time: finish_time
-            // channel_id: 1,
-            // device_id: 36,
-            // end_time: '2022-01-04T19:27:05.000Z',
-            // start_time: '2022-01-04T19:26:32.000Z'
-          })
-          video.then((r) => {
-            if (r.status == 200) {
-              console.log(r)
-              let currentDate = new Date()
-              const url = window.URL.createObjectURL(new Blob([r.data]))
-              const link = document.createElement('a')
-              link.href = url
-              link.setAttribute(
-                'download',
-                this.getDevice.premise.custom_premise_id +
-                  '-CH-' +
-                  this.selected_channel +
-                  '-' +
-                  currentDate.getFullYear() +
-                  ('0' + (currentDate.getMonth() + 1)).slice(-2) +
-                  ('0' + currentDate.getDate()).slice(-2) +
-                  ('0' + currentDate.getHours()).slice(-2) +
-                  ('0' + currentDate.getMinutes()).slice(-2) +
-                  ('0' + currentDate.getSeconds()).slice(-2) +
-                  '.avi'
-              )
-              document.body.appendChild(link)
-              link.click()
+      console.log('Request Control', this.again_request)
+
+      if (this.again_request) {
+        if (
+          moment.utc(
+            moment(this.ruleForm.finish_time, 'DD/MM/YYYY HH:mm:ss').diff(
+              moment(this.ruleForm.start_time, 'DD/MM/YYYY HH:mm:ss'),
+              'minutes'
+            )
+          )._i < 60
+        ) {
+          let start_time = moment(this.ruleForm.start_time)
+            .add(3, 'hours')
+            ._d.toISOString()
+          let finish_time = moment(this.ruleForm.finish_time)
+            .add(3, 'hours')
+            ._d.toISOString()
+          this.$refs[form].validate((valid) => {
+            if (valid) {
+              let video = this.getVguardDeviceChannelRecord({
+                channel_id: this.selected_channel,
+                device_id: parseInt(this.$route.params.device_id),
+                start_time: start_time,
+                end_time: finish_time
+                // channel_id: 1,
+                // device_id: 36,
+                // end_time: '2022-01-04T19:27:05.000Z',
+                // start_time: '2022-01-04T19:26:32.000Z'
+              })
+              this.again_request = false
+              video.then((r) => {
+                if (r.status == 200) {
+                  console.log(r)
+                  let currentDate = new Date()
+                  const url = window.URL.createObjectURL(new Blob([r.data]))
+                  const link = document.createElement('a')
+                  link.href = url
+                  link.setAttribute(
+                    'download',
+                    this.getDevice.premise.custom_premise_id +
+                      '-CH-' +
+                      this.selected_channel +
+                      '-' +
+                      currentDate.getFullYear() +
+                      ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+                      ('0' + currentDate.getDate()).slice(-2) +
+                      ('0' + currentDate.getHours()).slice(-2) +
+                      ('0' + currentDate.getMinutes()).slice(-2) +
+                      ('0' + currentDate.getSeconds()).slice(-2) +
+                      '.avi'
+                  )
+                  document.body.appendChild(link)
+                  link.click()
+                  this.downloadRecordVisible = false
+                  this.record_download_request = true
+                } else {
+                  this.record_download_request = true
+                }
+                console.log(this.again_request)
+                setTimeout(() => {
+                  this.again_request = true
+                }, 5000)
+              })
+              console.log(valid)
             }
           })
-          console.log(valid)
+        } else {
+          Vue.notify({
+            text: 'Girdiğiniz tarih aralığının maximum 1 saat olduğuna emin olunuz.',
+            group: 'error-template',
+            type: 'error'
+          })
         }
-      })
+      }
     },
     handleOnSnapshotClick(val) {
       console.log('DEvice', this.getDevice.premise.custom_premise_id)

@@ -70,6 +70,7 @@ export default {
       selected_events: '',
       downloadEventRecordConfirmDialog: false,
       record_download_request: false,
+      again_request: true,
       channels_normal_status: {
         has_sabotage: false,
         has_scene_change: false,
@@ -109,69 +110,76 @@ export default {
        * Buraya cihazda gerçekleşen olayın
        * kaydının indirileceği kod gelicek
        */
-      let start_time = ''
-      let finish_time = ''
-      if (this.selected_events.state == 'Video Kaybı Algılandı') {
-        start_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(-30, 'seconds')
-          ._d.toISOString()
-        finish_time = moment(this.selected_events.event_date).add(3, 'hours')
-      } else if (this.selected_events.state == 'Video Kaybı Düzeldi') {
-        start_time = moment(this.selected_events.event_date).add(3, 'hours')
-        finish_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(30, 'seconds')
-          ._d.toISOString()
-      } else {
-        start_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(-61, 'seconds')
-          ._d.toISOString()
-        finish_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(29, 'seconds')
-          ._d.toISOString()
-      }
-      console.log('FinishTime', finish_time)
-      console.log('StartTime', start_time)
-      let video = this.getVguardDeviceChannelRecord({
-        channel_id: this.selected_events.channel_id,
-        device_id: parseInt(this.$route.params.device_id),
-        // channel_id: 1,
-        // device_id: 36,
-        start_time: start_time,
-        end_time: finish_time
-      })
-      video.then((r) => {
-        if (r.status == 200) {
-          let currentDate = new Date()
-          const url = window.URL.createObjectURL(new Blob([r.data]))
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute(
-            'download',
-            this.getDevice.premise.custom_premise_id +
-              '-CH-' +
-              this.selected_channel +
-              '-' +
-              currentDate.getFullYear() +
-              ('0' + (currentDate.getMonth() + 1)).slice(-2) +
-              ('0' + currentDate.getDate()).slice(-2) +
-              ('0' + currentDate.getHours()).slice(-2) +
-              ('0' + currentDate.getMinutes()).slice(-2) +
-              ('0' + currentDate.getSeconds()).slice(-2) +
-              '.avi'
-          )
-          document.body.appendChild(link)
-          link.click()
-          this.downloadEventRecordConfirmDialog = false
-          this.record_download_request = true
+      console.log('Kontrol', this.again_request)
+      if (this.again_request) {
+        let start_time = ''
+        let finish_time = ''
+        if (this.selected_events.state == 'Video Kaybı Algılandı') {
+          start_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(-30, 'seconds')
+            ._d.toISOString()
+          finish_time = moment(this.selected_events.event_date).add(3, 'hours')
+        } else if (this.selected_events.state == 'Video Kaybı Düzeldi') {
+          start_time = moment(this.selected_events.event_date).add(3, 'hours')
+          finish_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(30, 'seconds')
+            ._d.toISOString()
         } else {
-          //   this.downloadEventRecordConfirmDialog = false
-          this.record_download_request = true
+          start_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(-61, 'seconds')
+            ._d.toISOString()
+          finish_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(29, 'seconds')
+            ._d.toISOString()
         }
-      })
+        console.log('FinishTime', finish_time)
+        console.log('StartTime', start_time)
+        let video = this.getVguardDeviceChannelRecord({
+          channel_id: this.selected_events.channel_id,
+          device_id: parseInt(this.$route.params.device_id),
+          // channel_id: 1,
+          // device_id: 36,
+          start_time: start_time,
+          end_time: finish_time
+        })
+        video.then((r) => {
+          if (r.status == 200) {
+            let currentDate = new Date()
+            const url = window.URL.createObjectURL(new Blob([r.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute(
+              'download',
+              this.getDevice.premise.custom_premise_id +
+                '-CH-' +
+                this.selected_channel +
+                '-' +
+                currentDate.getFullYear() +
+                ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+                ('0' + currentDate.getDate()).slice(-2) +
+                ('0' + currentDate.getHours()).slice(-2) +
+                ('0' + currentDate.getMinutes()).slice(-2) +
+                ('0' + currentDate.getSeconds()).slice(-2) +
+                '.avi'
+            )
+            document.body.appendChild(link)
+            link.click()
+            this.downloadEventRecordConfirmDialog = false
+            this.record_download_request = true
+          } else {
+            //   this.downloadEventRecordConfirmDialog = false
+            this.record_download_request = true
+          }
+          this.again_request = false
+          setTimeout(() => {
+            this.again_request = true
+          }, 2000)
+        })
+      }
       //     .catch((err) => console.log(err))
       //   // .catch(() => {
       //   //   //Kayıt indirme gerçekleşmezse oluşacak durumlar

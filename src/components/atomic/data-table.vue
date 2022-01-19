@@ -33,7 +33,7 @@
     <el-table-column
       header-align="left"
       prop="premise.custom_premise_name"
-      label="MAĞAZA ADI"
+      label="İSTASYON ADI"
     >
     </el-table-column>
     <el-table-column
@@ -79,40 +79,44 @@
           <li class="device-channel-icon">
             <SvgIconFirstChannels
               :status="
-                scope.row.is_active == true &&
-                scope.row.channels[0].status == true
-                  ? !scope.row.channels[0].show_warning
-                  : null
+                scope.row.is_active == true
+                  ? scope.row.channels[0].status == true
+                    ? !scope.row.channels[0].show_warning
+                    : null
+                  : false
               "
             ></SvgIconFirstChannels>
           </li>
           <li class="device-channel-icon">
             <SvgIconSecondChannel
               :status="
-                scope.row.is_active == true &&
-                scope.row.channels[1].status == true
-                  ? !scope.row.channels[1].show_warning
-                  : null
+                scope.row.is_active == true
+                  ? scope.row.channels[1].status == true
+                    ? !scope.row.channels[1].show_warning
+                    : null
+                  : false
               "
             ></SvgIconSecondChannel>
           </li>
           <li class="device-channel-icon">
             <SvgIconThirdChannel
               :status="
-                scope.row.is_active == true &&
-                scope.row.channels[2].status == true
-                  ? !scope.row.channels[2].show_warning
-                  : null
+                scope.row.is_active == true
+                  ? scope.row.channels[2].status == true
+                    ? !scope.row.channels[2].show_warning
+                    : null
+                  : false
               "
             ></SvgIconThirdChannel>
           </li>
           <li class="device-channel-icon">
             <SvgIconFourthChannel
               :status="
-                scope.row.is_active == true &&
-                scope.row.channels[3].status == true
-                  ? !scope.row.channels[3].show_warning
-                  : null
+                scope.row.is_active == true
+                  ? scope.row.channels[3].status == true
+                    ? !scope.row.channels[3].show_warning
+                    : null
+                  : false
               "
             ></SvgIconFourthChannel>
           </li>
@@ -125,14 +129,14 @@
           <li class="device-state-icon">
             <SvgIconCommunication
               :status="
-                scope.row.is_active == true ? !scope.row.network_error : null
+                scope.row.is_active == true ? !scope.row.network_error : false
               "
             ></SvgIconCommunication>
           </li>
           <li class="device-state-icon">
             <SvgIconDisk
               :status="
-                scope.row.is_active == true ? !scope.row.disk_error : null
+                scope.row.is_active == true ? !scope.row.disk_error : false
               "
             ></SvgIconDisk>
           </li>
@@ -141,14 +145,14 @@
               :status="
                 scope.row.is_active == true
                   ? !scope.row.record_error && !scope.row.disk_error
-                  : null
+                  : false
               "
             ></SvgIconRecord>
           </li>
           <li class="device-state-icon">
             <SvgIconDateTime
               :status="
-                scope.row.is_active == true ? !scope.row.datetime_error : null
+                scope.row.is_active == true ? !scope.row.datetime_error : false
               "
             ></SvgIconDateTime>
           </li>
@@ -189,7 +193,7 @@
       </template>
     </el-table-column> -->
   </el-table>
-  <!-- Mekanlar -->
+  <!-- İstasyonlar -->
   <el-table
     v-loading="loading"
     v-else-if="['Premises'].includes(this.$route.name)"
@@ -246,8 +250,6 @@
     <el-table-column type="selection" width="55"> </el-table-column>
     <el-table-column property="premise_id" label="İSTASYON KODU" min-width="55">
     </el-table-column>
-    <el-table-column property="location" label="LOKASYON" min-width="80">
-    </el-table-column>
 
     <el-table-column
       property="premise_name"
@@ -257,6 +259,8 @@
       <!-- <template slot-scope="scope">
         {{ scope.custom_premise_id }}
       </template> -->
+    </el-table-column>
+    <el-table-column property="location" label="LOKASYON" min-width="80">
     </el-table-column>
     <el-table-column property="fault_type" label="ARIZA TİPİ" min-width="150">
     </el-table-column>

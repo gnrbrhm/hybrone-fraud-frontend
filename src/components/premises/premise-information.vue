@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="premise-information-content">
-      <span>Mekan Bilgileri</span>
+      <span>İstasyon Bilgileri</span>
 
       <span
-        >Mekan ID :
+        >İstasyon ID :
         <p>{{ premise.custom_premise_id }}</p></span
       >
       <span
-        >Mekan Adı:
+        >İstasyon Adı:
         <p>{{ premise.custom_premise_name }}</p></span
       >
       <span

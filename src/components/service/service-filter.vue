@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="location">
-      <span class="label">LOKASYON ID</span>
+      <span class="label">İSTASYON KODU</span>
       <el-input
         class="sentinel-input"
         type="search"
