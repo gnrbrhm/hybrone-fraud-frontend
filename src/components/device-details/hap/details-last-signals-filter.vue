@@ -99,7 +99,8 @@ export default {
         this.filtered_data[item] = ''
       })
       this.signals_code = []
-      this.$emit('onFilteredData', {})
+      //   this.$emit('onFilteredData', {})
+      bus.$emit('onFilteredEventsData', this.filtered_data)
     }
   },
   created() {

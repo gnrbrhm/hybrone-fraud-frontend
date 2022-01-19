@@ -14,6 +14,7 @@
     ></DataTablePagination>
     <el-dialog
       :visible.sync="downloadEventRecordConfirmDialog"
+      :before-close="handleClose"
       width="500px"
       top="350px"
     >
@@ -68,6 +69,7 @@ export default {
       filtered_data: {},
       selected_events: '',
       downloadEventRecordConfirmDialog: false,
+      record_download_request: false,
       channels_normal_status: {
         has_sabotage: false,
         has_scene_change: false,
@@ -95,6 +97,12 @@ export default {
       this.selected_events = val
       console.log(val)
       this.downloadEventRecordConfirmDialog = true
+    },
+    handleClose() {
+      if (this.record_download_request) {
+        this.downloadEventRecordConfirmDialog = false
+        this.record_download_request = false
+      }
     },
     downloadEventRecord() {
       /**
@@ -135,35 +143,41 @@ export default {
         start_time: start_time,
         end_time: finish_time
       })
-      video
-        .then((r) => {
-          if (r.status == 200) {
-            this.downloadEventRecordConfirmDialog = false
-            let currentDate = new Date()
-            const url = window.URL.createObjectURL(new Blob([r.data]))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute(
-              'download',
-              this.getDevice.premise.custom_premise_id +
-                '-CH-' +
-                this.selected_channel +
-                '-' +
-                currentDate.getFullYear() +
-                ('0' + (currentDate.getMonth() + 1)).slice(-2) +
-                ('0' + currentDate.getDate()).slice(-2) +
-                ('0' + currentDate.getHours()).slice(-2) +
-                ('0' + currentDate.getMinutes()).slice(-2) +
-                ('0' + currentDate.getSeconds()).slice(-2) +
-                '.avi'
-            )
-            document.body.appendChild(link)
-            link.click()
-          }
-        })
-        .catch
-        //Kayıt indirme gerçekleşmezse oluşacak durumlar
-        ()
+      video.then((r) => {
+        if (r.status == 200) {
+          let currentDate = new Date()
+          const url = window.URL.createObjectURL(new Blob([r.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute(
+            'download',
+            this.getDevice.premise.custom_premise_id +
+              '-CH-' +
+              this.selected_channel +
+              '-' +
+              currentDate.getFullYear() +
+              ('0' + (currentDate.getMonth() + 1)).slice(-2) +
+              ('0' + currentDate.getDate()).slice(-2) +
+              ('0' + currentDate.getHours()).slice(-2) +
+              ('0' + currentDate.getMinutes()).slice(-2) +
+              ('0' + currentDate.getSeconds()).slice(-2) +
+              '.avi'
+          )
+          document.body.appendChild(link)
+          link.click()
+          this.downloadEventRecordConfirmDialog = false
+          this.record_download_request = true
+        } else {
+          //   this.downloadEventRecordConfirmDialog = false
+          this.record_download_request = true
+        }
+      })
+      //     .catch((err) => console.log(err))
+      //   // .catch(() => {
+      //   //   //Kayıt indirme gerçekleşmezse oluşacak durumlar
+      //   this.downloadEventRecordConfirmDialog = false
+      //   this.record_download_request = true
+      //   // })
     },
     handleChangePagination() {
       this.data = []
@@ -198,17 +212,19 @@ export default {
         ...payload
       })
       let events_data = []
+
       device_signals.then((r) => {
-        console.log('Events', r)
-        r.forEach((item) => {
-          //    if (r.length - 1 > index) {}
-          events_data.push({
-            ...item,
-            state: this.getDifferenceObject(item)
+        console.log('Events R', r)
+        if (r !== null)
+          r.forEach((item) => {
+            //    if (r.length - 1 > index) {}
+            events_data.push({
+              ...item,
+              state: this.getDifferenceObject(item)
+            })
           })
-        })
         console.log('Events', events_data)
-        this.data = events_data
+        this.data = events_data.length > 0 ? events_data : []
       })
     },
     getDifferenceObject(obj1) {
