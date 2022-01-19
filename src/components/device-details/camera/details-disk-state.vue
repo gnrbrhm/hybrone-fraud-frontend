@@ -3,6 +3,7 @@
     <span class="title">Disk Durumu</span>
     <div class="dashboard-indicator">
       <VueApexCharts
+        v-if="this.getDevice.last_disk_event.capacity !== 0"
         class="dashboard-card-circle"
         type="donut"
         :options="chartOptions"
@@ -12,27 +13,42 @@
     <div class="dashboard-legand">
       <div class="item">
         <span class="title">Durum</span>
-        <span class="value">Normal</span>
+        <span class="value">{{
+          this.getDevice.last_disk_event.capacity !== 0
+            ? 'Normal'
+            : 'Bilgi Alınamadı'
+        }}</span>
       </div>
       <div class="item">
         <span class="title">Toplam Kapasite</span>
-        <span class="value">4TB</span>
+        <span class="value">{{
+          this.getDevice.last_disk_event.capacity + ' TB'
+        }}</span>
       </div>
       <div class="item">
-        <span class="title">Kullanılan</span> <span class="value">3,42 TB</span>
+        <span class="title">Kullanılan</span>
+        <span class="value">{{
+          this.getDevice.last_disk_event.used + ' TB'
+        }}</span>
       </div>
       <div class="item">
-        <span class="title">Kalan</span> <span class="value">0,36 TB</span>
+        <span class="title">Kalan</span>
+        <span class="value">{{
+          this.getDevice.last_disk_event.empty + ' TB'
+        }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import VueApexCharts from 'vue-apexcharts'
-
+import VueApexCharts from 'vue-apexcharts'
+import { mapGetters } from 'vuex'
 export default {
   name: 'DetailsDiskState',
+  components: {
+    VueApexCharts
+  },
   data() {
     return {
       indicators: {}
@@ -45,10 +61,10 @@ export default {
     },
     hash_data: Object
   },
-  //   components: {
-  //     VueApexCharts
-  //   },
   computed: {
+    ...mapGetters({
+      getDevice: 'device/getDevice'
+    }),
     chartOptions() {
       return {
         colors: [...this.hash_data.colors],

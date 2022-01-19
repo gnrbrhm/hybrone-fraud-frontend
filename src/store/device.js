@@ -193,6 +193,7 @@ export default {
         data: { ...payload }
       })
       return refresh.then((r) => {
+        console.log('refreshVguardDeviceData', r)
         if (r.status) return r
       })
     },
