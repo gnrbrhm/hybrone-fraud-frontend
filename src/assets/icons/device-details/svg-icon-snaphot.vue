@@ -31,7 +31,7 @@
 export default {
   name: 'SvgIconSnapshot',
   props: {
-    status: { type: Boolean, default: null }
+    status: { type: Boolean, default: false }
   },
   computed: {
     changeColor() {
