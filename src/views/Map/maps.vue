@@ -113,29 +113,31 @@ export default {
       return popup
     },
     async getDeviceStatus(config) {
+      console.log('Config', config)
       if (config.hardware_type_id == 3) {
-        let channels = []
+        let channels = config.channels
+        // let channels = []
 
-        config.channels.forEach((channel) => {
-          let channels_events = config.events.filter((event) => {
-            return event.channel_id == channel.channel_id
-          })
-          if (channels_events.length > 0) {
-            channels.push({
-              channel_id: channel.channel_id,
-              category: channel.category,
-              status: channel.status,
-              ...channels_events[0]
-            })
-          } else {
-            channels.push({
-              channel_id: channel.channel_id,
-              category: channel.category,
-              status: channel.status
-              // is_active: false
-            })
-          }
-        })
+        // config.channels.forEach((channel) => {
+        //   let channels_events = config.events.filter((event) => {
+        //     return event.channel_id == channel.channel_id
+        //   })
+        //   if (channels_events.length > 0) {
+        //     channels.push({
+        //       channel_id: channel.channel_id,
+        //       category: channel.category,
+        //       status: channel.status,
+        //       ...channels_events[0]
+        //     })
+        //   } else {
+        //     channels.push({
+        //       channel_id: channel.channel_id,
+        //       category: channel.category,
+        //       status: channel.status
+        //       // is_active: false
+        //     })
+        //   }
+        // })
         this.device_state.state.is_connection =
           config.is_active == true ? !config.network_error : null
         this.device_state.state.is_storage =
@@ -145,16 +147,16 @@ export default {
         this.device_state.state.is_last_signal =
           config.is_active == true ? !config.datetime_error : null
         this.device_state.channels.first = channels[0].status
-          ? channels[0].is_active
+          ? channels[0].is_active && !channels[0].show_warning
           : null
         this.device_state.channels.second = channels[1].status
-          ? channels[1].is_active
+          ? channels[1].is_active && !channels[1].show_warning
           : null
         this.device_state.channels.thirdth = channels[2].status
-          ? channels[2].is_active
+          ? channels[2].is_active && !channels[2].show_warning
           : null
         this.device_state.channels.forth = channels[3].status
-          ? channels[3].is_active
+          ? channels[3].is_active && !channels[3].show_warning
           : null
       } else {
         if (!config.network_error) {

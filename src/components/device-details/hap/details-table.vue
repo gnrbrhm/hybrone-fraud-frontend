@@ -11,7 +11,11 @@
     <el-table-column property="id" label="KANAL" min-width="35" align="center">
       <template slot-scope="scope"
         ><SvgIconFirstChannel
-          :status="scope.row.status ? scope.row.is_active : null"
+          :status="
+            scope.row.status
+              ? scope.row.is_active && !scope.row.show_warning
+              : null
+          "
           :device_id="scope.row.channel_id"
         ></SvgIconFirstChannel>
       </template>
