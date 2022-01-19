@@ -109,7 +109,7 @@
               getPermissions['download_records'] && -->
           <SvgIconSnapshot
             @click="snapshotClick(scope.row.channel_id)"
-            :status="!scope.row.is_active"
+            :status="scope.row.status && scope.row.is_active"
           ></SvgIconSnapshot>
         </el-button>
       </template>
@@ -125,16 +125,18 @@
       <template slot-scope="scope">
         <el-button
           :disabled="
-            !scope.row.status &&
-            !scope.row.is_active &&
-            !getPermissions['download_records']
+            !scope.row.status ||
+            !scope.row.is_active ||
+            !getPermissions['download_record']
           "
           class="button"
           @click="downloadRecord(scope.row.channel_id)"
         >
           <!-- scope.row.status &&
               getPermissions['download_records'] && -->
-          <SvgIconDownload :status="!scope.row.is_active"></SvgIconDownload>
+          <SvgIconDownload
+            :status="scope.row.status && scope.row.is_active"
+          ></SvgIconDownload>
         </el-button>
       </template>
     </el-table-column>

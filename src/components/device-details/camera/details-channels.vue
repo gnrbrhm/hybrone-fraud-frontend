@@ -232,30 +232,31 @@ export default {
       //       }
       //     })
       //   })
-      let channels = []
-      vguard_device.channels.forEach((channel) => {
-        let channels_events = vguard_device.events.filter((event) => {
-          return event.channel_id == channel.channel_id
-        })
-        if (channels_events.length > 0) {
-          channels.push({
-            channel_id: channel.channel_id,
-            category: channel.category,
-            status: channel.status,
-            ...channels_events[0]
-          })
-        } else {
-          channels.push({
-            channel_id: channel.channel_id,
-            category: channel.category,
-            status: channel.status
-            // is_active: false
-          })
-        }
-      })
+      //   let channels = []
+      //   vguard_device.channels.forEach((channel) => {
+      //     let channels_events = vguard_device.events.filter((event) => {
+      //       return event.channel_id == channel.channel_id
+      //     })
+      //     if (channels_events.length > 0) {
+      //       channels.push({
+      //         channel_id: channel.channel_id,
+      //         category: channel.category,
+      //         status: channel.status,
+      //         ...channels_events[0]
+      //       })
+      //     } else {
+      //       channels.push({
+      //         channel_id: channel.channel_id,
+      //         category: channel.category,
+      //         status: channel.status
+      //         // is_active: false
+      //       })
+      //     }
+      //   })
 
-      this.device_channels = channels
-      console.log('Channels', channels)
+      //   this.device_channels = channels
+      this.device_channels = vguard_device.channels
+      console.log('Channels', vguard_device.channels)
       //   this.device_channels = vguard_device.events
 
       //   console.log('ProsecDevice', vguard_device)
