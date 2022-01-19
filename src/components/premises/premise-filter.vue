@@ -17,11 +17,11 @@
     </div>
     <div class="component">
       <span>YENİ</span>
-      <router-link :to="{ name: 'CreatePremise' }">
-        <el-button
-          :disabled="!this.getPermissions['location_create']"
-          class="sentinel-button"
-        >
+      <router-link
+        :disabled="!this.getPermissions['location_create']"
+        :to="{ name: 'CreatePremise' }"
+      >
+        <el-button class="sentinel-button">
           <SvgIconAdd></SvgIconAdd>
         </el-button>
       </router-link>
@@ -114,6 +114,11 @@ export default {
         color: #444444;
       }
     }
+  }
+
+  a[disabled='disabled'] {
+    pointer-events: none;
+    opacity: 0.4;
   }
 }
 </style>

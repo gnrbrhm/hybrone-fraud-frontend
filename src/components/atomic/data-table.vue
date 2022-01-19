@@ -79,10 +79,9 @@
           <li class="device-channel-icon">
             <SvgIconFirstChannels
               :status="
-                scope.row.is_active == true && scope.row.events.length > 0
-                  ? scope.row.events[0]
-                    ? scope.row.events[0].is_active
-                    : null
+                scope.row.is_active == true &&
+                scope.row.channels[0].status == true
+                  ? !scope.row.channels[0].show_warning
                   : null
               "
             ></SvgIconFirstChannels>
@@ -90,10 +89,9 @@
           <li class="device-channel-icon">
             <SvgIconSecondChannel
               :status="
-                scope.row.is_active == true && scope.row.events.length > 0
-                  ? scope.row.events[1]
-                    ? scope.row.events[1].is_active
-                    : null
+                scope.row.is_active == true &&
+                scope.row.channels[1].status == true
+                  ? !scope.row.channels[1].show_warning
                   : null
               "
             ></SvgIconSecondChannel>
@@ -101,10 +99,9 @@
           <li class="device-channel-icon">
             <SvgIconThirdChannel
               :status="
-                scope.row.is_active == true && scope.row.events.length > 0
-                  ? scope.row.events[2]
-                    ? scope.row.events[2].is_active
-                    : null
+                scope.row.is_active == true &&
+                scope.row.channels[2].status == true
+                  ? !scope.row.channels[2].show_warning
                   : null
               "
             ></SvgIconThirdChannel>
@@ -112,10 +109,9 @@
           <li class="device-channel-icon">
             <SvgIconFourthChannel
               :status="
-                scope.row.is_active == true && scope.row.events.length > 0
-                  ? scope.row.events[3]
-                    ? scope.row.events[3].is_active
-                    : null
+                scope.row.is_active == true &&
+                scope.row.channels[3].status == true
+                  ? !scope.row.channels[3].show_warning
                   : null
               "
             ></SvgIconFourthChannel>

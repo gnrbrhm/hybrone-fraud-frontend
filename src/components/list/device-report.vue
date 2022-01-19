@@ -100,7 +100,7 @@ export default {
     getSelectedRowsPremiseId() {
       let selected_premise_ids = []
       this.$store.state.dataTable.selectedRows.forEach((item) => {
-        selected_premise_ids.push(item.premise_id)
+        selected_premise_ids.push(item.id)
       })
       return selected_premise_ids
     }
@@ -126,7 +126,9 @@ export default {
           report_type: this.type,
           start_time: this.start_time,
           finish_time: this.finish_time,
-          premise_id: devicesPremiseID.join()
+          device_id: devicesPremiseID.join(),
+          page: 1,
+          limit: 20
         }
       }).then((r) => {
         if (r.status == 200) {

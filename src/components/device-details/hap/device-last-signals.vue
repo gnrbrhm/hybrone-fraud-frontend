@@ -199,19 +199,19 @@ export default {
       })
       let events_data = []
       device_signals.then((r) => {
-        r.forEach((item, index) => {
-          if (r.length - 1 > index) {
-            events_data.push({
-              ...item,
-              state: this.getDifferenceObject(item, r[index + 1])
-            })
-          }
+        console.log('Events', r)
+        r.forEach((item) => {
+          //    if (r.length - 1 > index) {}
+          events_data.push({
+            ...item,
+            state: this.getDifferenceObject(item)
+          })
         })
         console.log('Events', events_data)
         this.data = events_data
       })
     },
-    getDifferenceObject(obj1, obj2) {
+    getDifferenceObject(obj1) {
       let result = ''
       Object.keys(obj1).forEach((item1) => {
         if (
@@ -224,34 +224,34 @@ export default {
           item1 != 'id' &&
           item1 != 'is_active' &&
           item1 != 'is_record' &&
-          item1 != 'vguard_device'
+          item1 != 'vguard_device' &&
+          obj1[item1] != null
         ) {
-          if (obj1[item1] != obj2[item1]) {
-            switch (item1) {
-              case 'has_sabotage':
-                result = obj1[item1]
-                  ? 'Video Sabotaj Algılandı'
-                  : 'Video Sabotaj Düzeldi'
-                break
-              case 'has_scene_change':
-                result = obj1[item1]
-                  ? 'Video Sahne Değişimi Algılandı'
-                  : 'Video Sahne Değişimi Düzeldi'
-                break
-              case 'has_video_loss':
-                result = obj1[item1]
-                  ? 'Video Kaybı Algılandı'
-                  : 'Video Kaybı Düzeldi'
-                break
-              case 'motion_detect':
-                result = obj1[item1]
-                  ? 'Hareket Algılama Algılandı'
-                  : 'Hareket Algılama Düzeldi'
-                break
+          console.log(item1 + obj1[item1])
+          switch (item1) {
+            case 'has_sabotage':
+              result = obj1[item1]
+                ? 'Video Sabotaj Algılandı'
+                : 'Video Sabotaj Düzeldi'
+              break
+            case 'has_scene_change':
+              result = obj1[item1]
+                ? 'Video Sahne Değişimi Algılandı'
+                : 'Video Sahne Değişimi Düzeldi'
+              break
+            case 'has_video_loss':
+              result = obj1[item1]
+                ? 'Video Kaybı Algılandı'
+                : 'Video Kaybı Düzeldi'
+              break
+            case 'motion_detect':
+              result = obj1[item1]
+                ? 'Hareket Algılama Algılandı'
+                : 'Hareket Algılama Düzeldi'
+              break
 
-              default:
-                break
-            }
+            default:
+              break
           }
         }
       })
