@@ -186,8 +186,6 @@ export default {
       let image = this.getVguardDeviceChannelSnapshot({
         device_id: parseInt(this.$route.params.device_id),
         channel_id: val
-        // device_id: 38,
-        // channel_id: 1
       })
       image.then((r) => {
         let currentDate = new Date()
