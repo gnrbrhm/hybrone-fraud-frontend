@@ -82,17 +82,18 @@ export default {
     ) {
       console.log('UpdatePremise Location', this.getCurrentLocation.location)
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
-      this.$maps.on('click', (e) => {
-        console.log(this.marker)
-        if (this.marker) this.$maps.removeLayer(this.marker)
-        this.marker = this.L.marker(e.latlng).addTo(this.$maps)
-        this.$store.dispatch('setSelectedLocation', {
-          long: this.marker.getLatLng().lng,
-          lat: this.marker.getLatLng().lat
-        })
+      if (!['Premises'].includes(this.$route.name))
+        this.$maps.on('click', (e) => {
+          console.log(this.marker)
+          if (this.marker) this.$maps.removeLayer(this.marker)
+          this.marker = this.L.marker(e.latlng).addTo(this.$maps)
+          this.$store.dispatch('setSelectedLocation', {
+            long: this.marker.getLatLng().lng,
+            lat: this.marker.getLatLng().lat
+          })
 
-        this.selected_location = true
-      })
+          this.selected_location = true
+        })
     }
 
     bus.$on('onCurrentChangeRowPremise', () =>

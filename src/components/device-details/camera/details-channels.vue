@@ -275,9 +275,10 @@ export default {
       let refresh = this.refreshVguardDeviceData({
         device_id: [parseInt(this.$route.params.device_id)]
       })
-      if (refresh.status == 200) {
-        this.getDeviceDetails(this.$route.params.device_id)
-      }
+      console.log('Refresh Device Details', refresh.status)
+      //   if (refresh.status == 200) {
+      this.getDeviceDetails(this.$route.params.device_id)
+      //   }
       //   refresh.then((r) => {
       //     if (r.status == 200) {
       //       this.getDeviceDetails(this.$route.params.device_id)
