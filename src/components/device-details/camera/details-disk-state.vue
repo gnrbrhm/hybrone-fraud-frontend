@@ -168,6 +168,9 @@ export default {
     console.log('Chart Option', this.chartOptions)
     this.is_ready = true
     this.$forceUpdate()
+  },
+  destroyed() {
+    this.is_ready = false
   }
 }
 </script>

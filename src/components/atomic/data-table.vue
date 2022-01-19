@@ -139,7 +139,9 @@
           <li class="device-state-icon">
             <SvgIconRecord
               :status="
-                scope.row.is_active == true ? !scope.row.record_error : null
+                scope.row.is_active == true
+                  ? !scope.row.record_error && !scope.row.disk_error
+                  : null
               "
             ></SvgIconRecord>
           </li>

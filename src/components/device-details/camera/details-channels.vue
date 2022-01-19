@@ -271,14 +271,18 @@ export default {
       //   })
       //   console.log('Zone Array', this.device_channels)
     },
-    refreshDeviceAndData() {
-      let refresh = this.refreshVguardDeviceData({
+    async refreshDeviceAndData() {
+      let refresh = await this.refreshVguardDeviceData({
         device_id: [parseInt(this.$route.params.device_id)]
       })
-      console.log('Refresh Device Details', refresh.status)
-      //   if (refresh.status == 200) {
-      this.getDeviceDetails(this.$route.params.device_id)
-      //   }
+      console.log('Refresh Device Details', refresh)
+      if (refresh.status == 200) {
+        let vguard_device = await this.getDeviceDetails(
+          this.$route.params.device_id
+        )
+        console.log('vguard_device', vguard_device)
+        this.getPartionsZones(vguard_device)
+      }
       //   refresh.then((r) => {
       //     if (r.status == 200) {
       //       this.getDeviceDetails(this.$route.params.device_id)
