@@ -1,3 +1,4 @@
+export const APP_NAME = 'Hybrone-Sentinel-Petronet'
 export const NAVIGATON = [
   // { label: "Takip", route: "tracked" ,disabled:false},
   { label: 'Dashboard', route: '/dashboard/panel', disabled: true },

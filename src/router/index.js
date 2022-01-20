@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MiddlewareAuth from './middleware-auth'
+import store from '../store'
+// import i18n from '../plugins/i18n'
+import { APP_NAME } from '../constant'
+import { version } from '../../package'
 
 import Auth from '../views/Auth/auth.vue'
 import Dashboard from '../views/Dashboard/dashboard.vue'
@@ -226,5 +230,21 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+router.beforeEach((to, from, next) => {
+  //   const lang = to.query.lang
+
+  //   if (lang && store.state.locale.locales.includes(lang)) {
+  //     i18n.locale = lang
+  //     store.dispatch('locale/setLang', lang)
+  //   }
+  console.log(process)
+  document.title = APP_NAME + ' - ' + 'v' + version
+  next()
+})
+
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch((error) => error)
+}
 
 export default router
