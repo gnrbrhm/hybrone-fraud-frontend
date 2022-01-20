@@ -30,9 +30,12 @@
 
 <script>
 import VueApexCharts from 'vue-apexcharts'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'DetailsDiskState',
+  components: {
+    VueApexCharts
+  },
   data() {
     return {
       indicators: {}
@@ -45,9 +48,7 @@ export default {
     },
     hash_data: Object
   },
-  components: {
-    VueApexCharts
-  },
+
   computed: {
     chartOptions() {
       return {
