@@ -30,7 +30,7 @@ new Vue({
   store,
   created() {
     // Prevent blank screen in Electron builds
-    this.$router.push('/')
+    if (process.env.IS_ELECTRON) this.$router.push('/')
   },
   render: (h) => h(App)
 }).$mount('#app')
