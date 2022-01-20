@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="location">
-      <span class="label">LOKASYON ID</span>
+      <span class="label">İSTASYON KODU</span>
       <el-input
         class="sentinel-input"
         type="search"
@@ -136,11 +136,11 @@
           :data="resultTable"
           style="width: 100%"
         >
-          <el-table-column prop="row" label="Sıra" width="60px">
+          <el-table-column prop="row" label="Sıra" width="200">
           </el-table-column>
-          <el-table-column prop="id" label="ATM ID" width="80px">
+          <el-table-column prop="id" label="İstasyon ID" width="300">
           </el-table-column>
-          <el-table-column prop="description" label="Açıklama" width="auto">
+          <el-table-column prop="description" label="Açıklama" width="150">
           </el-table-column>
         </el-table>
         <div class="bottom">
@@ -333,7 +333,7 @@ export default {
         .post(
           // 'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/tickets/import/',
           // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/tickets/import/',
-          'http://34.79.135.127:3000/api/v1/tickets/import',
+          'http://10.100.0.34::3000/api/v1/tickets/import',
           // 'http://10.81.102.51:3000/api/v1/tickets/import',
           form,
           config
@@ -604,7 +604,7 @@ export default {
 .bottom {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 4;
 }
 

@@ -152,6 +152,11 @@ export default {
     method: 'POST',
     data: {}
   },
+  resetVguardDeviceSceneChange: {
+    url: '/vguard/device-scene-change-reset',
+    method: 'POST',
+    data: {}
+  },
   getVguardDeviceById: {
     url: '/vguard/devices',
     method: 'GET'

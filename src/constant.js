@@ -65,7 +65,8 @@ export const DASHBOARD_VARIABLES = {
           online: { label: 'Online', value: 5 },
           offline: { label: 'Offline', value: 5 }
         },
-        colors: ['#6FCF97', '#A0A0A0', 'rgba(255,87,93,.77)']
+        colors: ['#6FCF97', '#E04141', '#A0A0A0', 'rgba(255,87,93,.77)']
+        // colors: ['#A0A0A0', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -75,7 +76,8 @@ export const DASHBOARD_VARIABLES = {
           normal: { label: 'Normal', value: 4 },
           alarm: { label: 'Alarm', value: 10 }
         },
-        colors: ['#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
+        colors: ['#6FCF97', '#E04141', '#A0A0A0', 'rgba(255,87,93,.77)']
+        // colors: ['#E04141', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -136,10 +138,10 @@ export const DASHBOARD_VARIABLES = {
       title: 'Kayıt Durumu',
       state: {
         series: {
-          normal: { label: 'Kayıt Yapılıyor', value: 4 },
+          normal_record: { label: 'Kayıt Yapılıyor', value: 4 },
           alarm: { label: 'Kayıt Yapmıyor', value: 10 }
         },
-        colors: ['#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
+        colors: ['#007DB7', '#E04141', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -147,7 +149,7 @@ export const DASHBOARD_VARIABLES = {
       state: {
         series: {
           total: { label: 'Toplam', value: 10 },
-          normal: { label: 'Normal', value: 10 },
+          normal_disk: { label: 'Normal', value: 10 },
           fault: { label: 'Hatalı', value: 10 }
         },
         colors: ['#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
@@ -161,18 +163,18 @@ export const DASHBOARD_VARIABLES = {
           active: { label: 'Aktif', value: 10 },
           pasif: { label: 'Pasif', value: 10 }
         },
-        colors: ['#007DB7', '#A0A0A0', 'rgba(255,87,93,.77)']
+        colors: ['#6FCF97', '#007DB7', '#A0A0A0', 'rgba(255,87,93,.77)']
       }
     },
     {
       title: 'Video Analiz Durumları',
       state: {
         series: {
-          normal: { label: 'Normal', value: 10 },
+          normal_analysis: { label: 'Normal', value: 10 },
           video_loss: { label: 'Video Kaybı', value: 10 },
           other_state: { label: 'Diğer Durumlar', value: 10 }
         },
-        colors: ['#6FCF97', '#F2994A', 'rgba(255,87,93,.77)']
+        colors: ['#A0A0A0', '#F2994A', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -183,7 +185,7 @@ export const DASHBOARD_VARIABLES = {
           sabotage: { label: 'Sabotaj Algılama', value: 10 },
           scene_change: { label: 'Sahne Değişimi', value: 10 }
         },
-        colors: ['#6FCF97', '#E04141', '#9B51E0', 'rgba(255,87,93,.77)']
+        colors: ['#A0A0A0', '#E04141', '#9B51E0', 'rgba(255,87,93,.77)']
       }
     }
   ]

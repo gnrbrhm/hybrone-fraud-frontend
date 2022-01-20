@@ -97,14 +97,14 @@ export default {
       if (val) this.map.flyTo([val.data.lat, val.data.long], 10)
       else
         this.$notify({
-          text: 'Aradığınız ilde ATM bulunmamaktadır.',
+          text: 'Aradığınız ilde İstasyon bulunmamaktadır.',
           type: 'error'
         })
     },
     async createPopup(status) {
       let popup = {
         popupContent:
-          "<div><span>ATM ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
+          "<div><span>İstasyon ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
         popupOptions: {
           maxWidth: '500',
           className: 'another-popup' // classname for another popup
@@ -113,29 +113,31 @@ export default {
       return popup
     },
     async getDeviceStatus(config) {
+      console.log('Config', config)
       if (config.hardware_type_id == 3) {
-        let channels = []
+        let channels = config.channels
+        // let channels = []
 
-        config.channels.forEach((channel) => {
-          let channels_events = config.events.filter((event) => {
-            return event.channel_id == channel.channel_id
-          })
-          if (channels_events.length > 0) {
-            channels.push({
-              channel_id: channel.channel_id,
-              category: channel.category,
-              status: channel.status,
-              ...channels_events[0]
-            })
-          } else {
-            channels.push({
-              channel_id: channel.channel_id,
-              category: channel.category,
-              status: channel.status
-              // is_active: false
-            })
-          }
-        })
+        // config.channels.forEach((channel) => {
+        //   let channels_events = config.events.filter((event) => {
+        //     return event.channel_id == channel.channel_id
+        //   })
+        //   if (channels_events.length > 0) {
+        //     channels.push({
+        //       channel_id: channel.channel_id,
+        //       category: channel.category,
+        //       status: channel.status,
+        //       ...channels_events[0]
+        //     })
+        //   } else {
+        //     channels.push({
+        //       channel_id: channel.channel_id,
+        //       category: channel.category,
+        //       status: channel.status
+        //       // is_active: false
+        //     })
+        //   }
+        // })
         this.device_state.state.is_connection =
           config.is_active == true ? !config.network_error : null
         this.device_state.state.is_storage =
@@ -145,16 +147,16 @@ export default {
         this.device_state.state.is_last_signal =
           config.is_active == true ? !config.datetime_error : null
         this.device_state.channels.first = channels[0].status
-          ? channels[0].is_active
+          ? channels[0].is_active && !channels[0].show_warning
           : null
         this.device_state.channels.second = channels[1].status
-          ? channels[1].is_active
+          ? channels[1].is_active && !channels[1].show_warning
           : null
         this.device_state.channels.thirdth = channels[2].status
-          ? channels[2].is_active
+          ? channels[2].is_active && !channels[2].show_warning
           : null
         this.device_state.channels.forth = channels[3].status
-          ? channels[3].is_active
+          ? channels[3].is_active && !channels[3].show_warning
           : null
       } else {
         if (!config.network_error) {
@@ -210,7 +212,7 @@ export default {
           })
           var popupContent =
             `<div class='column-1'>
-         <div class="atm_id_label">ATM ID</div>
+         <div class="atm_id_label">İstasyon ID</div>
           <span class="atm_id_text">` +
             item[4] +
             `</span>
@@ -370,9 +372,12 @@ export default {
     })
 
     var addressPoints = new Array(this.locations)
-
-    L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
+    var southWest = L.latLng(26.712, 45.227)
+    var northEast = L.latLng(36.774, 42.125)
+    var bounds = L.latLngBounds(southWest, northEast)
+    L.tileLayer('http://10.100.0.34::8081/tile/{z}/{x}/{y}.png', {
       maxZoom: 18,
+      maxBounds: bounds,
       zoomControl: false,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -381,6 +386,8 @@ export default {
       .addTo(this.map)
       .on('mouseover,')
     var markers = new L.MarkerClusterGroup()
+    this.map.zoomControl.setPosition('botttomleft')
+    this.map.fitBounds(bounds)
     this.map.addLayer(markers)
   }
 }

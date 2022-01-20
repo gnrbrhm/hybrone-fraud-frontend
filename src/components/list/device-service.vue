@@ -163,7 +163,7 @@ export default {
     this.state_options = [...ACTIONS_FIELDS['SERVICE'][0]['state']['options']]
   },
   mounted() {
-    console.log('Seçilen Mekanlar', this.getSelectedRowsPremiseId)
+    console.log('Seçilen İstasyonlar', this.getSelectedRowsPremiseId)
     bus.$on('onSubmitService', (val) => {
       this.handleServiceSubmit(val)
     })

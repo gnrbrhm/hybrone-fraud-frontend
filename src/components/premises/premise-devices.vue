@@ -9,16 +9,18 @@
         :selected_device_id="selectedDevice"
       ></DeviceCard>
     </div>
-    <span v-else>İlgili mekanda herhangi bir cihaz kaydı bulunmamaktadır.</span>
+    <span v-else
+      >İlgili İstasyonda herhangi bir cihaz kaydı bulunmamaktadır.</span
+    >
     <!-- <div class="sentinel-location-bottom"> -->
     <div class="devices-bottom">
       <el-button
-        :disabled="!selectedDevice && !this.getPermissions['device_edit']"
+        :disabled="!selectedDevice || !this.getPermissions['device_edit']"
         @click="handleUpdate()"
         >DÜZENLE</el-button
       >
       <el-button
-        :disabled="!!selectedDevice && !this.getPermissions['device_create']"
+        :disabled="!!selectedDevice || !this.getPermissions['device_create']"
         @click="handleCreateDevice()"
         >YENİ EKLE</el-button
       >
@@ -177,6 +179,10 @@ export default {
         background-color: $hybrone_disabled_color;
         color: $hybrone_background_color;
       }
+    }
+    [disabled='disabled'] {
+      pointer-events: none;
+      opacity: 0.4;
     }
   }
 }

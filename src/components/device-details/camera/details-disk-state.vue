@@ -1,8 +1,10 @@
 <template>
   <div class="dashboard-content">
-    <span class="title">Disk Durumu</span>
+    <span class="general-title">Disk Durumu</span>
     <div class="dashboard-indicator">
+      <!-- v-if="this.getDevice.last_disk_event.capacity !== 0" -->
       <VueApexCharts
+        v-if="is_ready"
         class="dashboard-card-circle"
         type="donut"
         :options="chartOptions"
@@ -12,17 +14,32 @@
     <div class="dashboard-legand">
       <div class="item">
         <span class="title">Durum</span>
-        <span class="value">Normal</span>
+        <span class="value">{{
+          this.getDevice.last_disk_event.capacity !== 0
+            ? 'Normal'
+            : 'Bilgi Alınamadı'
+        }}</span>
       </div>
       <div class="item">
         <span class="title">Toplam Kapasite</span>
-        <span class="value">4TB</span>
+        <span class="value">{{
+          parseFloat(this.getDevice.last_disk_event.capacity / 100).toFixed(2) +
+          ' GB'
+        }}</span>
       </div>
       <div class="item">
-        <span class="title">Kullanılan</span> <span class="value">3,42 TB</span>
+        <span class="title">Kullanılan</span>
+        <span class="value">{{
+          parseFloat(this.getDevice.last_disk_event.used / 100).toFixed(2) +
+          ' GB'
+        }}</span>
       </div>
       <div class="item">
-        <span class="title">Kalan</span> <span class="value">0,36 TB</span>
+        <span class="title">Kalan</span>
+        <span class="value">{{
+          parseFloat(this.getDevice.last_disk_event.empty / 100).toFixed(2) +
+          ' GB'
+        }}</span>
       </div>
     </div>
   </div>
@@ -38,21 +55,33 @@ export default {
   },
   data() {
     return {
-      indicators: {}
+      indicators: {},
+      is_ready: false,
+      hash_data: {
+        state: {
+          series: {
+            used: { label: 'Kullanılan', value: 10 },
+            empty: { label: 'Kullanılmayan', value: 10 }
+          },
+          colors: ['#E04141', '#6FCF97', 'rgba(255,87,93,.77)']
+        }
+      }
     }
   },
   props: {
     title: {
       default: '',
       type: String
-    },
-    hash_data: Object
+    }
+    // hash_data: Object
   },
-
   computed: {
+    ...mapGetters({
+      getDevice: 'device/getDevice'
+    }),
     chartOptions() {
       return {
-        colors: [...this.hash_data.colors],
+        colors: [...this.hash_data.state.colors],
         legend: {
           show: false
         },
@@ -60,7 +89,7 @@ export default {
           enabled: false,
           dropShadow: false
         },
-        labels: [...Object.keys(this.hash_data.series)],
+        labels: this.changeLabelName(this.hash_data.state.series),
 
         plotOptions: {
           pie: {
@@ -118,9 +147,96 @@ export default {
             }
           }
         },
-        series: this.toArray(this.hash_data.series)
+        series: this.toArray(this.hash_data.state.series)
       }
     }
+  },
+  methods: {
+    toArray(val) {
+      let array = []
+      Object.keys(val).forEach((item) => {
+        if (val[item].label != 'Toplam' && item != 'total')
+          array.push(val[item].value)
+      })
+      return array
+    },
+    changeLabelName(label) {
+      let array = []
+      Object.keys(label).forEach((item) => {
+        if (item != 'total')
+          switch (item) {
+            case 'total':
+              array.push('Toplam')
+              break
+            case 'online':
+              array.push('Online')
+              break
+            case 'offline':
+              array.push('Offline')
+              break
+            case 'normal_record':
+              array.push('Kayıt Yapılıyor')
+              break
+            case 'alarm':
+              array.push('Kayıt Yapılmıyor')
+              break
+            case 'normal_disk':
+              array.push('Normal')
+              break
+            case 'fault':
+              array.push('Hatalı')
+              break
+            case 'active':
+              array.push('Aktif')
+              break
+            case 'pasif':
+              array.push('Pasif')
+              break
+            case 'normal_analysis':
+              array.push('Normal')
+              break
+            case 'video_loss':
+              array.push('Video Kaybı')
+              break
+            case 'other_state':
+              array.push('Diğer Durumlar')
+              break
+            case 'motion_detect':
+              array.push('Hareket Algılama')
+              break
+            case 'sabotage':
+              array.push('Sabotaj Algılama')
+              break
+            case 'scene_change':
+              array.push('Sahne Değişimi')
+              break
+            case 'used':
+              array.push('Kullanılan')
+              break
+            case 'empty':
+              array.push('Kullanılmayan')
+              break
+
+            default:
+              break
+          }
+      })
+      return array
+    }
+  },
+  created() {},
+  mounted() {
+    this.hash_data.state.series.used.value = this.getDevice.last_disk_event.used
+    this.hash_data.state.series.empty.value =
+      this.getDevice.last_disk_event.empty
+    // this.hash_data.state.series.used.value = 5
+    // this.hash_data.state.series.empty.value = 2
+    console.log('Chart Option', this.chartOptions)
+    this.is_ready = true
+    this.$forceUpdate()
+  },
+  destroyed() {
+    this.is_ready = false
   }
 }
 </script>
@@ -129,7 +245,7 @@ export default {
 .dashboard-content {
   display: flex;
   flex-direction: column;
-
+  align-items: center;
   /* Gray Light */
   margin-top: 20px;
   margin-bottom: 20px;
@@ -138,19 +254,20 @@ export default {
   border-radius: 10px;
   margin-left: 20px;
   width: 290px;
-  height: 300px;
-  .title {
+  min-height: 300px;
+  .general-title {
     font-size: 18px;
     line-height: 21px;
     margin-top: 20px;
     margin-left: 10px;
     display: flex;
-    align-items: flex-start;
+    align-self: flex-start;
     /* Gray Dark */
 
     color: #444444;
   }
   .dashboard-indicator {
+    justify-content: center;
     display: flex;
     .dashboard-card-circle {
       margin-left: 0px;
@@ -161,6 +278,8 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(2, auto);
+    grid-gap: 20px;
+    margin-top: 20px;
     .item {
       display: flex;
       flex-direction: column;

@@ -243,7 +243,7 @@
         </div>
       </div>
     </el-dialog>
-    <!-- Import Device Error -->
+    <!-- Import Device Success -->
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -284,7 +284,7 @@
         >
           <el-table-column prop="row" label="Sıra" width="60px">
           </el-table-column>
-          <el-table-column prop="id" label="ATM ID" width="80px">
+          <el-table-column prop="id" label="İstasyon ID" width="80px">
           </el-table-column>
           <el-table-column prop="description" label="Açıklama" width="auto">
           </el-table-column>
@@ -407,7 +407,7 @@ export default {
         current_password: [
           {
             required: true,
-            message: 'Lütfen adı giriniz !',
+            message: 'Lütfen eski şifrenizi giriniz !',
             trigger: 'blur'
           },
           {
@@ -420,14 +420,14 @@ export default {
         new_password: [
           {
             required: true,
-            message: 'Lütfen soyadı giriniz.',
+            message: 'Lütfen yeni şifrenizi giriniz.',
             trigger: 'blur'
           }
         ],
         confirm_new_password: [
           {
             required: true,
-            message: 'Lütfen email giriniz.',
+            message: 'Lütfen yeni şifrenizi tekrar giriniz.',
             trigger: 'blur'
           }
         ]
@@ -531,20 +531,28 @@ export default {
       this.dialogImportDevicePopupVisible = false
       this.dialogImportDeviceConfirmPopupVisible = true
     },
-    changeUserPasswordSubmitForm(form) {
-      this.$refs[form].validate((valid) => {
-        if (valid) {
-          let result = this.changeUserPasswordVerify({
-            old_password: this.ruleForm.current_password,
-            new_password: this.ruleForm.new_password
-          })
-          console.log(result)
-          if (result.status == 200) {
-            this.passwordResetDialogVisible = false
-            this.ruleForm.current_password = ''
-            this.ruleForm.new_password = ''
-            this.ruleForm.confirm_new_password = ''
+    async changeUserPasswordSubmitForm(form) {
+      this.$refs[form].validate(async (valid) => {
+        if (this.ruleForm.confirm_new_password === this.ruleForm.new_password) {
+          if (valid) {
+            let result = await this.changeUserPasswordVerify({
+              old_password: this.ruleForm.current_password,
+              new_password: this.ruleForm.new_password
+            })
+            console.log(result)
+            if (result.status == 200) {
+              this.passwordResetDialogVisible = false
+              this.ruleForm.current_password = ''
+              this.ruleForm.new_password = ''
+              this.ruleForm.confirm_new_password = ''
+            }
           }
+        } else {
+          Vue.notify({
+            text: 'Girdiğiniz şifreler eşleşmemektedir.',
+            group: 'error-template',
+            type: 'error'
+          })
         }
       })
     },
@@ -648,7 +656,7 @@ export default {
       axios
         .post(
           //   'http://3be30dfc4aee.ngrok.io/api/v1/vguard/devices/multiplecreate',
-          'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
+          'http://10.100.0.34::3000/api/v1/vguard/devices/multiplecreate',
           form,
           config
         )
@@ -664,9 +672,12 @@ export default {
                 parseInt(this.import_result.success_count)
               this.resultTable = r.data.data.failed_rows
               this.dialogImportDeviceSuccessPopup = true
+              this.dialogImportDeviceProgressPopupVisible = false
             }
           } else {
             alert('else')
+            this.dialogImportDeviceConfirmPopupVisible = false
+            this.dialogImportDeviceProgressPopupVisible = false
             this.dialogImportDeviceErrorPopup = true
           }
         })
@@ -1033,7 +1044,8 @@ button span {
     }
     .action-button-group {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
+      //   justify-content: space-between;
       margin-top: 20px;
       .canceled-button {
         width: 120px;

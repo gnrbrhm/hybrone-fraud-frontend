@@ -80,10 +80,10 @@
         </div>
         <div class="value">
           {{
-            getDevice.last_signal == null ||
-            getDevice.last_signal == '0001-01-01T00:00:00Z'
+            getDevice.last_signal.event_date == null ||
+            getDevice.last_signal.event_date == '0001-01-01T00:00:00Z'
               ? 'Bilgi Alınamadı'
-              : formattedDatetime(getDevice.last_signal)
+              : formattedDatetime(getDevice.last_signal.event_date)
           }}
         </div>
       </div>

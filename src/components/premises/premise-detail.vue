@@ -53,20 +53,22 @@ export default {
       deletePremise: 'premise/deletePremise'
     }),
     deleteClick() {
-      this.$confirm('Mekanı silmek istediğinize emin misiniz?', {
-        confirmButtonText: 'Sil',
-        cancelButtonText: 'Vazgeç',
-        type: 'error'
-      }).then(() => {
-        let delete_premise = this.deletePremise(this.getSelectedRow)
-        bus.$emit('onDeletePremise', true)
-      })
+      if (this.getPermissions['location_delete'])
+        this.$confirm('İstasyonu silmek istediğinize emin misiniz?', {
+          confirmButtonText: 'Sil',
+          cancelButtonText: 'Vazgeç',
+          type: 'error'
+        }).then(async () => {
+          let delete_premise = await this.deletePremise(this.getSelectedRow)
+          if (delete_premise.status == 200) bus.$emit('onDeletePremise', true)
+        })
     },
     handleUpdate() {
-      this.$router.push({
-        name: 'UpdatePremise',
-        params: { id: this.getSelectedRow.id }
-      })
+      if (this.getPermissions['location_edit'])
+        this.$router.push({
+          name: 'UpdatePremise',
+          params: { id: this.getSelectedRow.id }
+        })
     }
   },
   mounted() {
@@ -117,6 +119,10 @@ export default {
           color: $hybrone_light_blue;
           background-color: $hybrone_background_color;
         }
+      }
+      [disabled='disabled'] {
+        pointer-events: none;
+        opacity: 0.4;
       }
     }
   }

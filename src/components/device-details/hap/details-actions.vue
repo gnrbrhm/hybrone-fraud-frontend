@@ -95,18 +95,15 @@ export default {
       this.$router.push({ name: 'DeviceLastSignals' })
     },
     clickHandleInterface() {
-      console.log(
-        'https://' +
-          this.$store.state.device.host +
-          ':' +
-          this.$store.state.device.port
-      )
-      require('electron').shell.openExternal(
-        'https://' +
-          this.$store.state.device.host +
-          ':' +
-          this.$store.state.device.port
-      )
+      console.log('http://' + this.getDevice.host + ':' + this.getDevice.port)
+      if (process.env.IS_ELECTRON) {
+        require('electron').shell.openExternal(
+          'http://' + this.getDevice.host + ':' + this.getDevice.port
+        )
+      } else {
+        let href = 'http://' + this.getDevice.host + ':' + this.getDevice.port
+        window.open(href, '_blank')
+      }
     },
     openDeviceDetails() {
       this.$router.go(-1)

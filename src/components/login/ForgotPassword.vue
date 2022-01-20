@@ -95,7 +95,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import axios from 'axios'
+import Vue from 'vue'
 export default {
   name: 'ForgotPassword',
   data() {
@@ -146,30 +146,57 @@ export default {
       forgotUserPassword: 'auth/forgotUserPassword',
       resetUserPassword: 'auth/resetUserPassword'
     }),
-    resetUserPasswordSubmitForm(form) {
-      console.log(this.$refs[form])
-      this.$refs[form].validate((valid) => {
-        if (valid) {
-          //   let result = axios.post(
-          //     'http://34.79.135.127:3000/api/v1/user/forgot/password/reset',
-          //     {
-          //       secret: this.reset_password_form.current_password,
-          //       password: this.reset_password_form.new_password
-          //     }
-          //   )
-          let result = this.resetUserPassword({
-            secret: this.reset_password_form.current_password,
-            password: this.reset_password_form.new_password
-          })
-          //   if (result.status == 200) {
-          this.$router.push({ name: 'Login' })
-          this.is_send_email = true
-          this.reset_password_form.current_password = ''
-          this.reset_password_form.new_password = ''
-          this.reset_password_form.confirm_new_password = ''
-        }
-        // }
+    async resetUserPasswordSubmitForm(form) {
+      if (
+        this.reset_password_form.new_password ===
+        this.reset_password_form.confirm_new_password
+      ) {
+        console.log('1.İf')
+        this.$refs[form].validate(async (valid) => {
+          if (valid) {
+            console.log('2.İf')
+            // await this.resetPassword({
+            //   secret: this.reset_password_form.current_password,
+            //   password: this.reset_password_form.new_password
+            // })
+            let result = await this.resetUserPassword({
+              secret: this.reset_password_form.current_password,
+              password: this.reset_password_form.new_password
+            })
+            console.log('RESULT', result)
+            if (result.status == 200) {
+              this.$router.push({ name: 'Login' })
+              this.is_send_email = true
+              this.reset_password_form.current_password = ''
+              this.reset_password_form.new_password = ''
+              this.reset_password_form.confirm_new_password = ''
+            }
+          }
+        })
+      } else {
+        console.log('Else')
+        Vue.notify({
+          text: 'Girdiğiniz şifreler eşleşmemektedir.',
+          group: 'error-template',
+          type: 'error'
+        })
+      }
+    },
+    async resetPassword(payload) {
+      console.log('Reset Password')
+
+      let result = await this.resetUserPassword({
+        secret: this.reset_password_form.current_password,
+        password: this.reset_password_form.new_password
       })
+      console.log('RESULT', result)
+      if (result.status == 200) {
+        this.$router.push({ name: 'Login' })
+        this.is_send_email = true
+        this.reset_password_form.current_password = ''
+        this.reset_password_form.new_password = ''
+        this.reset_password_form.confirm_new_password = ''
+      }
     },
     submitForm(form) {
       this.$refs[form].validate((valid) => {

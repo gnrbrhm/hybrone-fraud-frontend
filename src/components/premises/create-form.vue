@@ -3,7 +3,7 @@
     <el-form :model="premiseForm" :rules="premiseRules" ref="createPremise">
       <div class="form-row">
         <div class="premise-form-content">
-          <span class="premise-form-content-label"> İSTASYON KODU </span>
+          <span class="premise-form-content-label">İSTASYON KODU </span>
           <el-form-item prop="custom_premise_id">
             <el-input
               style="width: 330px"
@@ -14,7 +14,7 @@
           </el-form-item>
         </div>
         <div class="premise-form-content">
-          <span class="premise-form-content-label">MAĞAZA ADI</span>
+          <span class="premise-form-content-label">İSTASYON ADI</span>
           <el-form-item prop="custom_premise_name">
             <el-input
               style="width: 330px"

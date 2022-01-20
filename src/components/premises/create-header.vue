@@ -5,7 +5,7 @@
         <BackArrow></BackArrow>
       </router-link>
       <span class="title">{{
-        title ? 'Yeni Mekan Ekle' : 'Mekan Güncelle'
+        title ? 'Yeni İstasyon Ekle' : 'İstasyon Güncelle'
       }}</span>
     </div>
     <div class="header-element"></div>
@@ -32,6 +32,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   margin: 18px;
+  max-height: 150px;
   .header-element {
     display: flex;
     justify-content: space-between;

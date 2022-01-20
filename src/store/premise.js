@@ -112,13 +112,13 @@ export default {
         }
       })
     },
-    deletePremise(_, premise_id) {
+    async deletePremise(_, premise_id) {
       const deletePremise = Vue.prototype.$api({
         ...endpoints.deletePremise,
         url: endpoints.deletePremise.url + '/' + premise_id.id
         // query: { premise_id: premise_id }
       })
-      return deletePremise.then((r) => {
+      return await deletePremise.then((r) => {
         return r
       })
     },

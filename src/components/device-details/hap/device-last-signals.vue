@@ -14,6 +14,7 @@
     ></DataTablePagination>
     <el-dialog
       :visible.sync="downloadEventRecordConfirmDialog"
+      :before-close="handleClose"
       width="500px"
       top="350px"
     >
@@ -68,6 +69,8 @@ export default {
       filtered_data: {},
       selected_events: '',
       downloadEventRecordConfirmDialog: false,
+      record_download_request: false,
+      again_request: true,
       channels_normal_status: {
         has_sabotage: false,
         has_scene_change: false,
@@ -96,49 +99,56 @@ export default {
       console.log(val)
       this.downloadEventRecordConfirmDialog = true
     },
+    handleClose() {
+      if (this.record_download_request) {
+        this.downloadEventRecordConfirmDialog = false
+        this.record_download_request = false
+      }
+    },
     downloadEventRecord() {
       /**
        * Buraya cihazda gerçekleşen olayın
        * kaydının indirileceği kod gelicek
        */
-      let start_time = ''
-      let finish_time = ''
-      if (this.selected_events.state == 'Video Kaybı Algılandı') {
-        start_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(-30, 'seconds')
-          ._d.toISOString()
-        finish_time = moment(this.selected_events.event_date).add(3, 'hours')
-      } else if (this.selected_events.state == 'Video Kaybı Düzeldi') {
-        start_time = moment(this.selected_events.event_date).add(3, 'hours')
-        finish_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(30, 'seconds')
-          ._d.toISOString()
-      } else {
-        start_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(-61, 'seconds')
-          ._d.toISOString()
-        finish_time = moment(this.selected_events.event_date)
-          .add(3, 'hours')
-          .add(29, 'seconds')
-          ._d.toISOString()
-      }
-      console.log('FinishTime', finish_time)
-      console.log('StartTime', start_time)
-      let video = this.getVguardDeviceChannelRecord({
-        channel_id: this.selected_events.channel_id,
-        device_id: parseInt(this.$route.params.device_id),
-        // channel_id: 1,
-        // device_id: 36,
-        start_time: start_time,
-        end_time: finish_time
-      })
-      video
-        .then((r) => {
+      console.log('Kontrol', this.again_request)
+      if (this.again_request) {
+        let start_time = ''
+        let finish_time = ''
+        if (this.selected_events.state == 'Video Kaybı Algılandı') {
+          start_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(-30, 'seconds')
+            ._d.toISOString()
+          finish_time = moment(this.selected_events.event_date).add(3, 'hours')
+        } else if (this.selected_events.state == 'Video Kaybı Düzeldi') {
+          start_time = moment(this.selected_events.event_date).add(3, 'hours')
+          finish_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(30, 'seconds')
+            ._d.toISOString()
+        } else {
+          start_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(-61, 'seconds')
+            ._d.toISOString()
+          finish_time = moment(this.selected_events.event_date)
+            .add(3, 'hours')
+            .add(29, 'seconds')
+            ._d.toISOString()
+        }
+        console.log('FinishTime', finish_time)
+        console.log('StartTime', start_time)
+        let video = this.getVguardDeviceChannelRecord({
+          channel_id: this.selected_events.channel_id,
+          device_id: parseInt(this.$route.params.device_id),
+          // channel_id: 1,
+          // device_id: 36,
+          start_time: start_time,
+          end_time: finish_time
+        })
+        this.again_request = false
+        video.then((r) => {
           if (r.status == 200) {
-            this.downloadEventRecordConfirmDialog = false
             let currentDate = new Date()
             const url = window.URL.createObjectURL(new Blob([r.data]))
             const link = document.createElement('a')
@@ -159,11 +169,17 @@ export default {
             )
             document.body.appendChild(link)
             link.click()
+            this.downloadEventRecordConfirmDialog = false
+            this.record_download_request = true
+          } else {
+            //   this.downloadEventRecordConfirmDialog = false
+            this.record_download_request = true
           }
+          setTimeout(() => {
+            this.again_request = true
+          }, 2000)
         })
-        .catch
-        //Kayıt indirme gerçekleşmezse oluşacak durumlar
-        ()
+      }
     },
     handleChangePagination() {
       this.data = []
@@ -198,20 +214,22 @@ export default {
         ...payload
       })
       let events_data = []
+
       device_signals.then((r) => {
-        r.forEach((item, index) => {
-          if (r.length - 1 > index) {
+        console.log('Events R', r)
+        if (r !== null)
+          r.forEach((item) => {
+            //    if (r.length - 1 > index) {}
             events_data.push({
               ...item,
-              state: this.getDifferenceObject(item, r[index + 1])
+              state: this.getDifferenceObject(item)
             })
-          }
-        })
+          })
         console.log('Events', events_data)
-        this.data = events_data
+        this.data = events_data.length > 0 ? events_data : []
       })
     },
-    getDifferenceObject(obj1, obj2) {
+    getDifferenceObject(obj1) {
       let result = ''
       Object.keys(obj1).forEach((item1) => {
         if (
@@ -224,34 +242,34 @@ export default {
           item1 != 'id' &&
           item1 != 'is_active' &&
           item1 != 'is_record' &&
-          item1 != 'vguard_device'
+          item1 != 'vguard_device' &&
+          obj1[item1] != null
         ) {
-          if (obj1[item1] != obj2[item1]) {
-            switch (item1) {
-              case 'has_sabotage':
-                result = obj1[item1]
-                  ? 'Video Sabotaj Algılandı'
-                  : 'Video Sabotaj Düzeldi'
-                break
-              case 'has_scene_change':
-                result = obj1[item1]
-                  ? 'Video Sahne Değişimi Algılandı'
-                  : 'Video Sahne Değişimi Düzeldi'
-                break
-              case 'has_video_loss':
-                result = obj1[item1]
-                  ? 'Video Kaybı Algılandı'
-                  : 'Video Kaybı Düzeldi'
-                break
-              case 'motion_detect':
-                result = obj1[item1]
-                  ? 'Hareket Algılama Algılandı'
-                  : 'Hareket Algılama Düzeldi'
-                break
+          console.log(item1 + obj1[item1])
+          switch (item1) {
+            case 'has_sabotage':
+              result = obj1[item1]
+                ? 'Video Sabotaj Algılandı'
+                : 'Video Sabotaj Düzeldi'
+              break
+            case 'has_scene_change':
+              result = obj1[item1]
+                ? 'Video Sahne Değişimi Algılandı'
+                : 'Video Sahne Değişimi Düzeldi'
+              break
+            case 'has_video_loss':
+              result = obj1[item1]
+                ? 'Video Kaybı Algılandı'
+                : 'Video Kaybı Düzeldi'
+              break
+            case 'motion_detect':
+              result = obj1[item1]
+                ? 'Hareket Algılama Algılandı'
+                : 'Hareket Algılama Düzeldi'
+              break
 
-              default:
-                break
-            }
+            default:
+              break
           }
         }
       })

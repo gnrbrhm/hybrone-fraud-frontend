@@ -90,7 +90,7 @@ export default {
         this.table_data = r
       })
     },
-    refreshVguardDeviceAndData() {
+    async refreshVguardDeviceAndData() {
       let refresh = null
       let selected_devices_integer = []
       if (this.$route.params.device_id) {
@@ -103,12 +103,12 @@ export default {
           selected_devices_integer.push(row.id)
           //   selected_devices_integer.push(parseInt(row.id))
         })
-        refresh = this.refreshVguardDeviceData({
+        refresh = await this.refreshVguardDeviceData({
           device_id: selected_devices_integer
         })
       }
       if (refresh.status == 200) {
-        this.getDeviceDetails(this.$route.params.device_id)
+        this.handleChangePagination()
       }
       //   refresh.then((r) => {
       //     if (r.status == 200) {

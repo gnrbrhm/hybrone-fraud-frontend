@@ -19,7 +19,7 @@ const clientInstance = (baseURL) =>
         arrayFormat: 'repeat'
       })
   })
-// const cyclops = clientInstance('http://3be30dfc4aee.ngrok.io/api/v1/')
+// const cyclops = clientInstance('http://http://34.79.135.127:3000/api/v1/')
 
 // const cyclops = clientInstance('http://34.79.135.127:3000/api/v1/')
 // const map = 'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png'

@@ -192,7 +192,18 @@ export default {
         ...endpoints.refreshVguardDevice,
         data: { ...payload }
       })
-      return refresh.then((r) => {
+      return await refresh.then((r) => {
+        console.log('refreshVguardDeviceData', r)
+        if (r.status) return r
+      })
+    },
+    async resetVguardDeviceSceneChange(_, payload) {
+      const refresh = Vue.prototype.$api({
+        ...endpoints.resetVguardDeviceSceneChange,
+        data: { ...payload }
+      })
+      return await refresh.then((r) => {
+        console.log('resetVguardDeviceSceneChange', r)
         if (r.status) return r
       })
     },
