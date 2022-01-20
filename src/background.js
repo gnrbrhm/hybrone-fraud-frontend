@@ -1,13 +1,25 @@
 'use strict'
 
 import { app, protocol, BrowserWindow } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+// import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol'
+
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  {
+    scheme: 'app',
+    privileges: {
+      standard: true,
+      secure: true,
+      // Bu kısım sonradan eklendi
+      supportFetchAPI: true,
+      corsEnabled: true,
+      bypassCSP: true
+    }
+  }
 ])
 
 async function createWindow() {
@@ -15,16 +27,17 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: 'Hybrone-Sentinel',
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      icon: __dirname + '/hybrone_logo.png',
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      devTools: true,
+      deleteAppDataOnUninstall: false
     }
   })
-  const ses = win.webContents.session
-  console.log('Session', ses.getUserAgent())
-
+  win.maximize()
+  win.setFullScreen(false)
+  win.setMenuBarVisibility(false)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -33,6 +46,7 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+    // win.loadURL('/./index.html')
   }
 }
 
