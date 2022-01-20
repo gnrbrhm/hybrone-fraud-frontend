@@ -33,7 +33,7 @@ export default {
     //   id: 'base'
     // }).addTo(this.map)
     // this.map.invalidateSize()
-    L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
+    L.tileLayer('http://10.100.0.34::8081/tile/{z}/{x}/{y}.png', {
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
