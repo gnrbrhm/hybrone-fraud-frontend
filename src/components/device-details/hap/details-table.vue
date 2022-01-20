@@ -88,7 +88,7 @@
     >
       <template slot-scope="scope">
         <SvgIconChannelStatus
-          v-if="!scope.row.has_scene_change"
+          v-if="!scope.row.has_scene_change && scope.row.is_active"
           :status="
             scope.row.status && scope.row.is_active
               ? !scope.row.has_scene_change

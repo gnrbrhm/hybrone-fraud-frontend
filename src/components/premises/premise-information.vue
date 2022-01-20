@@ -4,7 +4,7 @@
       <span>İstasyon Bilgileri</span>
 
       <span
-        >İstasyon ID :
+        >İstasyon Kodu :
         <p>{{ premise.custom_premise_id }}</p></span
       >
       <span

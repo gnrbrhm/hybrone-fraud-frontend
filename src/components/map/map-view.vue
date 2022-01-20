@@ -64,7 +64,7 @@ export default {
   },
   mounted() {
     this.L = leaflet
-    this.$maps = this.L.map('map').setView([38.963745, 35.243322], 10)
+    this.$maps = this.L.map('map').setView([38.963745, 35.243322], 6)
     delete this.L.Icon.Default.prototype._getIconUrl
 
     this.L.Icon.Default.mergeOptions({
@@ -79,7 +79,7 @@ export default {
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       id: 'base'
     }).addTo(this.$maps)
-    if (this.$route.name == 'Premises') {
+    if (['UpdatePremise', 'Premises'].includes(this.$route.name)) {
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
     }
     // if (this.$route.name == "CreatePremise") {
@@ -87,7 +87,8 @@ export default {
       ['CreatePremise', 'UpdatePremise', 'Premises'].includes(this.$route.name)
     ) {
       console.log('UpdatePremise Location', this.getCurrentLocation.location)
-      this.addMarkerAndFlyTo(this.getCurrentLocation.location)
+      if (['UpdatePremise', 'Premises'].includes(this.$route.name))
+        this.addMarkerAndFlyTo(this.getCurrentLocation.location)
       if (!['Premises'].includes(this.$route.name))
         this.$maps.on('click', (e) => {
           console.log('Marker', this.marker)

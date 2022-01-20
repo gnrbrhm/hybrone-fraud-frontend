@@ -21,8 +21,7 @@
       <!-- @close="handleCloseCreateUserDialog" -->
       <div class="create-user-dialog-content">
         <div class="span-title">
-          Seçtiğiniz olay zamanının 60 saniye öncesi ve 30 saniye sonrası
-          indirilecektir. <br />Onaylıyor musunuz?
+          Seçtiğiniz olay kaydı indirilecektir. <br />Onaylıyor musunuz?
         </div>
         <el-form class="form">
           <div class="action-button-group">

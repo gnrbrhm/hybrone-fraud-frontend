@@ -204,7 +204,9 @@ export default {
                   ('0' + currentDate.getMinutes()).slice(-2) +
                   ('0' + currentDate.getSeconds()).slice(-2) +
                   '.' +
-                  (this.response_type == 'excel' ? 'xlsx' : this.response_type)
+                  (this.ruleForm.response_type == 'excel'
+                    ? 'xlsx'
+                    : this.ruleForm.response_type)
               )
               // link.setAttribute('download', 'file.xlsx')
               document.body.appendChild(link)

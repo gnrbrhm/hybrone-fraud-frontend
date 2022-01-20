@@ -203,6 +203,11 @@ export default {
                   this.downloadRecordVisible = false
                   this.record_download_request = true
                 } else {
+                  Vue.notify({
+                    text: 'Kayıt indirilemedi lütfen tekrar deneyiniz.',
+                    group: 'error-template',
+                    type: 'error'
+                  })
                   this.record_download_request = true
                 }
                 console.log(this.again_request)
