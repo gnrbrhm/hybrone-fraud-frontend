@@ -32,6 +32,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   margin: 18px;
+  max-height: 150px;
   .header-element {
     display: flex;
     justify-content: space-between;

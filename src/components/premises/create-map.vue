@@ -29,7 +29,7 @@ export default {
   overflow: hidden;
   display: flex !important;
   width: 750px !important;
-  height: 722px !important;
+  height: 652px !important;
   border: 1px solid #007db7;
   box-sizing: border-box;
   border-radius: 10px;

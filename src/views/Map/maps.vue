@@ -97,14 +97,14 @@ export default {
       if (val) this.map.flyTo([val.data.lat, val.data.long], 10)
       else
         this.$notify({
-          text: 'Aradığınız ilde ATM bulunmamaktadır.',
+          text: 'Aradığınız ilde İstasyon bulunmamaktadır.',
           type: 'error'
         })
     },
     async createPopup(status) {
       let popup = {
         popupContent:
-          "<div><span>ATM ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
+          "<div><span>İstasyon ID</span></div><div class='column-2'><div class='first-row'>Kanal Durumları</div><div class='second-row'><div class='first-channel-success'></div></div><div class='third-row'>Sağlık Durumları</div><div class='fourht-row'></div></div>",
         popupOptions: {
           maxWidth: '500',
           className: 'another-popup' // classname for another popup
@@ -212,7 +212,7 @@ export default {
           })
           var popupContent =
             `<div class='column-1'>
-         <div class="atm_id_label">ATM ID</div>
+         <div class="atm_id_label">İstasyon ID</div>
           <span class="atm_id_text">` +
             item[4] +
             `</span>
@@ -372,9 +372,12 @@ export default {
     })
 
     var addressPoints = new Array(this.locations)
-
+    var southWest = L.latLng(26.712, 45.227)
+    var northEast = L.latLng(36.774, 42.125)
+    var bounds = L.latLngBounds(southWest, northEast)
     L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
       maxZoom: 18,
+      maxBounds: bounds,
       zoomControl: false,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -383,6 +386,8 @@ export default {
       .addTo(this.map)
       .on('mouseover,')
     var markers = new L.MarkerClusterGroup()
+    this.map.zoomControl.setPosition('botttomleft')
+    this.map.fitBounds(bounds)
     this.map.addLayer(markers)
   }
 }

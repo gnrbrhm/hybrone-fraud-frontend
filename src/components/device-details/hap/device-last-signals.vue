@@ -146,6 +146,7 @@ export default {
           start_time: start_time,
           end_time: finish_time
         })
+        this.again_request = false
         video.then((r) => {
           if (r.status == 200) {
             let currentDate = new Date()
@@ -174,18 +175,11 @@ export default {
             //   this.downloadEventRecordConfirmDialog = false
             this.record_download_request = true
           }
-          this.again_request = false
           setTimeout(() => {
             this.again_request = true
           }, 2000)
         })
       }
-      //     .catch((err) => console.log(err))
-      //   // .catch(() => {
-      //   //   //Kayıt indirme gerçekleşmezse oluşacak durumlar
-      //   this.downloadEventRecordConfirmDialog = false
-      //   this.record_download_request = true
-      //   // })
     },
     handleChangePagination() {
       this.data = []

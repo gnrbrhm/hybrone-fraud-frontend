@@ -136,11 +136,11 @@
           :data="resultTable"
           style="width: 100%"
         >
-          <el-table-column prop="row" label="Sıra" width="60px">
+          <el-table-column prop="row" label="Sıra" width="200">
           </el-table-column>
-          <el-table-column prop="id" label="ATM ID" width="80px">
+          <el-table-column prop="id" label="İstasyon ID" width="300">
           </el-table-column>
-          <el-table-column prop="description" label="Açıklama" width="auto">
+          <el-table-column prop="description" label="Açıklama" width="150">
           </el-table-column>
         </el-table>
         <div class="bottom">
@@ -604,7 +604,7 @@ export default {
 .bottom {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 4;
 }
 

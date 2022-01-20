@@ -58,9 +58,9 @@ export default {
           confirmButtonText: 'Sil',
           cancelButtonText: 'Vazgeç',
           type: 'error'
-        }).then(() => {
-          let delete_premise = this.deletePremise(this.getSelectedRow)
-          bus.$emit('onDeletePremise', true)
+        }).then(async () => {
+          let delete_premise = await this.deletePremise(this.getSelectedRow)
+          if (delete_premise.status == 200) bus.$emit('onDeletePremise', true)
         })
     },
     handleUpdate() {

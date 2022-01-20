@@ -243,7 +243,7 @@
         </div>
       </div>
     </el-dialog>
-    <!-- Import Device Error -->
+    <!-- Import Device Success -->
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -284,7 +284,7 @@
         >
           <el-table-column prop="row" label="Sıra" width="60px">
           </el-table-column>
-          <el-table-column prop="id" label="ATM ID" width="80px">
+          <el-table-column prop="id" label="İstasyon ID" width="80px">
           </el-table-column>
           <el-table-column prop="description" label="Açıklama" width="auto">
           </el-table-column>
@@ -531,11 +531,11 @@ export default {
       this.dialogImportDevicePopupVisible = false
       this.dialogImportDeviceConfirmPopupVisible = true
     },
-    changeUserPasswordSubmitForm(form) {
-      this.$refs[form].validate((valid) => {
-        if (this.confirm_new_password == this.new_password)
+    async changeUserPasswordSubmitForm(form) {
+      this.$refs[form].validate(async (valid) => {
+        if (this.ruleForm.confirm_new_password === this.ruleForm.new_password) {
           if (valid) {
-            let result = this.changeUserPasswordVerify({
+            let result = await this.changeUserPasswordVerify({
               old_password: this.ruleForm.current_password,
               new_password: this.ruleForm.new_password
             })
@@ -547,6 +547,13 @@ export default {
               this.ruleForm.confirm_new_password = ''
             }
           }
+        } else {
+          Vue.notify({
+            text: 'Girdiğiniz şifreler eşleşmemektedir.',
+            group: 'error-template',
+            type: 'error'
+          })
+        }
       })
     },
     changeUserPassword() {
@@ -665,9 +672,12 @@ export default {
                 parseInt(this.import_result.success_count)
               this.resultTable = r.data.data.failed_rows
               this.dialogImportDeviceSuccessPopup = true
+              this.dialogImportDeviceProgressPopupVisible = false
             }
           } else {
             alert('else')
+            this.dialogImportDeviceConfirmPopupVisible = false
+            this.dialogImportDeviceProgressPopupVisible = false
             this.dialogImportDeviceErrorPopup = true
           }
         })
@@ -1034,7 +1044,8 @@ button span {
     }
     .action-button-group {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
+      //   justify-content: space-between;
       margin-top: 20px;
       .canceled-button {
         width: 120px;

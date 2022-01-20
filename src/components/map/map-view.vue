@@ -11,7 +11,10 @@
       </span>
       <span class="legand-text"> <i class="fault"></i> Hatalı </span>
     </div>
-    <div id="map" :style="this.$route.name !== 'Map' ? 'margin:0' : ''"></div>
+    <div
+      id="map"
+      :style="this.$route.name !== 'Map' ? 'margin:0; max-height:325px;' : ''"
+    ></div>
   </div>
 </template>
 
@@ -51,7 +54,7 @@ export default {
       setLocation: 'maps/setLocation'
     }),
     async addMarkerAndFlyTo(val) {
-      this.L.marker([val.lat, val.long]).addTo(this.$maps)
+      this.marker = this.L.marker([val.lat, val.long]).addTo(this.$maps)
       this.$maps.flyTo([val.lat, val.long], 14)
       this.$forceUpdate()
     },
@@ -61,7 +64,9 @@ export default {
   },
   mounted() {
     this.L = leaflet
-    this.$maps = this.L.map('map').setView([38.963745, 35.243322], 6)
+    this.$maps = this.L.map('map').setView([38.963745, 35.243322], 10)
+    delete this.L.Icon.Default.prototype._getIconUrl
+
     this.L.Icon.Default.mergeOptions({
       iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
       iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -69,6 +74,7 @@ export default {
     })
     this.L.tileLayer(this.$map, {
       maxZoom: 18,
+      zoomControl: false,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       id: 'base'
@@ -84,7 +90,7 @@ export default {
       this.addMarkerAndFlyTo(this.getCurrentLocation.location)
       if (!['Premises'].includes(this.$route.name))
         this.$maps.on('click', (e) => {
-          console.log(this.marker)
+          console.log('Marker', this.marker)
           if (this.marker) this.$maps.removeLayer(this.marker)
           this.marker = this.L.marker(e.latlng).addTo(this.$maps)
           this.$store.dispatch('setSelectedLocation', {
@@ -109,7 +115,7 @@ export default {
 <style lang="scss">
 #map {
   width: 100%;
-  height: 100vh;
+  min-height: 100%;
   margin-left: 14px;
 }
 /*Lejant Scss */

@@ -23,19 +23,22 @@
       <div class="item">
         <span class="title">Toplam Kapasite</span>
         <span class="value">{{
-          this.getDevice.last_disk_event.capacity + ' GB'
+          parseFloat(this.getDevice.last_disk_event.capacity / 100).toFixed(2) +
+          ' GB'
         }}</span>
       </div>
       <div class="item">
         <span class="title">Kullanılan</span>
         <span class="value">{{
-          this.getDevice.last_disk_event.used + ' GB'
+          parseFloat(this.getDevice.last_disk_event.used / 100).toFixed(2) +
+          ' GB'
         }}</span>
       </div>
       <div class="item">
         <span class="title">Kalan</span>
         <span class="value">{{
-          this.getDevice.last_disk_event.empty + ' GB'
+          parseFloat(this.getDevice.last_disk_event.empty / 100).toFixed(2) +
+          ' GB'
         }}</span>
       </div>
     </div>
@@ -86,7 +89,7 @@ export default {
           enabled: false,
           dropShadow: false
         },
-        labels: [...Object.keys(this.hash_data.state.series)],
+        labels: this.changeLabelName(this.hash_data.state.series),
 
         plotOptions: {
           pie: {
@@ -154,6 +157,69 @@ export default {
       Object.keys(val).forEach((item) => {
         if (val[item].label != 'Toplam' && item != 'total')
           array.push(val[item].value)
+      })
+      return array
+    },
+    changeLabelName(label) {
+      let array = []
+      Object.keys(label).forEach((item) => {
+        if (item != 'total')
+          switch (item) {
+            case 'total':
+              array.push('Toplam')
+              break
+            case 'online':
+              array.push('Online')
+              break
+            case 'offline':
+              array.push('Offline')
+              break
+            case 'normal_record':
+              array.push('Kayıt Yapılıyor')
+              break
+            case 'alarm':
+              array.push('Kayıt Yapılmıyor')
+              break
+            case 'normal_disk':
+              array.push('Normal')
+              break
+            case 'fault':
+              array.push('Hatalı')
+              break
+            case 'active':
+              array.push('Aktif')
+              break
+            case 'pasif':
+              array.push('Pasif')
+              break
+            case 'normal_analysis':
+              array.push('Normal')
+              break
+            case 'video_loss':
+              array.push('Video Kaybı')
+              break
+            case 'other_state':
+              array.push('Diğer Durumlar')
+              break
+            case 'motion_detect':
+              array.push('Hareket Algılama')
+              break
+            case 'sabotage':
+              array.push('Sabotaj Algılama')
+              break
+            case 'scene_change':
+              array.push('Sahne Değişimi')
+              break
+            case 'used':
+              array.push('Kullanılan')
+              break
+            case 'empty':
+              array.push('Kullanılmayan')
+              break
+
+            default:
+              break
+          }
       })
       return array
     }
