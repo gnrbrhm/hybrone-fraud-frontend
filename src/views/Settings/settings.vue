@@ -676,13 +676,25 @@ export default {
               this.dialogImportDeviceProgressPopupVisible = false
             }
           } else {
+            console.log('Else', r)
             alert('else')
             this.dialogImportDeviceConfirmPopupVisible = false
             this.dialogImportDeviceProgressPopupVisible = false
             this.dialogImportDeviceErrorPopup = true
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log('Error', error)
+          console.log('Error Response  ', error.response)
+          console.log('Error Response Status', error.response.status)
+          console.log('Error Response Data', error.response.data)
+          console.log('Error Response Config', error.response.config)
+
+          Vue.notify({
+            text: error.response.data.message,
+            group: 'error-template',
+            type: 'error'
+          })
           this.dialogImportDeviceConfirmPopupVisible = false
           this.dialogImportDeviceProgressPopupVisible = false
           this.dialogImportDeviceErrorPopup = true

@@ -53,7 +53,7 @@ clients.forEach((client) => {
           type: status ? 'success' : 'error'
         })
       }
-      console.log(response)
+      console.log('Response', response)
       //   if ([202].includes(response.status)) {
       //     // router.push({ name: 'Settings', query: { is_random_password: true } })
       //     router.push({ name: 'Settings' })
@@ -68,6 +68,12 @@ clients.forEach((client) => {
           status
         }
       } = error
+      console.log('Error   ', error)
+      console.log('Error Response  ', error.response)
+      console.log('Error Response Status', error.response.status)
+      console.log('Error Response Data', error.response.data)
+      console.log('Error Response Config', error.response.config)
+
       if (message) {
         Vue.notify({
           text: message,

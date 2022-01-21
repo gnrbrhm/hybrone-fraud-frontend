@@ -159,6 +159,8 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import Vue from 'vue'
+
 // import endpoints from "@/endpoints";
 import SvgIconServiceAllDone from '@/assets/icons/services/svg-icon-service-all-done.vue'
 import SvgIconSearch from '@/assets/icons/list/svg-icon-search.vue'
@@ -345,6 +347,13 @@ export default {
             parseInt(this.import_result.fail_count) +
             parseInt(this.import_result.success_count)
           this.resultTable = r.data.data.failed_rows
+        })
+        .catch((error) => {
+          Vue.notify({
+            text: error.response.data.message,
+            group: 'error-template',
+            type: 'error'
+          })
         })
       setTimeout(() => {
         this.dialogImportVisible = false
