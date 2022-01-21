@@ -375,8 +375,8 @@ export default {
     var southWest = L.latLng(26.712, 45.227)
     var northEast = L.latLng(36.774, 42.125)
     var bounds = L.latLngBounds(southWest, northEast)
-    // L.tileLayer('http://10.100.0.34:8081/tile/{z}/{x}/{y}.png', {
-    L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
+    L.tileLayer('http://10.100.0.34:8081/tile/{z}/{x}/{y}.png', {
+      // L.tileLayer('http://34.79.135.127:8081/tile/{z}/{x}/{y}.png', {
       maxZoom: 18,
       maxBounds: bounds,
       zoomControl: false,
