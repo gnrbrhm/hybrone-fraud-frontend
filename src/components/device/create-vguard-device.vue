@@ -307,11 +307,11 @@ export default {
           message: 'Bu alan zorunlu',
           trigger: 'blur'
         },
-        password: {
-          required: true,
-          message: 'Bu alan zorunlu',
-          trigger: 'blur'
-        },
+        // password: {
+        //   required: true,
+        //   message: 'Bu alan zorunlu',
+        //   trigger: 'blur'
+        // },
         host: {
           required: true,
           message: 'Bu alan zorunlu',

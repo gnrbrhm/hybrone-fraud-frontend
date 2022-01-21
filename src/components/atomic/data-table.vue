@@ -557,7 +557,7 @@ export default {
       console.log('https://' + val.row.host + ':' + val.row.port)
       if (process.env.IS_ELECTRON)
         require('electron').shell.openExternal(
-          'https://' + val.row.host + ':' + val.row.port
+          'http://' + val.row.host + ':' + val.row.port
         )
       else {
         let href = 'http://' + val.row.host + ':' + val.row.port

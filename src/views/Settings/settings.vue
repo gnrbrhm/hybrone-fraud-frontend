@@ -656,17 +656,17 @@ export default {
       axios
         .post(
           //   'http://3be30dfc4aee.ngrok.io/api/v1/vguard/devices/multiplecreate',
-          'http://10.100.0.34:3000/api/v1/vguard/devices/multiplecreate',
-          //   'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
+          //   'http://10.100.0.34:3000/api/v1/vguard/devices/multiplecreate',
+          'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
           form,
           config
         )
         .then((r) => {
-          //   Vue.notify({
-          //     text: r.data.message,
-          //     group: 'success-template',
-          //     type: 'success'
-          //   })
+          Vue.notify({
+            text: r.data.message,
+            group: 'success-template',
+            type: 'success'
+          })
           if (r.status == 200) {
             this.dialogImportDeviceConfirmPopupVisible = false
             this.percentage = perc

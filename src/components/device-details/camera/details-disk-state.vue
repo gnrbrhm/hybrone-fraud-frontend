@@ -23,21 +23,22 @@
       <div class="item">
         <span class="title">Toplam Kapasite</span>
         <span class="value">{{
-          parseFloat(this.getDevice.last_disk_event.capacity / 100).toFixed(2) +
-          ' GB'
+          parseFloat(this.getDevice.last_disk_event.capacity / 1000).toFixed(
+            2
+          ) + ' GB'
         }}</span>
       </div>
       <div class="item">
         <span class="title">Kullanılan</span>
         <span class="value">{{
-          parseFloat(this.getDevice.last_disk_event.used / 100).toFixed(2) +
+          parseFloat(this.getDevice.last_disk_event.used / 1000).toFixed(2) +
           ' GB'
         }}</span>
       </div>
       <div class="item">
         <span class="title">Kalan</span>
         <span class="value">{{
-          parseFloat(this.getDevice.last_disk_event.empty / 100).toFixed(2) +
+          parseFloat(this.getDevice.last_disk_event.empty / 1000).toFixed(2) +
           ' GB'
         }}</span>
       </div>
