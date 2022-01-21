@@ -335,8 +335,8 @@ export default {
         .post(
           // 'https://sentinel-api-hybrone-prod.apps.ocp3.akbank.com/api/v1/tickets/import/',
           // 'https://sentinel-api-hybrone-qa.apps.ocptest3.akbank.com/api/v1/tickets/import/',
-          //   'http://10.100.0.34:3000/api/v1/tickets/import',
-          'http://34.79.135.127:3000/api/v1/tickets/import',
+          'http://10.100.0.34:3000/api/v1/tickets/import',
+          //   'http://34.79.135.127:3000/api/v1/tickets/import',
           // 'http://10.81.102.51:3000/api/v1/tickets/import',
           form,
           config
