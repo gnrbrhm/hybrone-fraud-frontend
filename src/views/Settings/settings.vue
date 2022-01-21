@@ -662,7 +662,13 @@ export default {
           config
         )
         .then((r) => {
-          console.log(r)
+          console.log(r.data.message)
+
+          Vue.notify({
+            text: r.data.message,
+            group: 'success-template',
+            type: 'success'
+          })
           if (r.status == 200) {
             this.dialogImportDeviceConfirmPopupVisible = false
             this.percentage = perc
@@ -682,6 +688,7 @@ export default {
             this.dialogImportDeviceProgressPopupVisible = false
             this.dialogImportDeviceErrorPopup = true
           }
+          this.dialogImportDeviceProgressPopupVisible = false
         })
         .catch((error) => {
           console.log('Error', error)
@@ -699,10 +706,10 @@ export default {
           this.dialogImportDeviceProgressPopupVisible = false
           this.dialogImportDeviceErrorPopup = true
         })
-      //   setTimeout(() => {
-      //     this.dialogImportVisible = false
-      //     this.dialogTableVisible = true
-      //   }, 1500)
+
+      setTimeout(() => {
+        this.dialogImportDeviceProgressPopupVisible = false
+      }, 500)
     },
     uploadBackupFiles() {
       this.$confirm(
