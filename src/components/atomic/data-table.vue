@@ -14,6 +14,7 @@
         : { color: '#444444' }
     "
     @selection-change="handleSelectionChange"
+    @sort-change="handleServiceSorting"
     :row-class-name="rowClassName"
     height="100%"
   >
@@ -159,18 +160,30 @@
         </ul>
       </template>
     </el-table-column>
-    <!-- <el-table-column
+    <!-- :sortable="['List'].includes(this.$route.name)" -->
+    <el-table-column
+      v-if="['List'].includes(this.$route.name)"
+      sortable
       align="center"
-      prop="has_service"
-      label="Servis"
-      width="180"
+      prop="last_signal"
+      label="SERVİS DURUMU"
     >
       <template slot-scope="scope">
         <SvgIconServiceRequest
-          :is_ticket="scope.is_active"
+          :is_ticket="
+            scope.row.ticket !== null &&
+            scope.row.ticket.ticket_finished_time !== null
+          "
         ></SvgIconServiceRequest>
       </template>
-    </el-table-column> -->
+    </el-table-column>
+    <el-table-column align="center" label="CİHAZ ARAYÜZÜ">
+      <template slot-scope="scope">
+        <el-button type="text" @click="interfaceClickHandle(scope)">
+          <SvgIconDeviceInterface></SvgIconDeviceInterface>
+        </el-button>
+      </template>
+    </el-table-column>
     <el-table-column
       align="left"
       prop="updated_at"
@@ -452,9 +465,9 @@ import SvgIconFault from '@/components/atomic/device/hap/svg-icon-fault.vue'
 import SvgIconSabotage from '@/components/atomic/device/hap/svg-icon-sabotage.vue'
 import SvgIconCommunication from '@/components/atomic/device/hap/svg-icon-communication.vue'
 import SvgIconEnergy from '@/components/atomic/device/hap/svg-icon-energy.vue'
-// import SvgIconServiceRequest from "@/components/atomic/device/hap/svg-icon-is-service-request.vue";
 import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
-// import SvgIconQuery from "@/components/atomic/device/hap/svg-icon-query.vue";
+import SvgIconServiceRequest from '@/assets/icons/list/svg-icon-is-service-request'
+import SvgIconDeviceInterface from '@/assets/icons/list/svg-icon-device-interface'
 import SvgIconWarning from '@/assets/icons/list/svg-icon-warning.vue'
 import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
@@ -474,6 +487,8 @@ export default {
     SvgIconWarning,
     SvgIconFirstChannel,
     SvgIconFirstChannels,
+    SvgIconServiceRequest,
+    SvgIconDeviceInterface,
     // SvgIconAlarm,
     SvgIconSecondChannel,
     SvgIconThirdChannel,
@@ -538,7 +553,33 @@ export default {
         return 'Henüz Tamanlanmadı'
       else return 'Bilgi Alınamadı'
     },
-
+    interfaceClickHandle(val) {
+      console.log('https://' + val.row.host + ':' + val.row.port)
+      if (process.env.IS_ELECTRON)
+        require('electron').shell.openExternal(
+          'https://' + val.row.host + ':' + val.row.port
+        )
+      else {
+        let href = 'http://' + val.row.host + ':' + val.row.port
+        window.open(href, '_blank')
+      }
+    },
+    handleServiceSorting(val) {
+      if (['List'].includes(this.$route.name)) {
+        if (val.order === 'ascending') {
+          bus.$emit('onServiceSorting', { is_service: true })
+        } else {
+          bus.$emit('onServiceSorting', {})
+        }
+      }
+      //    else {
+      //     if (val.order === 'ascending') {
+      //       bus.$emit('onTrackedServiceSorting', { is_service: true })
+      //     } else {
+      //       bus.$emit('onTrackedServiceSorting', {})
+      //     }
+      //   }
+    },
     handleDBClick(val) {
       if (
         ['List', 'Dashboard'].includes(this.$route.name) &&

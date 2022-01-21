@@ -85,6 +85,7 @@ export default {
       this.modal_visible = val
     },
     async fillDataTable(params) {
+      console.log('Gelen Datalar', params)
       let devices = this.getVguardDevices({ page: 1, limit: 20, ...params })
       devices.then((r) => {
         this.table_data = r
@@ -122,9 +123,11 @@ export default {
   },
   mounted() {
     bus.$on('onSelectedDevicesRefresh', this.refreshVguardDeviceAndData)
+    bus.$on('onServiceSorting', (val) => this.fillDataTable(val))
   },
   destroyed() {
     bus.$off('onSelectedDevicesRefresh')
+    bus.$off('onServiceSorting')
   }
 }
 </script>
