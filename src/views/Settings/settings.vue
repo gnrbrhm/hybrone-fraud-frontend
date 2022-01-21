@@ -656,8 +656,8 @@ export default {
       axios
         .post(
           //   'http://3be30dfc4aee.ngrok.io/api/v1/vguard/devices/multiplecreate',
-          'http://10.100.0.34::3000/api/v1/vguard/devices/multiplecreate',
-          //   'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
+          //   'http://10.100.0.34::3000/api/v1/vguard/devices/multiplecreate',
+          'http://34.79.135.127:3000/api/v1/vguard/devices/multiplecreate',
           form,
           config
         )
@@ -688,7 +688,7 @@ export default {
             this.dialogImportDeviceProgressPopupVisible = false
             this.dialogImportDeviceErrorPopup = true
           }
-          this.dialogImportDeviceProgressPopupVisible = false
+          //   this.dialogImportDeviceProgressPopupVisible = false
         })
         .catch((error) => {
           console.log('Error', error)
@@ -707,9 +707,9 @@ export default {
           this.dialogImportDeviceErrorPopup = true
         })
 
-      setTimeout(() => {
-        this.dialogImportDeviceProgressPopupVisible = false
-      }, 500)
+      //   setTimeout(() => {
+      //     this.dialogImportDeviceProgressPopupVisible = false
+      //   }, 500)
     },
     uploadBackupFiles() {
       this.$confirm(
