@@ -68,11 +68,6 @@ clients.forEach((client) => {
           status
         }
       } = error
-      console.log('Error   ', error)
-      console.log('Error Response  ', error.response)
-      console.log('Error Response Status', error.response.status)
-      console.log('Error Response Data', error.response.data)
-      console.log('Error Response Config', error.response.config)
 
       if (message) {
         Vue.notify({
