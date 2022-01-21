@@ -45,7 +45,7 @@ export default {
       return {
         // colors: [...this.hash_data.colors],
         colors: this.hash_data.colors.filter((item) => {
-          return item != '#6FCF97'
+          return item != '#444444'
         }),
         legend: {
           show: false
@@ -101,11 +101,11 @@ export default {
 
                         total += el
                       })
-                      //   return (
-                      //     ((100 / total) * w.globals.seriesTotals[0]).toFixed(2) +
-                      //     '%'
-                      //   )
-                      return ((100 / total) * total).toFixed(2) + '%'
+                      return (
+                        ((100 / total) * w.globals.seriesTotals[0]).toFixed(2) +
+                        '%'
+                      )
+                      //   return ((100 / total) * total).toFixed(2) + '%'
                     }
                     // return 100 + '%'
                     // return w.globals.seriesTotals.reduce((a, b) => {

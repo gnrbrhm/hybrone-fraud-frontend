@@ -264,6 +264,7 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding: 0px;
   //   gap: 10px;
   button {
     display: flex;

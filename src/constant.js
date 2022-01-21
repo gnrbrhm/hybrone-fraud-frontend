@@ -87,7 +87,7 @@ export const DASHBOARD_VARIABLES = {
           arm: { label: 'Kurulu', value: 10 },
           disarm: { label: 'Çözülü', value: 10 }
         },
-        colors: ['#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
+        colors: ['#444444', '#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -131,7 +131,7 @@ export const DASHBOARD_VARIABLES = {
           online: { label: 'Online', value: 5 },
           offline: { label: 'Offline', value: 5 }
         },
-        colors: ['#6FCF97', '#A0A0A0', 'rgba(255,87,93,.77)']
+        colors: ['#444444', '#6FCF97', '#A0A0A0', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -152,7 +152,7 @@ export const DASHBOARD_VARIABLES = {
           normal_disk: { label: 'Normal', value: 10 },
           fault: { label: 'Hatalı', value: 10 }
         },
-        colors: ['#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
+        colors: ['#444444', '#6FCF97', '#E04141', 'rgba(255,87,93,.77)']
       }
     },
     {
@@ -163,7 +163,13 @@ export const DASHBOARD_VARIABLES = {
           active: { label: 'Aktif', value: 10 },
           pasif: { label: 'Pasif', value: 10 }
         },
-        colors: ['#6FCF97', '#007DB7', '#A0A0A0', 'rgba(255,87,93,.77)']
+        colors: [
+          '#444444',
+          '#6FCF97',
+          '#007DB7',
+          '#A0A0A0',
+          'rgba(255,87,93,.77)'
+        ]
       }
     },
     {
