@@ -171,8 +171,7 @@
       <template slot-scope="scope">
         <SvgIconServiceRequest
           :is_ticket="
-            scope.row.ticket !== null &&
-            scope.row.ticket.ticket_finished_time !== null
+            scope.row.ticket != null && !scope.row.ticket.ticket_finished_time
           "
         ></SvgIconServiceRequest>
       </template>
@@ -213,7 +212,7 @@
     ref="singleTable"
     :data="data"
     :header-cell-style="{ color: '#444444' }"
-    style="width: 97%; max-height: calc(100vh - 180px);  margin-left 20px; overflow: scroll;"
+    style="width: 97%; max-height: calc(100vh - 75px);  margin-left 20px; overflow: scroll;"
     stripe
     highlight-current-row
     @current-change="handleCurrentChange"
@@ -567,7 +566,7 @@ export default {
     handleServiceSorting(val) {
       if (['List'].includes(this.$route.name)) {
         if (val.order === 'ascending') {
-          bus.$emit('onServiceSorting', { is_service: true })
+          bus.$emit('onServiceSorting', { state: 'is_service' })
         } else {
           bus.$emit('onServiceSorting', {})
         }

@@ -92,7 +92,8 @@ export default {
   margin-left: 15px;
   min-height: 100vh;
   .content {
-    max-width: 100%;
+    min-width: 100%;
+    max-height: 80%;
     display: flex;
     flex-direction: row;
     .data-layer {
