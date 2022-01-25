@@ -43,6 +43,10 @@
       label="LOKASYON"
       width="180"
     >
+      <!-- <template slot-scope="scope">
+        {{ scope.row.premise.location }}
+       
+      </template> -->
     </el-table-column>
 
     <!--   <el-table-column
