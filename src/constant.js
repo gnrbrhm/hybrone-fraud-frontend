@@ -236,39 +236,39 @@ export const DEVICE_STATUS = [
     value: 'all_state'
   },
   {
-    label: 'Video Kaybı',
+    label: 'Fiş İptali',
     value: 'has_video_loss'
   },
   {
-    label: 'Sahne Değişimi',
+    label: 'Satır İptali',
     value: 'has_scene_change'
   },
   {
-    label: 'Hareket Algılama',
+    label: 'Fiyat Gör',
     value: 'motion_detect'
   },
   {
-    label: 'Video Sabotaj',
+    label: 'Elle Barkod Girişi',
     value: 'has_sabotage'
   },
   {
-    label: 'Normal',
+    label: 'Ürün İade',
     value: 'normal'
   },
   {
-    label: 'Disk Hatası',
+    label: 'Askıya Alma',
     value: 'disk_error'
   },
   {
-    label: 'Ağ Hatası',
+    label: 'Manuel İndirim',
     value: 'network_error'
   },
   {
-    label: 'Kayıt Hatası',
+    label: 'Kritik Ürün Satışı',
     value: 'record_error'
   },
   {
-    label: 'Zaman Hatası',
+    label: 'Kritik Tutar',
     value: 'datetime_error'
   }
 ]

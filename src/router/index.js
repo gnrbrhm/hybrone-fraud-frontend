@@ -21,6 +21,7 @@ import StoreDetail from '../views/Store/store-detail.vue'
 import Settings from '../views/Settings/settings.vue'
 import Logs from '../views/Settings/logs.vue'
 import UserPermissions from '../views/Settings/user-permissions.vue'
+import Missions from '../views/Missions/Missions.vue'
 
 Vue.use(VueRouter)
 
@@ -150,13 +151,13 @@ const routes = [
   //   component: DeviceLastSignals,
   // },
   {
-    path: '/services',
-    name: 'Services',
+    path: '/missions',
+    name: 'Missions',
     beforeEnter: MiddlewareAuth,
     meta: {
       layout: 'auth'
     },
-    component: Services
+    component: Missions
   },
   {
     path: '/map',

@@ -90,6 +90,81 @@
       </template>
     </el-table-column>
   </el-table>
+  <!-- Liste Dashboard Tracked Device  -->
+  <el-table
+    v-loading="loading"
+    v-else-if="['Missions'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    @row-dblclick="handleDBClick"
+    :header-cell-style="
+      this.$route.name == 'List'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : { color: '#444444' }
+    "
+    @selection-change="handleSelectionChange"
+    @sort-change="handleServiceSorting"
+    :row-class-name="rowClassName"
+    height="100%"
+  >
+    <el-table-column header-align="left" prop="code" label="ID" width="180">
+      <template slot-scope="scope">
+        <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
+        {{ scope.row.code }}
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      header-align="left"
+      prop="name"
+      label="LOKASYON"
+      width="180"
+    >
+      <template slot-scope="scope">
+        {{ scope.row.receiptHeader3 }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KASA">
+      <template slot-scope="scope">
+        <span class="case-count">
+          {{ 100 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KASİYER">
+      <template slot-scope="scope">
+        <span class="total-count">
+          {{ 53 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="İŞLEM">
+      <template slot-scope="scope">
+        <span class="suspicion-count">
+          {{ 25 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="A.I SONUÇ">
+      <template slot-scope="scope">
+        <span class="analysis-count">
+          {{ 3 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      property="start_time"
+      label="DURUM ZAMANI"
+      min-width="100"
+      show-overflow-tooltip
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.start_time) }}
+      </template>
+    </el-table-column>
+  </el-table>
   <!-- İstasyonlar -->
   <el-table
     v-loading="loading"

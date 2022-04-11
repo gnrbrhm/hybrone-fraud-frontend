@@ -22,14 +22,30 @@
       <div class="fraud-percentage">
         <span class="title">En Yüksek Kayıp/Kaçak Oranları</span>
 
+        <!-- v-for="dashboardData.storeFraudCounts in  store"
+          :key="item.id" -->
         <div class="row">
-          <span class="label">Akşehir<br />Konya</span>
+          <span class="label"
+            >{{ Object.keys(dashboardData.storeFraudCounts)[0].split('/')[0]
+            }}<br />{{
+              Object.keys(dashboardData.storeFraudCounts)[0].split('/')[1]
+            }}</span
+          >
           <el-progress
+            :format="{ color: '#ffd700', backgroundColor: '#ffd700' }"
             style="width: 185px"
             :color="'#E04141'"
             :text-inside="true"
             :stroke-width="33"
-            :percentage="70"
+            :percentage="
+              (100 /
+                dashboardData.storeFraudCounts[
+                  Object.keys(dashboardData.storeFraudCounts)[0]
+                ].total) *
+              dashboardData.storeFraudCounts[
+                Object.keys(dashboardData.storeFraudCounts)[0]
+              ].fraud
+            "
           ></el-progress>
         </div>
         <div class="row">
@@ -571,9 +587,10 @@ export default {
     // border-radius: 0px;
   }
 }
-// .el-progress .el-progress--circle .el-progress__text {
-//   font-weight: 400;
-//   font-size: 12px;
-//   line-height: 14px;
-// }
+.el-progress-bar__innerText {
+  &-zero {
+    @extend .el-progress-bar__innerText;
+    color: #e04141;
+  }
+}
 </style>
