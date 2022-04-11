@@ -1,9 +1,9 @@
 <template>
   <div :class="getRouteForClass">
     <span
-      v-if="!['DeviceLastSignals'].includes(this.$route.name)"
+      v-if="['DeviceLastSignals'].includes(this.$route.name)"
       class="device-name"
-      >{{ getDevice.premise.custom_premise_name }}</span
+      >{{ getSelectedRow.receiptHeader1 }}</span
     >
     <DeviceDetailsLastSignalsFilter
       v-else
@@ -29,7 +29,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDevice: 'device/getDevice'
+      getDevice: 'device/getDevice',
+      getSelectedRow: 'dataTable/getSelectedRow'
     }),
     getRouteForClass: function () {
       if (!this.$route.path.split('/').includes('last-signals')) {

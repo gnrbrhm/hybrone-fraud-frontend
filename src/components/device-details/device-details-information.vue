@@ -1,10 +1,10 @@
 <template>
   <div class="information">
-    <span class="id">İSTASYON KODU</span>
-    <span class="number">{{ data.premise.custom_premise_id }}</span>
+    <span class="id">ID</span>
+    <span class="number">{{ data.code }}</span>
     <hr />
-    <span class="province">{{ data.premise.location.province.name }}</span>
-    <span class="country">{{ data.premise.location.city.name }}</span>
+    <span class="province">{{ data.receiptHeader3.split('/')[0] }}</span>
+    <span class="country">{{ data.receiptHeader3.split('/')[1] }}</span>
   </div>
 </template>
 

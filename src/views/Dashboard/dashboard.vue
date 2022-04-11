@@ -1,21 +1,19 @@
 <template>
   <div class="container">
-    <DashboardNav></DashboardNav>
-    <Indicators></Indicators>
-    <TrackedDevice></TrackedDevice>
+    <FraudIndicators></FraudIndicators>
+    <!-- <DashboardNav></DashboardNav>
+    <TrackedDevice></TrackedDevice>-->
   </div>
 </template>
 
 <script>
 import DashboardNav from '@/components/dashboard/dashboard-nav'
-import Indicators from '@/components/dashboard/indicators'
+import FraudIndicators from '@/components/dashboard/fraud/indicators'
 import TrackedDevice from '@/components/dashboard/tracked-device'
 export default {
   name: 'Dashbaord',
   components: {
-    DashboardNav,
-    Indicators,
-    TrackedDevice
+    FraudIndicators
   }
 }
 </script>

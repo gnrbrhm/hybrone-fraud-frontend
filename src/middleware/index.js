@@ -21,14 +21,21 @@ const clientInstance = (baseURL) =>
   })
 
 const cyclops = clientInstance('http://34.79.135.127:3000/api/v1/')
+const fraud = clientInstance(
+  'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/'
+)
 const map = 'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png'
 // const cyclops = clientInstance('http://10.100.0.34:3000/api/v1/')
 // const map = 'http://10.100.0.34:8081/tile/{z}/{x}/{y}.png'
 
-const clients = [cyclops]
+const clients = [cyclops, fraud]
 
 clients.forEach((client) => {
   client.interceptors.request.use((config) => {
+    config.url == '/register-activities'
+      ? (config.params = encodeURI(config.params))
+      : config.params
+    console.log(encodeURI(config.params))
     config.headers['Login-Type'] = 'account'
 
     if (!config.url.includes('token')) {
@@ -88,8 +95,8 @@ clients.forEach((client) => {
 
 export default {
   install() {
-    Vue['$api'] = cyclops
     Vue.prototype['$api'] = cyclops
+    Vue.prototype['$fraud'] = fraud
     Vue.prototype['$map'] = map
     Vue.prototype['$leaflet'] = leaflet
   }

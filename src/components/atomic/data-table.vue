@@ -20,194 +20,75 @@
   >
     <el-table-column type="selection" width="55"> </el-table-column>
 
-    <el-table-column
-      header-align="left"
-      prop="premise.custom_premise_id"
-      label="İSTASYON KODU"
-      width="180"
-    >
+    <el-table-column header-align="left" prop="code" label="ID" width="180">
       <template slot-scope="scope">
-        <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning>
-        {{ scope.row.premise.custom_premise_id }}
+        <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
+        {{ scope.row.code }}
       </template>
     </el-table-column>
+
     <el-table-column
       header-align="left"
-      prop="premise.custom_premise_name"
-      label="İSTASYON ADI"
-    >
-    </el-table-column>
-    <el-table-column
-      header-align="left"
-      prop="premise.location.city.name"
+      prop="name"
       label="LOKASYON"
       width="180"
     >
-      <!-- <template slot-scope="scope">
-        {{ scope.row.premise.location }}
-       
-      </template> -->
-    </el-table-column>
-
-    <!--   <el-table-column
-      header-align="left"
-      prop="description"
-      label="Açıklama"
-      width="300"
-    >
-    </el-table-column> -->
-    <el-table-column
-      header-align="left"
-      prop="device_brand.name"
-      label="CİHAZ"
-      width="180"
-    >
-    </el-table-column>
-    <!-- <el-table-column
-      header-align="left"
-      prop="is_warning"
-      label="CİHAZ"
-      width="180"
-    >
       <template slot-scope="scope">
-        {{ scope.row.show_warning }}
-       
-      </template>
-    </el-table-column> -->
-    <el-table-column
-      header-align="left"
-      prop="device_state"
-      label="CİHAZ DURUMLARI"
-    >
-      <template slot-scope="scope">
-        <ul>
-          <li class="device-channel-icon">
-            <SvgIconFirstChannels
-              :status="
-                scope.row.is_active == true
-                  ? scope.row.channels[0].status == true
-                    ? !scope.row.channels[0].show_warning
-                    : null
-                  : false
-              "
-            ></SvgIconFirstChannels>
-          </li>
-          <li class="device-channel-icon">
-            <SvgIconSecondChannel
-              :status="
-                scope.row.is_active == true
-                  ? scope.row.channels[1].status == true
-                    ? !scope.row.channels[1].show_warning
-                    : null
-                  : false
-              "
-            ></SvgIconSecondChannel>
-          </li>
-          <li class="device-channel-icon">
-            <SvgIconThirdChannel
-              :status="
-                scope.row.is_active == true
-                  ? scope.row.channels[2].status == true
-                    ? !scope.row.channels[2].show_warning
-                    : null
-                  : false
-              "
-            ></SvgIconThirdChannel>
-          </li>
-          <li class="device-channel-icon">
-            <SvgIconFourthChannel
-              :status="
-                scope.row.is_active == true
-                  ? scope.row.channels[3].status == true
-                    ? !scope.row.channels[3].show_warning
-                    : null
-                  : false
-              "
-            ></SvgIconFourthChannel>
-          </li>
-        </ul>
+        {{ scope.row.receiptHeader3 }}
       </template>
     </el-table-column>
-    <el-table-column header-align="left" prop="state" label="">
+    <el-table-column header-align="left" prop="code" label="KASA SAYISI">
       <template slot-scope="scope">
-        <ul>
-          <li class="device-state-icon">
-            <SvgIconCommunication
-              :status="
-                scope.row.is_active == true ? !scope.row.network_error : false
-              "
-            ></SvgIconCommunication>
-          </li>
-          <li class="device-state-icon">
-            <SvgIconDisk
-              :status="
-                scope.row.is_active == true ? !scope.row.disk_error : false
-              "
-            ></SvgIconDisk>
-          </li>
-          <li class="device-state-icon">
-            <SvgIconRecord
-              :status="
-                scope.row.is_active == true
-                  ? !scope.row.record_error && !scope.row.disk_error
-                  : false
-              "
-            ></SvgIconRecord>
-          </li>
-          <li class="device-state-icon">
-            <SvgIconDateTime
-              :status="
-                scope.row.is_active == true ? !scope.row.datetime_error : false
-              "
-            ></SvgIconDateTime>
-          </li>
-        </ul>
+        <span class="case-count">
+          {{ 100 || scope.row.receiptHeader3 }}
+        </span>
       </template>
     </el-table-column>
-    <!-- :sortable="['List'].includes(this.$route.name)" -->
-    <el-table-column
-      v-if="['List'].includes(this.$route.name)"
-      sortable
-      align="center"
-      prop="last_signal"
-      label="SERVİS DURUMU"
-    >
+    <el-table-column header-align="left" prop="code" label="TOPLAM İŞLEM">
       <template slot-scope="scope">
-        <SvgIconServiceRequest
-          :is_ticket="
-            scope.row.ticket != null && !scope.row.ticket.ticket_finished_time
-          "
-        ></SvgIconServiceRequest>
+        <span class="total-count">
+          {{ 53 || scope.row.receiptHeader3 }}
+        </span>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="CİHAZ ARAYÜZÜ">
+    <el-table-column header-align="left" prop="code" label="ŞÜPHELİ İŞLEM">
       <template slot-scope="scope">
-        <el-button type="text" @click="interfaceClickHandle(scope)">
-          <SvgIconDeviceInterface></SvgIconDeviceInterface>
-        </el-button>
+        <span class="suspicion-count">
+          {{ 25 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="ANALİZ">
+      <template slot-scope="scope">
+        <span class="analysis-count">
+          {{ 3 || scope.row.receiptHeader3 }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KAÇAK">
+      <template slot-scope="scope">
+        <span class="fraud-count">
+          {{ 5 || scope.row.receiptHeader3 }}
+        </span>
       </template>
     </el-table-column>
     <el-table-column
       align="left"
       prop="updated_at"
-      label="SON SİNYAL"
-      width="180"
+      label="KAÇAK / TOPLAM İŞLEM"
+      width="280"
     >
       <template slot-scope="scope">
-        {{
-          scope.row.last_signal.event_date == null ||
-          scope.row.last_signal.event_date == '0001-01-01T00:00:00Z' ||
-          scope.row.last_signal.event_date == '0001-01-01T01:55:52+01:55'
-            ? 'Bilgi Alınamadı'
-            : formattedDatetime(scope.row.last_signal.event_date)
-        }}
+        <ProgressStatus
+          :data="{
+            total: 53 || scope.row.receiptHeader3,
+            suspicion: 25 || scope.row.receiptHeader3,
+            analysis: 3 || scope.row.receiptHeader3,
+            fraud: 5 || scope.row.receiptHeader3
+          }"
+        ></ProgressStatus>
       </template>
     </el-table-column>
-    <!-- <el-table-column header-align="center" prop="last_state" label="Sorgu">
-      <template slot-scope="scope">
-        <SvgIconQuery :status="scope.is_active"></SvgIconQuery>
-      </template>
-    </el-table-column> -->
   </el-table>
   <!-- İstasyonlar -->
   <el-table
@@ -352,10 +233,10 @@
     >
     </el-table-column>
   </el-table>
-  <!--Geçmiş Sinyaller Kullanıcı İşlemleri-->
+  <!--Geçmiş Sinyaller Kullanıcı İşlemleri
   <el-table
     v-loading="loading"
-    v-else-if="['DeviceLastSignals'].includes(this.$route.name)"
+    v-else-if="['StoreDetail'].includes(this.$route.name)"
     ref="singleTable"
     class="data-table"
     :data="data"
@@ -363,7 +244,7 @@
     style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
     height="100%"
     :header-cell-style="
-      this.$route.name === 'DeviceLastSignals'
+      this.$route.name === 'StoreDetail'
         ? { background: '#f5f5f5', color: '#444444' }
         : ''
     "
@@ -379,8 +260,8 @@
     </el-table-column>
     <el-table-column header-align="left" prop="state" label="DURUM" width="450">
     </el-table-column>
-    <!-- <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
-    </el-table-column> -->
+     <el-table-column header-align="left" prop="signal_type.sub_category" label="KATEGORİ">
+    </el-table-column> 
     <el-table-column header-align="left" prop="channel_id" label="OLAY KAYDI">
       <template slot-scope="scope">
         <SvgIconDownload
@@ -390,6 +271,75 @@
       </template>
     </el-table-column>
 
+    <el-table-column
+      prop="channel_id"
+      header-align="right"
+      align="right"
+      label="OLAY ZAMANI"
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.event_date) }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="channel_id"
+      header-align="right"
+      align="right"
+      label="İŞLEMLER"
+    >
+      <template slot-scope="scope">
+		  {{}}
+        <el-button type="button" @click="(scope.row.id)"> Open Modal</el-button>
+      </template>
+    </el-table-column>
+  </el-table>-->
+  <!-- Fraud Analiz Tablosu -->
+  <el-table
+    v-loading="loading"
+    v-else-if="['StoreDetail'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    stripe
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    height="100%"
+    @row-dblclick="handleDBClick"
+    :header-cell-style="
+      this.$route.name === 'StoreDetail'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : ''
+    "
+  >
+    <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
+    <el-table-column
+      header-align="left"
+      prop="details.receiptNo"
+      label="FİŞ NO"
+    >
+      <template slot-scope="scope">
+        {{ scope.row.details.receiptNo }}
+      </template>
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="posCode"
+      label="KASA"
+      width="450"
+    >
+    </el-table-column>
+    <el-table-column
+      header-align="left"
+      prop="cashier.fullName"
+      label="KASİYER"
+    >
+    </el-table-column>
+    <el-table-column header-align="left" prop="description" label="AÇIKLAMA">
+    </el-table-column>
+    <el-table-column header-align="left" label="KAÇAK">
+      <el-button type="success">Hayır</el-button>
+    </el-table-column>
+    <el-table-column header-align="left" prop="userCode" label="PERSONEL">
+    </el-table-column>
     <el-table-column
       prop="channel_id"
       header-align="right"
@@ -471,7 +421,8 @@ import SvgIconEnergy from '@/components/atomic/device/hap/svg-icon-energy.vue'
 import SvgIconBattery from '@/components/atomic/device/hap/svg-icon-battery.vue'
 import SvgIconServiceRequest from '@/assets/icons/list/svg-icon-is-service-request'
 import SvgIconDeviceInterface from '@/assets/icons/list/svg-icon-device-interface'
-import SvgIconWarning from '@/assets/icons/list/svg-icon-warning.vue'
+// import SvgIconWarning from '@/assets/icons/list/svg-icon-warning.vue'
+import ProgressStatus from '@/components/list/ProgressStatus'
 import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
 import { dateTimeChange } from '@/utils.js'
@@ -486,24 +437,24 @@ export default {
     }
   },
   components: {
-    SvgIconDownload,
-    SvgIconWarning,
-    SvgIconFirstChannel,
-    SvgIconFirstChannels,
-    SvgIconServiceRequest,
-    SvgIconDeviceInterface,
-    // SvgIconAlarm,
-    SvgIconSecondChannel,
-    SvgIconThirdChannel,
-    SvgIconFourthChannel,
+    // SvgIconDownload,
+    // SvgIconWarning,
+    // SvgIconFirstChannel,
+    // SvgIconFirstChannels,
+    // SvgIconServiceRequest,
+    // SvgIconDeviceInterface,
+    ProgressStatus
+    // SvgIconSecondChannel,
+    // SvgIconThirdChannel,
+    // SvgIconFourthChannel,
     // SvgIconSabotage,
     // SvgIconFault,
-    SvgIconCommunication,
-    // SvgIconEnergy,
+    // SvgIconCommunication,
+    // SvgIconEnergy
     // SvgIconBattery,
-    SvgIconDisk,
-    SvgIconRecord,
-    SvgIconDateTime
+    // SvgIconDisk,
+    // SvgIconRecord,
+    // SvgIconDateTime
     // SvgIconServiceRequest,
     // SvgIconQuery,
   },
@@ -519,6 +470,7 @@ export default {
   },
   watch: {
     data: function (val) {
+      console.log('DataTable Prop', val)
       if (val) {
         this.loading = false
       } else {
@@ -589,11 +541,17 @@ export default {
         this.getPermissions['device_show_in_dashboard']
         // && this.getPermissions['device_show_in_dashboard']
       ) {
+        // this.$router.push({
+        //   name: 'DeviceDetail',
+        //   params: { device_id: val.id }
+        // })
         this.$router.push({
-          name: 'DeviceDetail',
-          params: { device_id: val.id }
+          name: 'StoreDetail',
+          params: { store_id: val.id }
         })
         this.setSelectedRow(val)
+      } else if (['StoreDetail'].includes(this.$route.name)) {
+        bus.$emit('storeOpenModal', val)
       }
     },
     rowClassName({ row }) {
@@ -673,5 +631,23 @@ export default {
       border-left: 10px solid $hybrone_light_blue !important;
     }
   }
+}
+.total-count {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #a0a0a0;
+}
+.suspicion-count {
+  @extend .total-count;
+  color: #444444;
+}
+.analysis-count {
+  @extend .total-count;
+  color: #6fcf97;
+}
+.fraud-count {
+  @extend .total-count;
+  color: #e04141;
 }
 </style>

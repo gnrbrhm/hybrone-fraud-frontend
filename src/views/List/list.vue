@@ -55,7 +55,7 @@ export default {
   methods: {
     ...mapActions({
       refreshVguardDeviceData: 'device/refreshVguardDeviceData',
-      getVguardDevices: 'device/getVguardDevices'
+      getShopies: 'shopies/getShopies'
     }),
     handleChangePagination() {
       this.fillDataTable({
@@ -86,10 +86,9 @@ export default {
     },
     async fillDataTable(params) {
       console.log('Gelen Datalar', params)
-      let devices = this.getVguardDevices({ page: 1, limit: 20, ...params })
-      devices.then((r) => {
-        this.table_data = r
-      })
+      let shopies = await this.getShopies({ page: 1, limit: 20, ...params })
+      console.log('FillDataTable', shopies)
+      this.table_data = shopies.data
     },
     async refreshVguardDeviceAndData() {
       let refresh = null

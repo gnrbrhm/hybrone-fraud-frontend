@@ -11,6 +11,7 @@ import device from './device'
 import pagination from './pagination'
 import logs from './logs'
 import service from './service'
+import shopies from './shopies'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,8 @@ export default new Vuex.Store({
     device,
     pagination,
     logs,
-    service
+    service,
+    shopies
     // locale,
   },
   plugins: [

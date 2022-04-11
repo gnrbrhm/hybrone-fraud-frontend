@@ -1,15 +1,16 @@
 export const APP_NAME = 'Hybrone-Sentinel-Petronet'
 export const NAVIGATON = [
   // { label: "Takip", route: "tracked" ,disabled:false},
-  { label: 'Dashboard', route: '/dashboard/panel', disabled: true },
-  { label: 'Liste', route: '/list/panel', disabled: true },
-  {
-    label: 'Harita',
-    route: '/map',
-    disabled: true
-  },
-  { label: 'Servisler', route: '/services', disabled: true },
-  { label: 'İstasyonlar', route: '/premises', disabled: true },
+  { label: 'Özet', route: '/dashboard/panel', disabled: true },
+  { label: 'Mekan Listesi', route: '/list/panel', disabled: true },
+  { label: 'Görevler', route: '/missions', disabled: true },
+  //   {
+  //     label: 'Harita',
+  //     route: '/map',
+  //     disabled: true
+  //   },
+  //   { label: 'Servisler', route: '/services', disabled: true },
+  //   { label: 'İstasyonlar', route: '/premises', disabled: true },
   { label: 'Ayarlar', route: '/settings', disabled: true }
   // { label: "Çıkış", route: "/logout" },
 ]

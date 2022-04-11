@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     getRouteForClass: function () {
-      if (!this.$route.path.split('/').includes('last-signals')) {
+      if (!['StoreDetail'].includes(this.$route.name)) {
         return 'detail-header-content'
       } else {
         return 'table-filter-header '

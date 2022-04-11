@@ -283,5 +283,25 @@ export default {
     method: 'PUT',
     url: '/settings',
     data: {}
+  },
+  getFraudDashboardData: {
+    method: 'GET',
+    url: '/dashboard',
+    data: {}
+  },
+  getFraudStores: {
+    method: 'GET',
+    url: '/stores',
+    data: {}
+  },
+  getFraudRegisterActivity: {
+    method: 'GET',
+    url: '/register-activities',
+    payload: {}
+  },
+  getFraudCashiers: {
+    method: 'GET',
+    url: '/cahiers',
+    payload: {}
   }
 }

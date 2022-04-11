@@ -21,8 +21,11 @@
             style="color: #ffffff"
             v-if="nav.label == 'Takip'"
           ></SvgIconTracked>
-          <Dashboard v-else-if="nav.label == 'Dashboard'"></Dashboard>
-          <SvgIconList v-else-if="nav.label == 'Liste'"></SvgIconList>
+          <Dashboard v-else-if="nav.label == 'Özet'"></Dashboard>
+          <SvgIconList v-else-if="nav.label == 'Mekan Listesi'"></SvgIconList>
+          <SvgIconMissions
+            v-else-if="nav.label == 'Görevler'"
+          ></SvgIconMissions>
           <SvgIconMaps v-else-if="nav.label == 'Harita'"></SvgIconMaps>
           <SvgIconServices
             v-else-if="nav.label == 'Servisler'"
@@ -61,6 +64,7 @@ import { NAVIGATON } from '@/constant'
 import SvgIconTracked from '@/assets/icons/navigation/tracked.vue'
 import Dashboard from '@/assets/icons/navigation/dashboard.vue'
 import SvgIconList from '@/assets/icons/navigation/svg-icon-list.vue'
+import SvgIconMissions from '@/assets/icons/navigation/svg-icon-missions.vue'
 import SvgIconServices from '@/assets/icons/navigation/svg-icon-services.vue'
 import SvgIconMaps from '@/assets/icons/navigation/svg-icon-maps.vue'
 import SvgIconSettings from '@/assets/icons/navigation/svg-icon-settings.vue'
@@ -79,7 +83,8 @@ export default {
     SvgIconMaps,
     SvgIconSettings,
     SvgIconLogout,
-    SvgIconStation
+    SvgIconStation,
+    SvgIconMissions
     // SvgIconPremise
   },
   data() {

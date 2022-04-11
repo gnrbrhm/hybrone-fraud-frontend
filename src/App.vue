@@ -68,13 +68,13 @@ export default {
   },
   created() {},
   mounted() {
-    if (
-      ['List', 'Dashboard', 'DeviceDetail'].includes(this.$route.name) &&
-      this.state.user.auto_reload
-    )
-      setInterval(() => {
-        window.location.reload(true)
-      }, 180000)
+    // if (
+    //   ['List', 'Dashboard', 'DeviceDetail'].includes(this.$route.name) &&
+    //   this.state.user.auto_reload
+    // )
+    //   setInterval(() => {
+    //     window.location.reload(true)
+    //   }, 180000)
     // window.on('beforeunload', alert('Do you really want to close?'))
   }
 }

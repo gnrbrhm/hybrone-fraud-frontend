@@ -69,7 +69,8 @@ $hybrone_header_background_color: #f5f5f5;
     background-color: $hybrone_light_blue;
     svg {
       path {
-        fill: $hybrone_background_color;
+        fill: #ffffff;
+        // fill: $hybrone_background_color;
       }
     }
   }

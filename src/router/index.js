@@ -17,6 +17,7 @@ import CreatePremise from '../views/Premises/create-premise.vue'
 // import DeviceLastSignals from "../views/Devices/Hap/device-last-signals.vue";
 import CreateDevice from '../views/Devices/Hap/create-device.vue'
 import DeviceDetail from '../views/Devices/Hap/device-detail.vue'
+import StoreDetail from '../views/Store/store-detail.vue'
 import Settings from '../views/Settings/settings.vue'
 import Logs from '../views/Settings/logs.vue'
 import UserPermissions from '../views/Settings/user-permissions.vue'
@@ -120,6 +121,24 @@ const routes = [
       layout: 'auth'
     },
     component: DeviceDetail
+  },
+  {
+    path: '/list/store/:store_id',
+    name: 'StoreDetail',
+    beforeEnter: MiddlewareAuth,
+    children: [
+      {
+        path: 'last-signals',
+        name: 'DeviceLastSignals',
+        meta: {
+          layout: 'auth'
+        }
+      }
+    ],
+    meta: {
+      layout: 'auth'
+    },
+    component: StoreDetail
   },
   // {
   //   path: "/device-detail/:device_id/last-signals",

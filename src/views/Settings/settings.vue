@@ -4,7 +4,7 @@
       <span class="settings-title">Ayarlar</span>
     </div>
     <div class="content">
-      <!-- Sorgulama Periyodu -->
+      <!-- Sorgulama Periyodu 
       <div class="process-logs">
         <div class="chart-title">Sorgulama Periyodu</div>
         <span class="span-text"
@@ -35,8 +35,8 @@
             >Kaydet</el-button
           >
         </div>
-      </div>
-      <!-- Cihaz Listesi İçe Aktar -->
+      </div>-->
+      <!-- Cihaz Listesi İçe Aktar 
       <div class="process-logs">
         <div class="chart-title">Cihaz Listesi İçe Aktar</div>
         <span class="span-text"
@@ -44,21 +44,7 @@
           aktarabilirsiniz.Tekrarlanan veriler aktarılmayacaktır.</span
         >
         <div class="chart-actions">
-          <!-- <el-upload
-            class="upload-demo"
-            :auto-upload="false"
-            accept=".xlsx"
-            :file-list="fileList"
-            :on-change="handleChange"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-success="handleSuccess"
-          >
-            <el-button v-if="isEmpyt" type="primary" class="select-file-button"
-              >Dosya Seç</el-button
-            >
-            <div width="50px" slot="tip" class="el-upload__tip"></div>
-          </el-upload> -->
+         
           <el-button
             :disabled="!this.getPermissions['data_import']"
             class="save-button logs"
@@ -66,12 +52,9 @@
             @click="handleImportDevice"
             >İçeri Aktar</el-button
           >
-          <!-- @click="uploadFiles" -->
         </div>
-        <!-- Sorgulama Periyodu -->
-        <!-- Sorgulama Periyodu -->
-      </div>
-      <!-- Cihaz Listesi Dışa Aktar -->
+      </div>-->
+      <!-- Cihaz Listesi Dışa Aktar 
       <div class="process-logs">
         <div class="chart-title">Cihaz Listesini Dışa Aktar</div>
         <span class="span-text"
@@ -86,7 +69,7 @@
             >Dışa Aktar</el-button
           >
         </div>
-      </div>
+      </div>-->
       <!-- İşlem Logları -->
       <div class="process-logs">
         <div class="chart-title">İşlem Logları</div>
@@ -104,7 +87,9 @@
           >
         </div>
       </div>
-      <!-- Kullanıcı Yetki Yönetimi -->
+    </div>
+
+    <!-- Kullanıcı Yetki Yönetimi 
       <div class="process-logs">
         <div class="chart-title">Kullanıcılar</div>
         <span class="span-text"
@@ -120,8 +105,8 @@
             >Kullanıcılar</el-button
           >
         </div>
-      </div>
-      <!-- Şifre Değiştirme-->
+      </div>-->
+    <!-- Şifre Değiştirme
       <div class="process-logs">
         <div class="chart-title">Şifre Değiştir</div>
         <span class="span-text">Kullanıcı şifrenizi değiştirebilirsiniz.</span>
@@ -134,8 +119,8 @@
           >
         </div>
       </div>
-    </div>
-    <!-- İmport Device -->
+    </div>-->
+    <!-- İmport Device
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -180,8 +165,8 @@
           </div>
         </div>
       </div>
-    </el-dialog>
-    <!-- İmport Device Confirm -->
+    </el-dialog> -->
+    <!-- İmport Device Confirm
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -207,8 +192,8 @@
           </div>
         </div>
       </div>
-    </el-dialog>
-    <!-- İmport Device Progress Bar -->
+    </el-dialog> -->
+    <!-- İmport Device Progress Bar 
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -223,8 +208,8 @@
           ></el-progress>
         </div>
       </div>
-    </el-dialog>
-    <!-- Import Device Error -->
+    </el-dialog>-->
+    <!-- Import Device Error 
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -242,8 +227,8 @@
           </div>
         </div>
       </div>
-    </el-dialog>
-    <!-- Import Device Success -->
+    </el-dialog>-->
+    <!-- Import Device Success
     <el-dialog
       class="dialog-popup"
       width="510px"
@@ -261,7 +246,7 @@
           </div>
         </div>
       </div>
-    </el-dialog>
+    </el-dialog> -->
     <!-- Result İmport Device Table 
     <el-dialog
       class="dialog-popup"
@@ -299,7 +284,7 @@
         </div>
       </div>
     </el-dialog>-->
-    <!-- Password Reset Dialog -->
+    <!-- Password Reset Dialog 
     <el-dialog
       class="dialog-popup"
       width="500px"
@@ -371,7 +356,7 @@
           </el-form-item>
         </el-form>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 
@@ -385,7 +370,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Settings',
   components: {
-    SvgIconFileUpload
+    // SvgIconFileUpload
   },
   data() {
     return {

@@ -4,43 +4,25 @@
       :premise_information="data"
       @openServiceModal="openModal"
     ></DeviceDetailsHeader>
-    <!-- <DeviceDetailsTitle
-      @onDownloadSignalsHistory="handleDownloadSignalsHistory"
-      @onServiceModal="openModal"
-    ></DeviceDetailsTitle> -->
-    <StoreCaseAction
-      v-if="isLastSignals"
-      @filterData="handleFilteredData"
-    ></StoreCaseAction>
-    <!--    <DeviceDetailsContent v-else :data="data"></DeviceDetailsContent>
-    <SentinelModal
-      @onClose="handleModalClose"
-      :drawer="modal_visible"
-      :type="'service'"
-    ></SentinelModal> -->
+
+    <StoreCaseAction @filterData="handleFilteredData"></StoreCaseAction>
   </div>
 </template>
 
 <script>
-import SentinelModal from '@/components/modal/sentinel-modal.vue'
 import StoreCaseAction from '@/components/device-details/fraud/store-case-action.vue'
 import DeviceDetailsHeader from '@/components/device-details/device-details-header.vue'
-// import DeviceDetailsTitle from '@/components/device-details/device-details-title.vue'
-import DeviceDetailsContent from '@/components/device-details/device-details-content.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'DeviceDetail',
+  name: 'StoreDetail',
   components: {
     DeviceDetailsHeader,
-    // DeviceDetailsTitle,
-    // DeviceDetailsContent,
     StoreCaseAction
-    // SentinelModal
   },
   data() {
     return {
       device_id: null,
-      data: [],
+      data: {},
       premise: {},
       is_last_signals: false,
       filtered_data: {},
@@ -48,11 +30,14 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getSelectedRow: 'dataTable/getSelectedRow'
+    }),
     isLastSignals() {
       return this.$route.path.split('/').includes('last-signals')
     },
     getRouteForClass: function () {
-      if (!this.$route.path.split('/').includes('last-signals')) {
+      if (!['StoreDetail'].includes(this.$route.name)) {
         return 'details-content'
       } else {
         return 'details-last-signals-content'
@@ -61,7 +46,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      getVguardDeviceById: 'device/getVguardDeviceById',
       getProsecDeviceLastSignals: 'device/getProsecDeviceLastSignals',
       downloadProsecDeviceLastSignals: 'device/downloadProsecDeviceLastSignals'
     }),
@@ -100,16 +84,21 @@ export default {
     }
   },
   created() {
+    console.log('Store Detail')
     this.device_id = this.$route.params.device_id
-    let device = this.getVguardDeviceById(this.device_id)
-    device.then((r) => {
-      this.data = r
-    })
-    if (this.isLastSignals) {
-      this.getProsecDeviceSignalsHistory({
-        device_id: this.device_id
-      })
-    }
+    this.data = this.getSelectedRow
+    console.log('this.data', this.data)
+    // let register = this.getFraudRegisterActivity()
+    // register.then((r) => {
+    //   console.log(r)
+    //   this.data = r.data
+    // })
+
+    // if (this.isLastSignals) {
+    //   this.getProsecDeviceSignalsHistory({
+    //     device_id: this.device_id
+    //   })
+    // }
   },
   mounted() {
     // if (this.isLastSignals) {
