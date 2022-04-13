@@ -24,7 +24,7 @@ import DataTable from '@/components/atomic/data-table.vue'
 import DataTablePagination from '@/components/atomic/data-table-pagination.vue'
 import MissionFilter from '@/components/missions/missions-filter.vue'
 import SentinelModal from '@/components/modal/sentinel-modal.vue'
-
+import axios from 'axios'
 import { bus } from '@/main.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -86,9 +86,37 @@ export default {
     },
     async fillDataTable(params) {
       console.log('Gelen Datalar', params)
-      let shopies = await this.getShopies({ page: 1, limit: 20, ...params })
+      let shopies = await axios
+        .get(
+          'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/register-activities',
+          {
+            params: {
+              filter: {
+                offset: 0,
+                limit: 20,
+                order: 'date DESC',
+                where: {
+                  date: {
+                    between: [
+                      '2022-03-13T20:55:03.187Z',
+                      '2022-03-17T20:55:03.187Z'
+                    ]
+                  },
+                  activityType: 0,
+                  posCode: '5688_2',
+                  storeCode: '5688',
+                  userCode: '26365'
+                },
+                include: ['cashier', 'store']
+              }
+            }
+          }
+        )
+        .then((r) => {
+          console.log('Filtred Data', r)
+          this.table_data = r.data
+        })
       console.log('FillDataTable', shopies)
-      this.table_data = shopies.data
     },
     async refreshVguardDeviceAndData() {
       let refresh = null

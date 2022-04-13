@@ -10,7 +10,9 @@
       <div class="popup-container-title">
         <div class="popup-container-title-content">
           <span class="label">İŞLEM</span>
-          <span class="value">FİŞ İPTALİ</span>
+          <span class="value">{{
+            this.RegisterActivityType[data.activityType]
+          }}</span>
         </div>
         <div class="popup-container-title-content">
           <span class="label">FİŞ NO</span>
@@ -146,7 +148,14 @@ import { dateTimeChange } from '@/utils.js'
 export default {
   name: 'SentinelPopup',
   data() {
-    return {}
+    return {
+      RegisterActivityType: {
+        0: 'SATIŞ',
+        1: 'İADE',
+        2: 'FİŞ İPTAL',
+        3: 'FİYAT SORGULAMA'
+      }
+    }
   },
   props: {
     dialogTableVisible: { type: Boolean, default: false },

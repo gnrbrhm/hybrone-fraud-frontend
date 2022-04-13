@@ -90,7 +90,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <!-- Liste Dashboard Tracked Device  -->
+  <!-- Missions  -->
   <el-table
     v-loading="loading"
     v-else-if="['Missions'].includes(this.$route.name)"
@@ -112,7 +112,7 @@
     <el-table-column header-align="left" prop="code" label="ID" width="180">
       <template slot-scope="scope">
         <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
-        {{ scope.row.code }}
+        {{ scope.row.id }}
       </template>
     </el-table-column>
 
@@ -123,35 +123,45 @@
       width="180"
     >
       <template slot-scope="scope">
-        {{ scope.row.receiptHeader3 }}
+        {{ scope.row.store.receiptHeader3 }}
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="KASA">
       <template slot-scope="scope">
-        <span class="case-count">
-          {{ 100 || scope.row.receiptHeader3 }}
-        </span>
+        {{ scope.row.details.posCode }}
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="KASİYER">
       <template slot-scope="scope">
-        <span class="total-count">
-          {{ 53 || scope.row.receiptHeader3 }}
-        </span>
+        {{ scope.row.cashier.fullName }}
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="İŞLEM">
       <template slot-scope="scope">
-        <span class="suspicion-count">
-          {{ 25 || scope.row.receiptHeader3 }}
-        </span>
+        {{ 0 || RegisterActivityType[scope.row.activityType] }}
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="A.I SONUÇ">
       <template slot-scope="scope">
-        <span class="analysis-count">
-          {{ 3 || scope.row.receiptHeader3 }}
-        </span>
+        {{ scope.row.userCode }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KAÇAK">
+      <template slot-scope="scope">
+        <div
+          :class="
+            (scope.row.adminAnnotation = undefined
+              ? 'status-badge-wait'
+              : 'status-badge-success')
+          "
+        >
+          {{ (scope.row.adminAnnotation = undefined ? 'Bekliyor' : 'Hayır') }}
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="PERSONEL">
+      <template slot-scope="scope">
+        {{ !scope.row.userCode || getUsername }}
       </template>
     </el-table-column>
     <el-table-column
@@ -161,7 +171,7 @@
       show-overflow-tooltip
     >
       <template slot-scope="scope">
-        {{ formattedDatetime(scope.row.start_time) }}
+        {{ formattedDatetime(scope.row.date) }}
       </template>
     </el-table-column>
   </el-table>
@@ -502,10 +512,17 @@ import { PERSONAL_TITLES } from '@/constant.js'
 import { bus } from '@/main.js'
 import { dateTimeChange } from '@/utils.js'
 import { mapActions, mapGetters } from 'vuex'
+import store from '@/store'
 export default {
   name: 'DataTable',
   data() {
     return {
+      RegisterActivityType: {
+        0: 'SATIŞ',
+        1: 'İADE',
+        2: 'FİŞ İPTAL',
+        3: 'FİYAT SORGULAMA'
+      },
       multiple_selection: [],
       bus: {},
       loading: true
@@ -541,7 +558,10 @@ export default {
   computed: {
     ...mapGetters({
       getPermissions: 'auth/getPermissions'
-    })
+    }),
+    getUsername: () => {
+      return 'hybrone'
+    }
   },
   watch: {
     data: function (val) {
@@ -724,5 +744,28 @@ export default {
 .fraud-count {
   @extend .total-count;
   color: #e04141;
+}
+.status-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 80px;
+  min-height: 36px;
+  border-radius: 5px;
+  color: $hybrone_background_color !important;
+  &-wait {
+    @extend .status-badge;
+    background: #a0a0a0 !important;
+  }
+  &-success {
+    @extend .status-badge;
+
+    background: #6fcf97 !important;
+  }
+  &-error {
+    @extend .status-badge;
+
+    background: #eb5757 !important;
+  }
 }
 </style>

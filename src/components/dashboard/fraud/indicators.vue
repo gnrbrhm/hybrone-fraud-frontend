@@ -86,7 +86,11 @@
         <el-progress
           class="first-circular"
           type="circle"
-          :percentage="0"
+          :percentage="
+            (dashboardData.totalFraudCounts.modelSuspectCount /
+              dashboardData.totalFraudCounts.totalActivityCount) *
+            100
+          "
           width="346"
           :show-text="false"
           :stroke-width="12"
@@ -96,7 +100,11 @@
           class="second-circular"
           type="circle"
           width="294"
-          :percentage="100"
+          :percentage="
+            (dashboardData.totalFraudCounts.annotatedCount /
+              dashboardData.totalFraudCounts.totalActivityCount) *
+            100
+          "
           status="success"
           :show-text="false"
           :stroke-width="12"
@@ -105,7 +113,11 @@
           class="third-circular"
           type="circle"
           width="242"
-          :percentage="100"
+          :percentage="
+            (dashboardData.totalFraudCounts.annotatedFraudCount /
+              dashboardData.totalFraudCounts.totalActivityCount) *
+            100
+          "
           status="exception"
           :show-text="false"
           :stroke-width="12"
@@ -119,8 +131,9 @@
         <p>
           %{{
             (
-              (100 / dashboardData.totalFraudCounts.notAnnotatedCount) *
-              dashboardData.totalFraudCounts.annotatedCount
+              (dashboardData.totalFraudCounts.annotatedFraudCount /
+                dashboardData.totalFraudCounts.totalActivityCount) *
+              100
             ).toFixed(2)
           }}
         </p>
