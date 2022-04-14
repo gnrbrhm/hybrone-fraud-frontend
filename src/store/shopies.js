@@ -45,7 +45,30 @@ export default {
     },
     async getFraudRegisterActivity({ commit }, params) {
       const register = await axios.get(
-        'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/register-activities?filter=%7B%0A%20%20%22offset%22%3A%200%2C%0A%20%20%22limit%22%3A%201%2C%0A%20%20%22where%22%3A%20%7B%0A%20%20%7D%2C%0A%20%20%22include%22%3A%20%5B%20%22cashier%22%2C%20%22store%22%20%5D%0A%7D'
+        // 'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/register-activities?filter=%7B%0A%20%20%22offset%22%3A%200%2C%0A%20%20%22limit%22%3A%201%2C%0A%20%20%22where%22%3A%20%7B%0A%20%20%7D%2C%0A%20%20%22include%22%3A%20%5B%20%22cashier%22%2C%20%22store%22%20%5D%0A%7D'
+        'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/register-activities',
+        {
+          params: {
+            filter: {
+              offset: 0,
+              limit: 20,
+              order: 'date DESC',
+              where: {
+                date: {
+                  between: [
+                    '2022-03-13T20:55:03.187Z',
+                    '2022-03-17T20:55:03.187Z'
+                  ]
+                },
+                activityType: 0,
+                posCode: '5688_2',
+                storeCode: '5688',
+                userCode: '26365'
+              },
+              include: ['cashier', 'store']
+            }
+          }
+        }
       )
       //   const register = await Vue.prototype.$fraud({
       //     ...endpoints.getFraudRegisterActivity,

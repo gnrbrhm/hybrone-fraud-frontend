@@ -29,7 +29,7 @@ import axios from 'axios'
 import { bus } from '@/main.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'Missions',
+  name: 'MissionsReport',
   components: {
     MissionFilter,
     DataTable,

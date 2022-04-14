@@ -78,11 +78,33 @@
       </div>
     </div>
     <div class="actions">
-      <div class="component">
-        <el-button @click="handleClickSelectedDevicesRefresh">
-          Rapor
+      <div v-if="this.$route.name == 'Missions'" class="component">
+        <span>RAPOR</span>
+        <el-button
+          :disabled="
+            isSelected ||
+            !this.getPermissions['device_list_status_report_create']
+              ? true
+              : false
+          "
+          @click="handleActionsClick('report')"
+        >
+          <SvgIconReport></SvgIconReport>
         </el-button>
       </div>
+
+      <div class="component2">
+        <el-button
+          v-if="this.$route.name == 'MissionsReport'"
+          @click="() => this.$router.push('/missions/report')"
+        >
+          Rapor
+        </el-button>
+        <el-button v-else @click="() => this.$router.push('/missions')">
+          Canlı
+        </el-button>
+      </div>
+
       <!-- <div v-if="false" class="component">
         <span>İŞLEM</span>
         <el-button :disabled="isSelected" @click="handleActionsClick('action')">
@@ -129,11 +151,11 @@ import { bus } from '@/main.js'
 export default {
   name: 'MissionFilter',
   components: {
-    SvgIconSearch
+    SvgIconSearch,
     // SvgIconRefresh,
     // SvgIconAction,
     // SvgIconService,
-    // SvgIconReport
+    SvgIconReport
   },
   computed: {
     ...mapGetters({
@@ -301,40 +323,51 @@ export default {
   }
 
   .actions {
+    margin-top: 18px;
     display: flex;
     flex-direction: row;
     align-content: left;
     align-items: center;
     justify-content: flex-start;
+    .component2 {
+      margin-top: 15px;
+      button {
+        height: 50px;
+        width: 110px;
+        padding: 0px;
+        color: #444444;
+        span {
+          color: #444444;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 19px;
+        }
+        &:hover {
+          background-color: $hybrone_light_blue;
+          span {
+            color: $hybrone_background_color;
+          }
+        }
+      }
+    }
     span {
       @extend .sentinel-label;
       margin: 0px;
     }
     button {
       height: 50px;
-      width: 110px;
+      width: 50px;
       padding: 0px;
-      margin-top: 18px;
       span {
-        padding: 0px;
-
         display: flex;
-        width: 110px;
         justify-content: center;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 19px;
-        text-align: center;
-
-        /* Gray Dark */
-
-        color: #444444;
       }
       &:hover {
-        span {
-          background-color: $hybrone_light_blue;
-
-          color: $hybrone_background_color;
+        background-color: $hybrone_light_blue;
+        svg {
+          path {
+            fill: $hybrone_background_color;
+          }
         }
       }
       &:focus {

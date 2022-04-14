@@ -22,6 +22,7 @@ import Settings from '../views/Settings/settings.vue'
 import Logs from '../views/Settings/logs.vue'
 import UserPermissions from '../views/Settings/user-permissions.vue'
 import Missions from '../views/Missions/Missions.vue'
+import MissionsReport from '../views/Missions/MissionsReport.vue'
 
 Vue.use(VueRouter)
 
@@ -152,6 +153,15 @@ const routes = [
   // },
   {
     path: '/missions',
+    name: 'MissionsReport',
+    beforeEnter: MiddlewareAuth,
+    meta: {
+      layout: 'auth'
+    },
+    component: MissionsReport
+  },
+  {
+    path: '/missions/report',
     name: 'Missions',
     beforeEnter: MiddlewareAuth,
     meta: {

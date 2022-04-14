@@ -59,6 +59,7 @@
                 fontSize: '18px',
                 color: '#444444'
               }"
+              height="100%"
             >
               <el-table-column
                 property="productName"
@@ -112,11 +113,17 @@
             </el-input>
           </div>
           <div class="popup-container-content-analysis-actions">
-            <div class="popup-container-content-analysis-actions-group">
+            <div
+              v-if="this.$route.name != 'Missions'"
+              class="popup-container-content-analysis-actions-group"
+            >
               <span>KAÇAK</span>
               <el-button size="small" type="success">HAYIR</el-button>
             </div>
-            <div class="popup-container-content-analysis-actions-group">
+            <div
+              v-if="this.$route.name != 'Missions'"
+              class="popup-container-content-analysis-actions-group"
+            >
               <span>PERSONEL</span>
               <el-button size="small">Özgir Sinan Halis</el-button>
             </div>
@@ -124,9 +131,31 @@
               class="popup-container-content-analysis-actions-popup-controls"
             >
               <el-button
+                v-if="this.$route.name != 'Missions'"
                 class="popup-container-content-analysis-actions-popup-controls-update sentinel-button"
                 size="medium"
                 >DÜZENLE</el-button
+              >
+
+              <el-select
+                v-else
+                class="popup-container-content-analysis-actions-popup-controls-update sentinel-input"
+                style="width: 100%; margin-right: 20px"
+                placeholder="Seçiniz"
+                clearable
+              >
+                <el-option
+                  v-for="item in status_option"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option
+              ></el-select>
+              <el-button
+                class="popup-container-content-analysis-actions-popup-controls-close sentinel-button"
+                size="medium"
+                @click="() => onSubmit(alert('onSubmit'))"
+                >KAYDET</el-button
               >
               <el-button
                 class="popup-container-content-analysis-actions-popup-controls-close sentinel-button"
@@ -154,7 +183,11 @@ export default {
         1: 'İADE',
         2: 'FİŞ İPTAL',
         3: 'FİYAT SORGULAMA'
-      }
+      },
+      status_option: [
+        { label: 'Evet', value: 'fraud' },
+        { label: 'Hayır', value: 'nonFraud' }
+      ]
     }
   },
   props: {
@@ -169,6 +202,7 @@ export default {
       console.log('Watch Popup DAta', val)
     }
   },
+
   methods: {
     formatDateTime: (val) => {
       return dateTimeChange(val)
@@ -304,7 +338,7 @@ export default {
         }
       }
       &-actions {
-        width: 255px;
+        width: 355px;
         margin-top: 15px;
         display: flex;
         flex-direction: row;
@@ -324,6 +358,7 @@ export default {
           display: flex;
           flex-direction: row;
           justify-content: space-around;
+          min-width: 100%;
           &-update {
             background-color: #ffffff;
             &:hover {

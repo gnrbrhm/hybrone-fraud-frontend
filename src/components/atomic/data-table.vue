@@ -175,6 +175,74 @@
       </template>
     </el-table-column>
   </el-table>
+  <!-- Missions Report -->
+  <el-table
+    v-loading="loading"
+    v-else-if="['MissionsReport'].includes(this.$route.name)"
+    ref="singleTable"
+    class="data-table"
+    :data="data"
+    style="width: 99%; max-height: calc(100vh - 180px); overflow: none"
+    @row-dblclick="handleDBClick"
+    :header-cell-style="
+      this.$route.name == 'List'
+        ? { background: '#f5f5f5', color: '#444444' }
+        : { color: '#444444' }
+    "
+    @selection-change="handleSelectionChange"
+    @sort-change="handleServiceSorting"
+    :row-class-name="rowClassName"
+    height="100%"
+  >
+    <el-table-column header-align="left" prop="code" label="ID" width="180">
+      <template slot-scope="scope">
+        <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
+        {{ scope.row.id }}
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      header-align="left"
+      prop="name"
+      label="LOKASYON"
+      width="180"
+    >
+      <template slot-scope="scope">
+        {{ scope.row.store.receiptHeader3 }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KASA">
+      <template slot-scope="scope">
+        {{ scope.row.details.posCode }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="KASİYER">
+      <template slot-scope="scope">
+        {{ scope.row.cashier.fullName }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="İŞLEM">
+      <template slot-scope="scope">
+        {{ 0 || RegisterActivityType[scope.row.activityType] }}
+      </template>
+    </el-table-column>
+    <el-table-column header-align="left" prop="code" label="A.I SONUÇ">
+      <template slot-scope="scope">
+        {{ scope.row.userCode }}
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      property="start_time"
+      label="DURUM ZAMANI"
+      min-width="100"
+      show-overflow-tooltip
+    >
+      <template slot-scope="scope">
+        {{ formattedDatetime(scope.row.date) }}
+      </template>
+    </el-table-column>
+  </el-table>
   <!-- İstasyonlar -->
   <el-table
     v-loading="loading"
@@ -645,7 +713,7 @@ export default {
           params: { store_id: val.id }
         })
         this.setSelectedRow(val)
-      } else if (['StoreDetail'].includes(this.$route.name)) {
+      } else if (['StoreDetail', 'Missions'].includes(this.$route.name)) {
         bus.$emit('storeOpenModal', val)
       }
     },

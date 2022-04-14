@@ -285,7 +285,7 @@ export default {
   },
   destroyed() {
     bus.$off('onFilteredEventsData')
-    // bus.$off('storeOpenModal')
+    bus.$off('storeOpenModal')
   }
 }
 </script>
