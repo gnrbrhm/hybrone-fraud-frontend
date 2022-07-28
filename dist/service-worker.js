@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.1a78584ac31b64061cb3fa5746d116fd.js"
+  "/precache-manifest.adbb4c1e49d0bf94f9a68f2ea41574e1.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "Hybrone-Sentinel"});
+workbox.core.setCacheNameDetails({prefix: "Hybrone-Sentinel-Petronet"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

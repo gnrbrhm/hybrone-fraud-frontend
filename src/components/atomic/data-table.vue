@@ -34,41 +34,43 @@
       width="180"
     >
       <template slot-scope="scope">
-        {{ scope.row.receiptHeader3 }}
+        {{ scope.row.name }}
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="KASA SAYISI">
       <template slot-scope="scope">
         <span class="case-count">
-          {{ 100 || scope.row.receiptHeader3 }}
+          {{ 2 || scope.row.receiptHeader3 }}
         </span>
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="TOPLAM İŞLEM">
       <template slot-scope="scope">
         <span class="total-count">
-          {{ 53 || scope.row.receiptHeader3 }}
+          {{
+            scope.row.fraudCounts.totalActivityCount || scope.row.receiptHeader3
+          }}
         </span>
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="ŞÜPHELİ İŞLEM">
       <template slot-scope="scope">
         <span class="suspicion-count">
-          {{ 25 || scope.row.receiptHeader3 }}
+          {{ scope.row.fraudCounts.notAnnotatedCount }}
         </span>
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="ANALİZ">
       <template slot-scope="scope">
         <span class="analysis-count">
-          {{ 3 || scope.row.receiptHeader3 }}
+          {{ scope.row.fraudCounts.modelSuspectCount }}
         </span>
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="KAÇAK">
       <template slot-scope="scope">
         <span class="fraud-count">
-          {{ 5 || scope.row.receiptHeader3 }}
+          {{ scope.row.fraudCounts.annotatedFraudCount }}
         </span>
       </template>
     </el-table-column>
@@ -79,12 +81,16 @@
       width="280"
     >
       <template slot-scope="scope">
-        <ProgressStatus
-          :data="{
-            total: 53 || scope.row.receiptHeader3,
+        <!-- total: 53 || scope.row.receiptHeader3,
             suspicion: 25 || scope.row.receiptHeader3,
             analysis: 3 || scope.row.receiptHeader3,
-            fraud: 5 || scope.row.receiptHeader3
+            fraud: 5 || scope.row.receiptHeader3 -->
+        <ProgressStatus
+          :data="{
+            total: scope.row.fraudCounts.totalActivityCount,
+            suspicion: scope.row.fraudCounts.notAnnotatedCount,
+            analysis: scope.row.fraudCounts.annotatedCount,
+            fraud: scope.row.fraudCounts.annotatedFraudCount
           }"
         ></ProgressStatus>
       </template>
@@ -109,10 +115,10 @@
     :row-class-name="rowClassName"
     height="100%"
   >
-    <el-table-column header-align="left" prop="code" label="ID" width="180">
+    <el-table-column header-align="left" prop="code" label="FİŞ NO" width="180">
       <template slot-scope="scope">
         <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
-        {{ scope.row.id }}
+        {{ scope.row.details.receiptNo ? scope.row.details.receiptNo : '-' }}
       </template>
     </el-table-column>
 
@@ -141,27 +147,43 @@
         {{ 0 || RegisterActivityType[scope.row.activityType] }}
       </template>
     </el-table-column>
-    <el-table-column header-align="left" prop="code" label="A.I SONUÇ">
+    <!-- <el-table-column
+      header-align="left"
+      prop="code"
+      label="ŞÜPHELİ İŞLEM DURUMU"
+    >
       <template slot-scope="scope">
-        {{ scope.row.userCode }}
+        {{
+          scope.row.modelPrediction
+            ? scope.row.modelPrediction.predictionConfiedence
+            : '-'
+        }}
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column header-align="left" prop="code" label="KAÇAK">
       <template slot-scope="scope">
         <div
           :class="
-            (scope.row.adminAnnotation = undefined
+            scope.row.adminAnnotation == undefined
               ? 'status-badge-wait'
-              : 'status-badge-success')
+              : scope.row.adminAnnotation.annotationType == 1
+              ? 'status-badge-error'
+              : 'status-badge-success'
           "
         >
-          {{ (scope.row.adminAnnotation = undefined ? 'Bekliyor' : 'Hayır') }}
+          {{
+            scope.row.adminAnnotation == undefined
+              ? 'Bekliyor'
+              : scope.row.adminAnnotation.annotationType == 1
+              ? 'Evet'
+              : 'Hayır'
+          }}
         </div>
       </template>
     </el-table-column>
     <el-table-column header-align="left" prop="code" label="PERSONEL">
       <template slot-scope="scope">
-        {{ !scope.row.userCode || getUsername }}
+        {{ getUsername || scope.row.adminAnnotation.sentinelUserName }}
       </template>
     </el-table-column>
     <el-table-column
@@ -197,7 +219,7 @@
     <el-table-column header-align="left" prop="code" label="ID" width="180">
       <template slot-scope="scope">
         <!-- <SvgIconWarning v-if="scope.row.show_warning"></SvgIconWarning> -->
-        {{ scope.row.id }}
+        {{ scope.row.details.receiptNo ? scope.row.details.receiptNo : '-' }}
       </template>
     </el-table-column>
 
@@ -226,11 +248,19 @@
         {{ 0 || RegisterActivityType[scope.row.activityType] }}
       </template>
     </el-table-column>
-    <el-table-column header-align="left" prop="code" label="A.I SONUÇ">
+    <!-- <el-table-column
+      header-align="left"
+      prop="code"
+      label="ŞÜPHELİ İŞLEM DURUMU"
+    >
       <template slot-scope="scope">
-        {{ scope.row.userCode }}
+        {{
+          scope.row.modelPrediction
+            ? scope.row.modelPrediction.predictionConfiedence
+            : '-'
+        }}
       </template>
-    </el-table-column>
+    </el-table-column> -->
 
     <el-table-column
       property="start_time"
@@ -470,7 +500,7 @@
       label="FİŞ NO"
     >
       <template slot-scope="scope">
-        {{ scope.row.details.receiptNo }}
+        {{ scope.row.details.receiptNo ? scope.row.details.receiptNo : '-' }}
       </template>
     </el-table-column>
     <el-table-column
@@ -489,7 +519,25 @@
     <el-table-column header-align="left" prop="description" label="AÇIKLAMA">
     </el-table-column>
     <el-table-column header-align="left" label="KAÇAK">
-      <el-button type="success">Hayır</el-button>
+      <template slot-scope="scope">
+        <div
+          :class="
+            scope.row.adminAnnotation == undefined
+              ? 'status-badge-wait'
+              : scope.row.adminAnnotation.annotationType == 1
+              ? 'status-badge-error'
+              : 'status-badge-success'
+          "
+        >
+          {{
+            scope.row.adminAnnotation == undefined
+              ? 'Bekliyor'
+              : scope.row.adminAnnotation.annotationType == 1
+              ? 'Evet'
+              : 'Hayır'
+          }}
+        </div>
+      </template>
     </el-table-column>
     <el-table-column header-align="left" prop="userCode" label="PERSONEL">
     </el-table-column>
@@ -708,9 +756,10 @@ export default {
         //   name: 'DeviceDetail',
         //   params: { device_id: val.id }
         // })
+        console.log('DB Click', val)
         this.$router.push({
           name: 'StoreDetail',
-          params: { store_id: val.id }
+          params: { store_id: val.code }
         })
         this.setSelectedRow(val)
       } else if (['StoreDetail', 'Missions'].includes(this.$route.name)) {

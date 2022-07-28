@@ -7,9 +7,10 @@
     >
     <DeviceDetailsLastSignalsFilter
       v-else
-      @onFilteredData="handleFilteredData"
+      @onFilteredEventsData="handleFilteredData"
     ></DeviceDetailsLastSignalsFilter>
     <DetailsActions
+      v-if="false"
       @downloadSignalsHistory="handleDownloadSignalsHistory"
       @openServiceModal="handleServiceModal"
     ></DetailsActions>
@@ -43,6 +44,9 @@ export default {
     }
   },
   methods: {
+    handleFilteredData(val) {
+      console.log('Filtered Data DEtails ', val)
+    },
     handleDownloadSignalsHistory() {
       this.$emit('onDownloadSignalsHistory')
     },

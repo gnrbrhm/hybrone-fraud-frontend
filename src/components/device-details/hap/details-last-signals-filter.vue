@@ -67,7 +67,6 @@ export default {
     return {
       signals_code: [],
       filtered_data: {
-        signal_code: [],
         start_time: null,
         finish_time: null
       },
