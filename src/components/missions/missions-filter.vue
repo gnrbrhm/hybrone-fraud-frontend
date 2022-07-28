@@ -98,10 +98,10 @@
           v-if="this.$route.name == 'MissionsReport'"
           @click="() => this.$router.push('/missions/report')"
         >
-          Rapor
+          Rapora Git
         </el-button>
         <el-button v-else @click="() => this.$router.push('/missions')">
-          Canlı
+          Canlıya Git
         </el-button>
       </div>
 
@@ -181,7 +181,8 @@ export default {
         state: []
       },
       status_options: [],
-      hardware_options: []
+      hardware_options: [],
+      date_val: {}
     }
   },
   methods: {
@@ -203,13 +204,45 @@ export default {
     },
     handleSearch() {
       let state = ''
-      Object.keys(this.filtered_data).forEach((item) => {
-        if (this.filtered_data[item] == false) delete this.filtered_data[item]
+      let where = {}
+      console.log(this.filtered_data.state)
+      this.filtered_data.state.forEach((item) => {
+        console.log(item)
+        if (item == 'cancel') {
+          where = { ...where, activityType: 2 }
+        } else if (item == 'pricequery') {
+          where = { ...where, activityType: 3 }
+        } else if (item == 'return') {
+          where = { ...where, activityType: 1 }
+        } else if (item == 'fraud') {
+          where = { ...where, 'adminAnnotation.annotationType': 1 }
+        } else if (item == 'non_fraud') {
+          where = { ...where, 'adminAnnotation.annotationType': 0 }
+        } else if (item == 'predicition') {
+          where = { ...where, 'modelPrediction.predictionType': 1 }
+        } else if (item == 'non_prediction') {
+          where = { ...where, 'modelPrediction.predictionType': 0 }
+        } else if (item == 'completed') {
+          where = {
+            ...where,
+            'adminAnnotation.annotationType': { inq: [0, 1] }
+          }
+        } else if (item == 'non_completed') {
+          where = {
+            ...where,
+            'adminAnnotation.annotationType': { nin: [0, 1] }
+          }
+        }
       })
-      if (this.filtered_data.state != undefined)
-        state = this.filtered_data.state.join()
+      console.log(where)
+      //   if (this.filtered_data.state != undefined)
+      //     state = this.filtered_data.state.join()
 
-      this.$emit('onFilteredData', { ...this.filtered_data, state: state })
+      this.$emit('onFilteredData', {
+        ...this.filtered_data,
+        where: where,
+        date: this.date_val
+      })
       this.is_total_count_visible = true
     }
   },

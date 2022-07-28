@@ -64,7 +64,7 @@
         >
       </div>
     </div>
-    <div v-if="currentRouteName !== 'Maps'" class="actions">
+    <div v-if="false" class="actions">
       <div class="component">
         <span>YENİLE</span>
         <el-button

@@ -12,7 +12,7 @@
       @onChangeSize="handleChangePagination"
     ></DataTablePagination>
     <SentinelPopup
-      @onclose="handlePopupClose"
+      @onClose="handlePopupClose"
       :dialogTableVisible="popupVisible"
       :data="selectedRowData"
     >
@@ -67,7 +67,12 @@ export default {
     handlePopupClose() {
       console.log('Close Tetiklendi ::::::', this.popupVisible)
       this.$forceUpdate()
+
       this.popupVisible = false
+      this.fillDataTable({
+        page: this.getCurrentPage,
+        limit: this.getCurrentLimit
+      })
     },
     handleChangePagination() {
       this.fillDataTable({
@@ -91,7 +96,7 @@ export default {
     },
     async handleFilteredData(val) {
       console.log('LİSt', val)
-      await this.fillDataTable(val)
+      await this.fillDataTable({ ...val, offset: 0, limit: 20 })
     },
     handleModalClose(val) {
       this.modal_visible = val
@@ -99,34 +104,33 @@ export default {
     async fillDataTable(params) {
       console.log('Gelen Datalar', params)
       let shopies = await axios
-        .get(
-          'http://ec2-3-68-193-146.eu-central-1.compute.amazonaws.com:3000/register-activities',
-          {
-            params: {
-              filter: {
-                offset: 0,
-                limit: 20,
-                order: 'date DESC',
-                where: {
-                  date: {
-                    between: [
-                      '2022-03-13T20:55:03.187Z',
-                      '2022-03-17T20:55:03.187Z'
-                    ]
-                  },
-                  activityType: 0,
-                  posCode: '5688_2',
-                  storeCode: '5688',
-                  userCode: '26365'
-                },
-                include: ['cashier', 'store']
-              }
+        .get('http://3.70.144.38:3000//register-activities', {
+          params: {
+            filter: {
+              offset: params.offset || 0,
+              limit: params.limit || 20,
+              order: 'date DESC',
+              where: {
+                ...params.where,
+                videoUrl: { neq: null },
+                //   date: {
+                //     between: [
+                //       '2022-03-13T20:55:03.187Z',
+                //       '2022-03-17T20:55:03.187Z'
+                //     ]
+                //   },
+
+                storeCode: '5688'
+                //   userCode: '26365'
+              },
+              include: ['cashier', 'store']
             }
           }
-        )
+        })
         .then((r) => {
           console.log('Filtred Data', r)
           this.table_data = r.data
+          this.setTotalRecord(r.data.length)
         })
       console.log('FillDataTable', shopies)
     },
@@ -158,7 +162,7 @@ export default {
     }
   },
   created() {
-    this.fillDataTable()
+    this.fillDataTable({ offset: 0, limit: 20 })
   },
   mounted() {
     bus.$on('onSelectedDevicesRefresh', this.refreshVguardDeviceAndData)

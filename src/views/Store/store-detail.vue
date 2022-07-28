@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      device_id: null,
+      store_id: null,
       data: {},
       premise: {},
       is_last_signals: false,
@@ -84,8 +84,8 @@ export default {
     }
   },
   created() {
-    console.log('Store Detail')
-    this.device_id = this.$route.params.device_id
+    console.log('Store Detail', this.$route.params.store_id)
+    this.store_id = this.$route.params.store_id
     this.data = this.getSelectedRow
     console.log('this.data', this.data)
     // let register = this.getFraudRegisterActivity()
@@ -96,14 +96,14 @@ export default {
 
     // if (this.isLastSignals) {
     //   this.getProsecDeviceSignalsHistory({
-    //     device_id: this.device_id
+    //     device_id: this.store_id
     //   })
     // }
   },
   mounted() {
     // if (this.isLastSignals) {
     //   let device_signals = this.getProsecDeviceLastSignals({
-    //     device_id: this.device_id,
+    //     device_id: this.store_id,
     //   });
     //   device_signals.then((r) => {
     //     this.data = r;

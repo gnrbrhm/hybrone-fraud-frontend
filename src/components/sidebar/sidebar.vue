@@ -38,16 +38,13 @@
           <span v-if="nav.label != 'Çıkış'">{{ nav.label }}</span></router-link
         >
       </div>
-      <div v-if="false" class="oto-query">
-        <span
-          >Otomatik <br />
-          Sorgu</span
-        >
+      <div v-if="true" class="oto-query">
+        <span>AI Destek</span>
         <el-switch
           active-color="#007DB7"
           inactive-color="#ff4949"
           v-model="auto_query"
-          @click="handleAutoReloadClick"
+          @change="handleAutoReloadClick()"
         >
         </el-switch>
       </div>
@@ -100,13 +97,27 @@ export default {
   },
   methods: {
     ...mapActions({
-      logout: 'auth/logout'
+      getAICheck: 'shopies/getAICheck',
+      updateAICheck: 'shopies/updateAICheck',
+      logout: 'auth/logout',
+      setAutoQuery: 'auth/setAutoQuery'
     }),
-    handleAutoReloadClick() {
-      console.log('AutoReload')
+    async handleAutoReloadClick() {
+      console.log('handleAutoReloadClick')
+      let update = await this.updateAICheck({ isAIActive: this.auto_query })
+      this.logout()
+      //   location.reload()
+      //   this.getAICheckData()
     },
     logoutFunc() {
       this.logout()
+    },
+    getAICheckData() {
+      let check = this.getAICheck()
+      check.then((r) => {
+        this.auto_query = r.data.isAIActive
+        this.setAutoQuery(this.auto_query)
+      })
     }
   },
 
@@ -132,10 +143,12 @@ export default {
         this.navigation[item].disabled =
           this.getPermissions['device_show_in_map']
       }
-    })
+    }),
+      this.getAICheck()
   },
   mounted() {
-    console.log('Sidebar', this.getPermissions)
+    this.getAICheckData()
+    console.log('CheckData Çalıştı.')
   }
 }
 </script>
@@ -278,6 +291,14 @@ $high: 1920px;
     background-color: rgba(0, 0, 0, 0);
     color: $hybrone_background_color !important;
   }
+}
+.oto-query {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 // #nav > div.navigation > a:hover {
 //   background-color: $hybrone_light_blue;

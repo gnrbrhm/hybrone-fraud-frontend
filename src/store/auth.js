@@ -6,11 +6,13 @@ import Vue from 'vue'
 export default {
   namespaced: true,
   state: {
-    user: {}
+    user: {},
+    autoQuery: false
   },
   getters: {
     isLoggedIn: (state) => !!state.user.token,
-    getPermissions: (state) => state.user.data.user.permission
+    getPermissions: (state) => state.user.data.user.permission,
+    getAutoQuery: (state) => state.autoQuery
   },
   mutations: {
     SET_TOKEN(state, data) {
@@ -20,11 +22,18 @@ export default {
     SET_AUTH_USER(state, data) {
       console.log(data)
       state.user = data
+    },
+    SET_AUTO_QUERY(state, data) {
+      state.autoQuery = data
     }
   },
   actions: {
     setToken({ commit }, token) {
       commit('SET_TOKEN', token)
+    },
+    setAutoQuery({ commit }, payload) {
+      console.log('setAutoQuery', payload)
+      commit('SET_AUTO_QUERY', payload)
     },
     setAuthUser({ commit }, data) {
       let payload = { ...data }

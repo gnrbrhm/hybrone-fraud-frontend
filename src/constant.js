@@ -237,39 +237,59 @@ export const DEVICE_STATUS = [
   },
   {
     label: 'Fiş İptali',
-    value: 'has_video_loss'
-  },
-  {
-    label: 'Satır İptali',
-    value: 'has_scene_change'
+    value: 'cancel'
   },
   {
     label: 'Fiyat Gör',
-    value: 'motion_detect'
+    value: 'pricequery'
+  },
+  //   {
+  //     label: 'Elle Barkod Girişi',
+  //     value: 'has_sabotage'
+  //   },
+  //   {
+  //     label: 'Ürün İade',
+  //     value: 'return'
+  //   },
+  //   {
+  //     label: 'Askıya Alma',
+  //     value: 'disk_error'
+  //   },
+  //   {
+  //     label: 'Manuel İndirim',
+  //     value: 'network_error'
+  //   },
+  //   {
+  //     label: 'Kritik Ürün Satışı',
+  //     value: 'record_error'
+  //   },
+  //   {
+  //     label: 'Kritik Tutar',
+  //     value: 'datetime_error'
+  //   },
+  {
+    label: 'Kaçak Var',
+    value: 'fraud'
   },
   {
-    label: 'Elle Barkod Girişi',
-    value: 'has_sabotage'
+    label: 'Kaçak Yok',
+    value: 'non_fraud'
   },
   {
-    label: 'Ürün İade',
-    value: 'normal'
+    label: 'İşlem Şüpheli',
+    value: 'predicition'
   },
   {
-    label: 'Askıya Alma',
-    value: 'disk_error'
+    label: 'İşlem Şüpheli Değil',
+    value: 'non_prediction'
   },
   {
-    label: 'Manuel İndirim',
-    value: 'network_error'
+    label: 'Tamamlanan Görev',
+    value: 'completed'
   },
   {
-    label: 'Kritik Ürün Satışı',
-    value: 'record_error'
-  },
-  {
-    label: 'Kritik Tutar',
-    value: 'datetime_error'
+    label: 'Bekleyen Görev',
+    value: 'non_completed'
   }
 ]
 export const PREMISE_DEVICES = [

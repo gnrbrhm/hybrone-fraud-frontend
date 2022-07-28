@@ -291,7 +291,7 @@ export default {
   },
   getFraudStores: {
     method: 'GET',
-    url: '/stores',
+    url: '/stores/fraudextended',
     data: {}
   },
   getFraudRegisterActivity: {
@@ -303,5 +303,13 @@ export default {
     method: 'GET',
     url: '/cahiers',
     payload: {}
+  },
+  getAICheck: {
+    method: 'GET',
+    url: '/configs/project/0'
+  },
+  updateAICheck: {
+    method: 'PATCH',
+    url: '/configs/62e0cb534d6813b1484a0d2a'
   }
 }

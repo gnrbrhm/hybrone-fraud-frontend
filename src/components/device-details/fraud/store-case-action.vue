@@ -10,7 +10,7 @@
       class="bottom"
     ></DataTablePagination>
     <SentinelPopup
-      @onclose="handlePopupClose"
+      @onClose="handlePopupClose"
       :dialogTableVisible="popupVisible"
       :data="selectedRowData"
     >
@@ -265,10 +265,11 @@ export default {
     let register = this.getFraudRegisterActivity({
       offset: 0,
       limit: 1,
-      where: {},
-      include: ['cashier', 'store']
+      where: { offset: 0, limit: 20 },
+      include: ['cashier', 'store'],
+      id: this.$route.params.store_id
     })
-    console.log(register)
+    console.log('register isteği', register)
     register.then((r) => {
       console.log('Store Case Action', r)
       this.data = r.data
@@ -280,7 +281,10 @@ export default {
     bus.$on('onFilteredEventsData', (val) =>
       this.getVguardDeviceChannelsEventsHistory(val)
     )
-    bus.$on('storeOpenModal', (val) => this.openReceiptPopop(val))
+    bus.$on('storeOpenModal', (val) => {
+      console.log('storeOpenModal', val)
+      this.openReceiptPopop(val)
+    })
     this.getVguardDeviceChannelsEventsHistory()
   },
   destroyed() {

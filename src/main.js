@@ -15,6 +15,10 @@ import './assets/scss/base.scss'
 
 import Notifications from 'vue-notification'
 import VueApexCharts from 'vue-apexcharts'
+
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+
 locale.use(lang)
 Vue.use(VueApexCharts)
 Vue.use(Notifications)
@@ -22,6 +26,7 @@ export const bus = new Vue()
 
 Vue.use(api)
 Vue.use(ElementUI)
+Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false
 
 new Vue({
