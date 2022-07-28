@@ -19,7 +19,6 @@ const clientInstance = (baseURL) =>
         arrayFormat: 'repeat'
       })
   })
-// ec2-3-121-236-159
 const cyclops = clientInstance('http://34.79.135.127:3000/api/v1/')
 const fraud = clientInstance('http://3.70.144.38:3000/')
 const map = 'http://34.79.135.127:8081/tile/{z}/{x}/{y}.png'
