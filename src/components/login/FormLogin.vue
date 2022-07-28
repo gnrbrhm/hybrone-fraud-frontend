@@ -55,6 +55,7 @@ export default {
   name: 'FormLogin',
   data() {
     return {
+      video: '92172.mp4',
       remember_me: false,
       ruleForm: {
         email: '',

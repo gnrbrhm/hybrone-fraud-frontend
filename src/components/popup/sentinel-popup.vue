@@ -3,8 +3,9 @@
     title="Shipping address"
     style="border-top-left-radius: 20px"
     :custom-class="'mypopup'"
-    :visible.sync="dialogTableVisible"
+    :visible.sync="visibleDialog"
     width="1200px"
+    :before-close="handleClose"
   >
     <div class="popup-container">
       <div class="popup-container-title">
@@ -16,7 +17,7 @@
         </div>
         <div class="popup-container-title-content">
           <span class="label">FİŞ NO</span>
-          <span class="value">{{ data.details.receiptNo }}</span>
+          <span class="value">{{ data.details.receiptNo || '-' }}</span>
         </div>
         <div class="popup-container-title-content">
           <span class="label">KASA</span>
@@ -34,8 +35,13 @@
           <span class="label">LOKASYON</span>
           <span class="value">{{ data.cashier.storeName }}</span>
         </div>
-        <div class="popup-container-title-content">
-          <span class="label">A.I SONUÇ</span> <span class="value">%22</span>
+        <div v-if="getAutoQuery" class="popup-container-title-content">
+          <span class="label">ŞÜPHELİ İŞLEM DURUMU</span>
+          <span class="value">{{
+            data.modelPrediction
+              ? formatAIPercents(data.modelPrediction.predictionConfidence)
+              : '-'
+          }}</span>
         </div>
         <div class="popup-container-title-content">
           <span class="label">İŞLEM ZAMANI</span>
@@ -82,26 +88,62 @@
           <div class="popup-container-content-receipt-detail-general-sum">
             <div class="popup-container-content-receipt-detail-general-sum-row">
               <span>TOPLAM KDV</span>
-              <span>{{ calculateVatTotal() }}</span>
+              <span>{{ calculateVatTotal().toFixed(2) }}</span>
             </div>
             <div class="popup-container-content-receipt-detail-general-sum-row">
               <span>TOPLAM </span>
-              <span>{{ data.details.payments[0].amount }}</span>
+              <span>{{
+                data.details.payments && data.details.payments.length > 0
+                  ? data.details.payments[0].amount
+                  : '0'
+              }}</span>
             </div>
             <hr />
             <div class="popup-container-content-receipt-detail-general-sum-row">
               <span
                 class="popup-container-content-receipt-detail-general-sum-row-payment-type"
-                >{{ data.details.payments[0].paymentName }}</span
+                >{{
+                  data.details.payments && data.details.payments.length > 0
+                    ? data.details.payments[0].paymentName
+                    : ''
+                }}</span
               >
-              <span>{{ data.details.payments[0].amount }}</span>
+              <span>{{
+                data.details.payments && data.details.payments.length > 0
+                  ? data.details.payments[0].amount
+                  : '0'
+              }}</span>
             </div>
           </div>
         </div>
         <div class="popup-container-content-analysis">
           <span>OLAY KAYDI</span>
+          <!-- :src="video1" v-if="" -->
+          <!-- :src="require('/58656242.mp4')" -->
+          <!-- :src="'../../../assets/videos/' + data.details.id + '.mp4'" -->
+          <!-- :src="require('@/assets/videos/' + data.details.id + '.mp4')" -->
+          <!-- <videoPlayer
+            class="video-player-box"
+            ref="videoPlayer"
+            :options="playerOptions"
+          ></videoPlayer> -->
 
-          <video src=""></video>
+          <video
+            width="400"
+            muted="true"
+            :src="require(`@/assets/media/${data.details.id}.mp4`)"
+            controls
+          ></video>
+          <!-- <img
+            v-if="show_play_image"
+            @click="changeImage(show_play_image)"
+            :src="require(`@/assets/play-button.webp`)"
+          />
+          <img
+            v-else
+            @click="changeImage(show_play_image)"
+            :src="'http://10.81.102.56:9011/video_feed'"
+          /> -->
           <div class="popup-container-content-analysis-description">
             <span>AÇIKLAMA</span>
             <el-input
@@ -118,14 +160,22 @@
               class="popup-container-content-analysis-actions-group"
             >
               <span>KAÇAK</span>
-              <el-button size="small" type="success">HAYIR</el-button>
+              <el-button size="small" type="success">{{
+                data.adminAnnotation.annotationType == undefined
+                  ? 'Bekliyor'
+                  : data.adminAnnotation.annotationType == 1
+                  ? 'Evet'
+                  : 'Hayır'
+              }}</el-button>
             </div>
             <div
               v-if="this.$route.name != 'Missions'"
               class="popup-container-content-analysis-actions-group"
             >
               <span>PERSONEL</span>
-              <el-button size="small">Özgir Sinan Halis</el-button>
+              <el-button size="small">{{
+                data.adminAnnotation.sentinelUserName
+              }}</el-button>
             </div>
             <div
               class="popup-container-content-analysis-actions-popup-controls"
@@ -138,7 +188,8 @@
               >
 
               <el-select
-                v-else
+                v-if="this.$route.name != 'StoreDetail'"
+                v-model="selectedAnnotation"
                 class="popup-container-content-analysis-actions-popup-controls-update sentinel-input"
                 style="width: 100%; margin-right: 20px"
                 placeholder="Seçiniz"
@@ -152,9 +203,10 @@
                 ></el-option
               ></el-select>
               <el-button
+                v-if="this.$route.name != 'StoreDetail'"
                 class="popup-container-content-analysis-actions-popup-controls-close sentinel-button"
                 size="medium"
-                @click="() => onSubmit(alert('onSubmit'))"
+                @click="onSubmit"
                 >KAYDET</el-button
               >
               <el-button
@@ -173,11 +225,34 @@
 
 <script>
 import { dateTimeChange } from '@/utils.js'
+import { mapGetters, mapActions } from 'vuex'
+import store from '@/store/index.js'
+import { aIFraudTreshold } from '@/utils.js'
+// import video1 from '@/assets/videos/58656242.mp4'
+// import { videoPlayer } from 'vue-video-player'
 
 export default {
   name: 'SentinelPopup',
+  //   components: { videoPlayer },
   data() {
     return {
+      show_play_image: true,
+      visibleDialog: false,
+      playerOptions: {
+        // videojs options
+
+        muted: true,
+        language: 'en',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        sources: [
+          {
+            type: 'video/mp4',
+            src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
+          }
+        ],
+        poster: '/static/images/author.jpg'
+      },
+      textarea: '',
       RegisterActivityType: {
         0: 'SATIŞ',
         1: 'İADE',
@@ -185,40 +260,73 @@ export default {
         3: 'FİYAT SORGULAMA'
       },
       status_option: [
-        { label: 'Evet', value: 'fraud' },
-        { label: 'Hayır', value: 'nonFraud' }
-      ]
+        { label: 'Evet', value: 1 },
+        { label: 'Hayır', value: 0 }
+      ],
+      selectedAnnotation: 0
     }
   },
   props: {
     dialogTableVisible: { type: Boolean, default: false },
     data: { type: Object, default: () => {} }
   },
+  computed: {
+    ...mapGetters({
+      getAutoQuery: 'auth/getAutoQuery'
+    })
+  },
   watch: {
-    data: (val) => {
-      console.log('Watch Popup DAta', val)
+    data: function (val) {
+      this.selectedAnnotation = val.adminAnnotation?.annotationType
+      this.textarea = val.adminAnnotation?.description
     },
-    dialogTableVisible: (val) => {
+    dialogTableVisible: function (val) {
       console.log('Watch Popup DAta', val)
+      this.visibleDialog = val
     }
   },
 
   methods: {
+    ...mapActions({
+      setAnnotationTask: 'shopies/setAnnotationTask'
+    }),
+    changeImage(val) {
+      this.show_play_image = !val
+    },
     formatDateTime: (val) => {
       return dateTimeChange(val)
     },
+    formatAIPercents: (val) => {
+      return aIFraudTreshold(val)
+    },
     calculateVatTotal() {
       let totalVat = 0
-      this.data.details.lines.forEach((line) => {
-        totalVat += line.totalPrice * line.vatTotal
-      })
-
+      if (this.data.details.lines !== undefined) {
+        this.data.details.lines.forEach((line) => {
+          totalVat += line.totalPrice * line.vatTotal
+        })
+      }
       return totalVat
     },
     handleClose() {
-      this.dialogTableVisible = false
+      this.visibleDialog = false
       this.$emit('onClose')
+      console.log('onClose')
+    },
+    onSubmit() {
+      this.setAnnotationTask({
+        annotationType: this.selectedAnnotation,
+        description: this.textarea,
+        sentinelUserId: store.state.auth.user.data.user.id.toString(),
+        sentinelUserName: store.state.auth.user.data.user.username,
+        id: this.data.id
+      })
+      this.handleClose()
     }
+  },
+  mounted() {
+    console.log('Mounted Popup', store.state.auth.autoQuery)
+    console.log('Mounted Popup', this.getAutoQuery)
   }
 }
 </script>
@@ -245,12 +353,14 @@ export default {
   &-title {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 100%;
     height: 100px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     background-color: $hybrone_header_background_color;
     &-content {
-      width: 100%;
+      //   width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
@@ -325,6 +435,14 @@ export default {
         height: 359px;
         background-color: #2c3357;
       }
+      //   img:nth-child(2n) {
+      //     width: 498px;
+      //     height: 359px;
+      //   }
+      //   img:nth-child(2n + 1) {
+      //     width: 638px;
+      //     height: 359px;
+      //   }
       span {
         font-weight: 500;
         font-size: 12px;

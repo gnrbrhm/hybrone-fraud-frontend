@@ -16,7 +16,7 @@
         </div>
         <div class="info">
           <span class="label">Kasa Sayısı</span>
-          <span class="value">1298</span>
+          <span class="value">2</span>
         </div>
       </div>
       <div class="fraud-percentage">
@@ -38,24 +38,42 @@
             :text-inside="true"
             :stroke-width="33"
             :percentage="
-              (100 /
+              (
+                (100 /
+                  dashboardData.storeFraudCounts[
+                    Object.keys(dashboardData.storeFraudCounts)[0]
+                  ].total) *
                 dashboardData.storeFraudCounts[
                   Object.keys(dashboardData.storeFraudCounts)[0]
-                ].total) *
-              dashboardData.storeFraudCounts[
-                Object.keys(dashboardData.storeFraudCounts)[0]
-              ].fraud
+                ].fraud
+              ).toFixed(2)
             "
           ></el-progress>
         </div>
         <div class="row">
-          <span class="label">Akşehir<br />Konya</span>
+          <span class="label"
+            >{{ Object.keys(dashboardData.storeFraudCounts)[1].split('/')[0]
+            }}<br />{{
+              Object.keys(dashboardData.storeFraudCounts)[1].split('/')[1]
+            }}</span
+          >
           <el-progress
+            :format="{ color: '#ffd700', backgroundColor: '#ffd700' }"
             style="width: 185px"
-            :color="'#E35454'"
+            :color="'#E04141'"
             :text-inside="true"
             :stroke-width="33"
-            :percentage="70"
+            :percentage="
+              (
+                (100 /
+                  dashboardData.storeFraudCounts[
+                    Object.keys(dashboardData.storeFraudCounts)[1]
+                  ].total) *
+                dashboardData.storeFraudCounts[
+                  Object.keys(dashboardData.storeFraudCounts)[1]
+                ].fraud
+              ).toFixed(2)
+            "
           ></el-progress>
         </div>
         <div class="row">
@@ -94,6 +112,7 @@
           width="346"
           :show-text="false"
           :stroke-width="12"
+          :color="'#C4C4C4'"
         >
         </el-progress>
         <el-progress
@@ -163,7 +182,6 @@
         <div class="col">
           <span class="label">Toplam İşlem Sayısı</span>
           <SvgIconEllipse :color="'blue'"></SvgIconEllipse>
-          <div></div>
           <span class="value">{{
             dashboardData.totalFraudCounts.totalActivityCount
           }}</span>
@@ -179,11 +197,19 @@
             :color="'#6fcf97'"
             :stroke-width="8"
             width="76"
-            :percentage="61"
+            :percentage="
+              (
+                (dashboardData.totalFraudCounts.annotatedCount /
+                  dashboardData.totalFraudCounts.totalActivityCount) *
+                100
+              ).toFixed(2)
+            "
           ></el-progress>
           <div class="info">
             <span class="label">Tamamlanan</span>
-            <span class="value-success">786</span>
+            <span class="value-success">{{
+              dashboardData.totalFraudCounts.annotatedCount
+            }}</span>
           </div>
         </div>
         <div class="indicator">
@@ -192,11 +218,19 @@
             :color="'#e04141'"
             :stroke-width="8"
             width="76"
-            :percentage="39"
+            :percentage="
+              (
+                (dashboardData.totalFraudCounts.notAnnotatedCount /
+                  dashboardData.totalFraudCounts.totalActivityCount) *
+                100
+              ).toFixed(2)
+            "
           ></el-progress>
           <div class="info">
             <span class="label">Bekleyen</span>
-            <span class="value-warning">538</span>
+            <span class="value-warning">{{
+              dashboardData.totalFraudCounts.notAnnotatedCount
+            }}</span>
           </div>
         </div>
       </div>
@@ -205,13 +239,16 @@
         <div class="row">
           <span class="label">Fiş İptali</span>
           <el-progress
+            :format="{ color: '#000' }"
             style="width: 185px"
             :color="'#5D3186'"
             :text-inside="true"
             :stroke-width="33"
             :percentage="
-              (100 / dashboardData.activityFraudCounts.CANCEL.total) *
-              dashboardData.activityFraudCounts.CANCEL.fraud
+              (
+                (100 / dashboardData.activityFraudCounts.CANCEL.total) *
+                dashboardData.activityFraudCounts.CANCEL.fraud
+              ).toFixed(2)
             "
           ></el-progress>
         </div>
@@ -223,8 +260,12 @@
             :text-inside="true"
             :stroke-width="33"
             :percentage="
-              (100 / dashboardData.activityFraudCounts.RETURN.total) *
-              dashboardData.activityFraudCounts.RETURN.fraud
+              (
+                (100 / dashboardData.activityFraudCounts.RETURN.total) *
+                dashboardData.activityFraudCounts.RETURN.fraud
+              )
+                .toFixed(2)
+                .toString()
             "
           ></el-progress>
         </div>
@@ -236,8 +277,12 @@
             :text-inside="true"
             :stroke-width="33"
             :percentage="
-              (100 / dashboardData.activityFraudCounts.PRICEQUERY.total) *
-              dashboardData.activityFraudCounts.PRICEQUERY.fraud
+              (
+                (100 / dashboardData.activityFraudCounts.PRICEQUERY.total) *
+                dashboardData.activityFraudCounts.PRICEQUERY.fraud
+              )
+                .toFixed(2)
+                .toString()
             "
           ></el-progress>
         </div>
@@ -259,8 +304,10 @@
             :text-inside="true"
             :stroke-width="33"
             :percentage="
-              (100 / dashboardData.activityFraudCounts.SALE.total) *
-              dashboardData.activityFraudCounts.SALE.fraud
+              (
+                (100 / dashboardData.activityFraudCounts.SALE.total) *
+                dashboardData.activityFraudCounts.SALE.fraud
+              ).toFixed(2)
             "
           ></el-progress>
         </div>
@@ -474,8 +521,9 @@ export default {
       align-items: center;
       .col {
         width: 70%;
-        display: flex;
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
         justify-content: space-around;
         align-items: center;
 
@@ -601,6 +649,7 @@ export default {
   }
 }
 .el-progress-bar__innerText {
+  color: #000 !important;
   &-zero {
     @extend .el-progress-bar__innerText;
     color: #e04141;
